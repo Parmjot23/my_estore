@@ -1,0 +1,17 @@
+{
+  "name": "Glass breaking tools",
+  "slug": "glass_breaking_tools",
+  "description": "",
+  "category": "repair-products",
+  "brand": null,
+  "price": 0.0,
+  "sku": null,
+  "images": [
+    "glass_breaking_tools_img1.jpg",
+    "glass_breaking_tools_img2.jpg"
+  ],
+  "color": null,
+  "material": null,
+  "connectivity_type": null,
+  "wattage": null
+}

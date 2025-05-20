@@ -1,0 +1,16 @@
+{
+  "name": "Earphones 3.5mm Aux",
+  "slug": "earphones_3.5mm_aux",
+  "description": "",
+  "category": "headphones",
+  "brand": null,
+  "price": 0.0,
+  "sku": null,
+  "images": [
+    "earphones_3.5mm_aux_img1.gif"
+  ],
+  "color": null,
+  "material": null,
+  "connectivity_type": null,
+  "wattage": null
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Fast Car Charger 7A Type C",
+  "slug": "fast_car_charger_7a_type_c",
+  "description": "",
+  "category": "chargers",
+  "brand": null,
+  "price": 0.0,
+  "sku": null,
+  "images": [
+    "fast_car_charger_7a_type_c_img1.jpg",
+    "fast_car_charger_7a_type_c_img2.gif"
+  ],
+  "color": null,
+  "material": null,
+  "connectivity_type": null,
+  "wattage": null
+}
