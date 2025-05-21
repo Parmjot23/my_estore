@@ -3,6 +3,7 @@ import Breadcrumb from "@/components/Common/Breadcrumb";
 import Link from "next/link";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import { requestPasswordReset } from "@/lib/apiService";
 
 const PasswordReset = () => {
   const [email, setEmail] = useState("");
@@ -22,7 +23,7 @@ const PasswordReset = () => {
 
     setIsSubmitting(true);
     try {
-      // TODO: integrate with password reset API
+      await requestPasswordReset(email);
       toast.success("If an account exists for this email, a reset link has been sent.");
       setEmail("");
     } catch (err: any) {

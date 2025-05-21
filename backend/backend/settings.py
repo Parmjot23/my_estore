@@ -158,4 +158,9 @@ MEDIA_ROOT = BASE_DIR / 'media'  # BASE_DIR is usually defined at the top of set
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Development email backend
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # backend/your_project_name/settings.py
+

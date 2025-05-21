@@ -258,6 +258,13 @@ export const changePassword = (passwordData: ChangePasswordData): Promise<any> =
     });
 };
 
+export const requestPasswordReset = (email: string): Promise<void> => {
+  return fetchWrapper<void>(`${ACCOUNTS_BASE_URL}/password-reset/`, {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  });
+};
+
 
 export const getUserAddresses = (): Promise<Address[]> => {
   return fetchWrapper<PaginatedResponse<Address>>(`${ACCOUNTS_BASE_URL}/addresses/`)

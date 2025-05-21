@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Address # , UserProfile
+from django.contrib.auth.forms import PasswordResetForm
+from .models import Address  # , UserProfile
 
 User = get_user_model()
 
@@ -42,6 +43,23 @@ class AddressSerializer(serializers.ModelSerializer):
         model = Address
         fields = '__all__'
         read_only_fields = ('user',) # User will be set from request
+
+
+class PasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        User = get_user_model()
+        if not User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("No user is associated with this email address.")
+        return value
+
+    def save(self, request=None):
+        form = PasswordResetForm({"email": self.validated_data["email"]})
+        if form.is_valid():
+            form.save(request=request, use_https=request.is_secure() if request else False,
+                      email_template_name="registration/password_reset_email.html")
+        return True
 
 # class UserProfileSerializer(serializers.ModelSerializer):
 #     class Meta:
