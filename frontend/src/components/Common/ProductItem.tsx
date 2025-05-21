@@ -18,6 +18,9 @@ import { Heart, Eye, ShoppingCart } from 'lucide-react';
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/250x250/F0F0F0/777777?text=No+Image";
 
 const ProductItem = ({ item }: { item: Product }) => {
+  // ADD THIS CONSOLE.LOG
+  // console.log("ProductItem received item:", JSON.stringify(item, null, 2));
+
   const { openModal, setProductSlug } = useQuickViewModalContext();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -74,12 +77,25 @@ const ProductItem = ({ item }: { item: Product }) => {
   };
 
   const imageUrl = item.cover_image_url || item.imgs?.previews?.[0] || PLACEHOLDER_IMAGE_URL;
-  const rating = item.average_rating ? parseFloat(String(item.average_rating)) : 0;
-  const reviewCount = typeof item.reviews_count === 'number' ? item.reviews_count : 0;
+
+  // Ensure rating is a number, default to 0 if not or undefined
+  const rating = (typeof item.average_rating === 'number' && !isNaN(item.average_rating))
+    ? item.average_rating
+    : 0;
+
+  // Ensure reviewCount is a number, default to 0
+  const reviewCount = (typeof item.reviews === 'number' && !isNaN(item.reviews))
+    ? item.reviews
+    : 0;
+
+  // Debugging: Log the processed rating and reviewCount
+  // console.log(`Product: ${item.name}, Original Reviews: ${item.reviews}, Processed Review Count: ${reviewCount}`);
+  // console.log(`Product: ${item.name}, Original Avg Rating: ${item.average_rating}, Processed Rating: ${rating}`);
+
 
   const renderStars = () => {
     const stars = [];
-    const roundedRating = Math.round(rating);
+    const roundedRating = Math.round(rating); // Use the processed rating
     for (let i = 1; i <= 5; i++) {
       stars.push(
         <Image
@@ -94,7 +110,6 @@ const ProductItem = ({ item }: { item: Product }) => {
     return stars;
   };
 
-  // Define currentPrice and currentDiscountedPrice here
   const currentPrice = parseFloat(String(item.price)) || 0;
   const currentDiscountedPrice = item.discounted_price ? parseFloat(String(item.discounted_price)) : null;
 
@@ -116,7 +131,7 @@ const ProductItem = ({ item }: { item: Product }) => {
               (e.target as HTMLImageElement).onerror = null;
               (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE_URL;
             }}
-            priority={false}
+            priority={false} // Generally false for list items, true for LCP images
           />
         </Link>
         {item.get_discount_percentage && item.get_discount_percentage > 0 && (
@@ -168,6 +183,7 @@ const ProductItem = ({ item }: { item: Product }) => {
       <div className="p-4 flex flex-col flex-grow">
         <div className="flex items-center gap-1.5 mb-1.5">
           {renderStars()}
+          {/* Display the processed reviewCount */}
           <p className="text-xs text-gray-600">({reviewCount})</p>
         </div>
         <h3 className="font-semibold text-sm text-dark hover:text-blue transition-colors duration-200 mb-1.5 flex-grow">
@@ -177,11 +193,9 @@ const ProductItem = ({ item }: { item: Product }) => {
         </h3>
         <div className="mt-auto">
           <span className="flex items-center gap-2 font-semibold text-base">
-            {/* Corrected usage of currentDiscountedPrice and currentPrice for className logic */}
             <span className={`${currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice ? 'text-red-600' : 'text-dark'}`}>
               ${effectivePrice.toFixed(2)}
             </span>
-            {/* Corrected usage of currentDiscountedPrice and currentPrice for conditional rendering and toFixed */}
             {currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice && (
               <span className="text-gray-500 line-through text-sm">${currentPrice.toFixed(2)}</span>
             )}

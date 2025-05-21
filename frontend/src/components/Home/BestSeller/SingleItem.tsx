@@ -1,154 +1,212 @@
 // frontend/src/components/Home/BestSeller/SingleItem.tsx
 "use client";
-import React from "react";
-import { Product } from "@/types/product"; // Ensure this path is correct
-import { useQuickViewModalContext  } from "@/app/context/QuickViewModalContext";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
+import React, { useEffect, useState } from "react"; // Added useEffect, useState
+import { Product } from "@/types/product";
+import { useQuickViewModalContext } from "@/app/context/QuickViewModalContext";
+import { useDispatch, useSelector } from "react-redux"; // Added useSelector
+import { AppDispatch, RootState } from "@/redux/store"; // Added RootState
 import { addItemToCart } from "@/redux/features/cart-slice";
-import { addItemToWishlist } from "@/redux/features/wishlist-slice";
+// Corrected: Using API services for wishlist actions directly
+import {
+    addToWishlist as apiAddToWishlist,
+    removeFromWishlist as apiRemoveFromWishlist
+} from "@/lib/apiService";
+// Removed Redux wishlist actions if API is used directly from component for wishlist
 import { updateproductDetails } from "@/redux/features/product-details";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "react-toastify"; // For user feedback
+import { Heart, Eye, ShoppingCart } from 'lucide-react'; // Lucide icons
 
-// Define a placeholder image URL that clearly indicates it's a placeholder
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/280x280/F0F0F0/777777?text=Image+Not+Available";
 
 const SingleItem = ({ item }: { item: Product }) => {
   const { openModal, setProductSlug } = useQuickViewModalContext();
   const dispatch = useDispatch<AppDispatch>();
 
-  // Handler to update the QuickView state in Redux and open the modal
-  const handleQuickViewUpdate = () => {
-    dispatch(updateQuickView({ ...item })); // Pass the full product item
-    openModal();
+  // Wishlist state and logic (moved from ProductItem.tsx for consistency)
+  const wishlistItems = useSelector((state: RootState) => state.wishlistReducer.items);
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isWishlistLoading, setIsWishlistLoading] = useState(false);
+
+  useEffect(() => {
+    setIsWishlisted(wishlistItems.some(wishlistItem => wishlistItem && wishlistItem.id === item.id));
+  }, [wishlistItems, item.id]);
+
+  const handleQuickViewClick = () => { // Changed from handleQuickViewUpdate
+    if (item.slug) {
+      setProductSlug(item.slug); // Use context to set slug
+      openModal();                // Use context to open modal
+    } else {
+      toast.error("Product details not available for quick view.");
+    }
   };
 
-  // Handler to add the item to the cart
   const handleAddToCart = () => {
+    if (!item.is_available) {
+      toast.warn(`${item.name} is out of stock.`);
+      return;
+    }
     dispatch(
       addItemToCart({
-        ...item, // Pass the full product item
-        quantity: 1, // Default quantity to 1 when adding from product list
-      })
+        ...item,
+        quantity: 1,
+        // Ensure discountedPrice and price are numbers
+        discountedPrice: item.discounted_price ? Number(item.discounted_price) : Number(item.price),
+        price: Number(item.price),
+      } as any) // Cast if CartItem type has minor differences not covered by spread
     );
+    toast.success(`${item.name} added to cart!`);
   };
 
-  // Handler to add the item to the wishlist
-  const handleItemToWishList = () => {
-    dispatch(
-      addItemToWishlist({
-        ...item, // Pass the full product item
-        // status and quantity for wishlist items are typically managed by the wishlist slice itself or defaulted
-      })
-    );
+  const handleToggleWishlist = async () => {
+    if (!item || typeof item.id === 'undefined') {
+        toast.error("Cannot update wishlist: Product ID is missing.");
+        return;
+    }
+    setIsWishlistLoading(true);
+    const currentIsWishlisted = wishlistItems.some(wishlistItem => wishlistItem && wishlistItem.id === item.id);
+    try {
+      if (currentIsWishlisted) {
+        await apiRemoveFromWishlist(item.id);
+        toast.info(`${item.name} removed from wishlist.`);
+        // Optionally dispatch Redux action to remove from local Redux wishlist state
+        // dispatch(removeItemFromWishlistAction(item.id));
+        setIsWishlisted(false);
+      } else {
+        await apiAddToWishlist(item.id);
+        toast.success(`${item.name} added to wishlist!`);
+        // Optionally dispatch Redux action to add to local Redux wishlist state
+        // dispatch(addItemToWishlistAction(item));
+        setIsWishlisted(true);
+      }
+    } catch (error: any) {
+      toast.error(error.data?.detail || error.message || "Failed to update wishlist.");
+      console.error("Wishlist toggle error:", error);
+    } finally {
+      setIsWishlistLoading(false);
+    }
   };
 
-  // Handler to update product details in Redux when navigating to the product details page
   const handleProductDetailsLink = () => {
     dispatch(updateproductDetails({ ...item }));
   };
 
-  // Determine the image URL: prioritize cover_image_url, then imgs.previews, then placeholder
   const imageUrl = item.cover_image_url || item.imgs?.previews?.[0] || PLACEHOLDER_IMAGE_URL;
-  // Parse average_rating to a number, default to 0 if not available
-  const rating = item.average_rating ? parseFloat(item.average_rating.toString()) : 0;
-  // Use item.reviews (from serializer) instead of item.reviews_count
-  const reviewCount = item.reviews || 0;
+  const rating = item.average_rating ? parseFloat(String(item.average_rating)) : 0;
+  const reviewCount = typeof item.reviews === 'number' ? item.reviews : 0; // Ensure reviews is number
+
+  const currentPrice = parseFloat(String(item.price)) || 0;
+  const currentDiscountedPrice = item.discounted_price ? parseFloat(String(item.discounted_price)) : null;
+
+  const effectivePrice = (currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice)
+    ? currentDiscountedPrice
+    : currentPrice;
+
+
+  const renderStars = () => { /* Same as ProductItem */
+    const stars = [];
+    const roundedRating = Math.round(rating);
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <Image
+          key={i}
+          src={i <= roundedRating ? "/images/icons/icon-star.svg" : "/images/icons/icon-star-gray.svg"}
+          alt="star icon"
+          width={14}
+          height={14}
+        />
+      );
+    }
+    return stars;
+  };
+
 
   return (
     <div className="group flex flex-col h-full rounded-lg bg-white shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out overflow-hidden">
-      {/* Product Image Section */}
       <div className="relative overflow-hidden flex items-center justify-center bg-gray-100 aspect-square w-full">
         <Link href={`/shop-details/${item.slug}`} onClick={handleProductDetailsLink} className="block w-full h-full">
           <Image
-            src={imageUrl} // Use the determined image URL
+            src={imageUrl}
             alt={item.name || "Best seller product image"}
-            width={280} // Desired width for the image container
-            height={280} // Desired height for the image container
+            width={280}
+            height={280}
             className="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300 ease-in-out"
-            // onError to fallback to placeholder if the primary image fails
             onError={(e) => {
-              e.currentTarget.onerror = null; // Prevents infinite loops if placeholder also fails
-              e.currentTarget.src = PLACEHOLDER_IMAGE_URL;
+              (e.target as HTMLImageElement).onerror = null;
+              (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE_URL;
             }}
           />
         </Link>
-        {/* Discount Badge */}
         {item.get_discount_percentage && item.get_discount_percentage > 0 && (
           <span className="absolute top-3 right-3 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
             {item.get_discount_percentage}% OFF
           </span>
         )}
-        {/* Hover Actions */}
-        <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-2.5 pb-4 pt-2 bg-gradient-to-t from-black/30 to-transparent ease-in-out duration-300 group-hover:translate-y-0 transition-transform">
-          <button
-            onClick={handleQuickViewUpdate}
-            aria-label="Quick view product"
-            title="Quick view"
-            className="flex items-center justify-center w-9 h-9 rounded-full shadow-md text-dark bg-white hover:text-white hover:bg-blue focus:outline-none focus:ring-2 focus:ring-blue focus:ring-opacity-50 transition-colors"
-          >
-            <svg className="fill-current" width="16" height="16" viewBox="0 0 16 16"><path fillRule="evenodd" clipRule="evenodd" d="M8.00016 5.5C6.61945 5.5 5.50016 6.61929 5.50016 8C5.50016 9.38071 6.61945 10.5 8.00016 10.5C9.38087 10.5 10.5002 9.38071 10.5002 8C10.5002 6.61929 9.38087 5.5 8.00016 5.5ZM6.50016 8C6.50016 7.17157 7.17174 6.5 8.00016 6.5C8.82859 6.5 9.50016 7.17157 9.50016 8C9.50016 8.82842 8.82859 9.5 8.00016 9.5C7.17174 9.5 6.50016 8.82842 6.50016 8Z"/><path fillRule="evenodd" clipRule="evenodd" d="M8.00016 2.16666C4.99074 2.16666 2.96369 3.96946 1.78721 5.49791L1.76599 5.52546C1.49992 5.87102 1.25487 6.18928 1.08862 6.5656C0.910592 6.96858 0.833496 7.40779 0.833496 8C0.833496 8.5922 0.910592 9.03142 1.08862 9.4344C1.25487 9.81072 1.49992 10.129 1.76599 10.4745L1.78721 10.5021C2.96369 12.0305 4.99074 13.8333 8.00016 13.8333C11.0096 13.8333 13.0366 12.0305 14.2131 10.5021L14.2343 10.4745C14.5004 10.129 14.7455 9.81072 14.9117 9.4344C15.0897 9.03142 15.1668 8.5922 15.1668 8C15.1668 7.40779 15.0897 6.96858 14.9117 6.5656C14.7455 6.18927 14.5004 5.87101 14.2343 5.52545L14.2131 5.49791C13.0366 3.96946 11.0096 2.16666 8.00016 2.16666ZM2.57964 6.10786C3.66592 4.69661 5.43374 3.16666 8.00016 3.16666C10.5666 3.16666 12.3344 4.69661 13.4207 6.10786C13.7131 6.48772 13.8843 6.7147 13.997 6.9697C14.1023 7.20801 14.1668 7.49929 14.1668 8C14.1668 8.50071 14.1023 8.79199 13.997 9.0303C13.8843 9.28529 13.7131 9.51227 13.4207 9.89213C12.3344 11.3034 10.5666 12.8333 8.00016 12.8333C5.43374 12.8333 3.66592 11.3034 2.57964 9.89213C2.28725 9.51227 2.11599 9.28529 2.00334 9.0303C1.89805 8.79199 1.8335 8.50071 1.8335 8C1.8335 7.49929 1.89805 7.20801 2.00334 6.9697C2.11599 6.7147 2.28725 6.48772 2.57964 6.10786Z"/></svg>
-          </button>
-          <button
-            onClick={handleAddToCart}
-            aria-label="Add to cart"
-            title="Add to cart"
-            className="flex-grow inline-flex justify-center font-medium text-xs sm:text-sm py-2 px-3 sm:px-4 rounded-md bg-blue text-white ease-out duration-200 hover:bg-blue-dark focus:outline-none focus:ring-2 focus:ring-blue focus:ring-opacity-50 transition-colors"
-          >
-            Add to Cart
-          </button>
-          <button
-            onClick={handleItemToWishList}
-            aria-label="Add to wishlist"
-            title="Add to wishlist"
-            className="flex items-center justify-center w-9 h-9 rounded-full shadow-md text-dark bg-white hover:text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition-colors"
-          >
-            <svg className="fill-current" width="16" height="16" viewBox="0 0 16 16"><path fillRule="evenodd" clipRule="evenodd" d="M3.74949 2.94946C2.6435 3.45502 1.83325 4.65749 1.83325 6.0914C1.83325 7.55633 2.43273 8.68549 3.29211 9.65318C4.0004 10.4507 4.85781 11.1118 5.694 11.7564C5.89261 11.9095 6.09002 12.0617 6.28395 12.2146C6.63464 12.491 6.94747 12.7337 7.24899 12.9099C7.55068 13.0862 7.79352 13.1667 7.99992 13.1667C8.20632 13.1667 8.44916 13.0862 8.75085 12.9099C9.05237 12.7337 9.3652 12.491 9.71589 12.2146C9.90982 12.0617 10.1072 11.9095 10.3058 11.7564C11.142 11.1118 11.9994 10.4507 12.7077 9.65318C13.5671 8.68549 14.1666 7.55633 14.1666 6.0914C14.1666 4.65749 13.3563 3.45502 12.2503 2.94946C11.1759 2.45832 9.73214 2.58839 8.36016 4.01382C8.2659 4.11175 8.13584 4.16709 7.99992 4.16709C7.864 4.16709 7.73393 4.11175 7.63967 4.01382C6.26769 2.58839 4.82396 2.45832 3.74949 2.94946ZM7.99992 2.97255C6.45855 1.5935 4.73256 1.40058 3.33376 2.03998C1.85639 2.71528 0.833252 4.28336 0.833252 6.0914C0.833252 7.86842 1.57358 9.22404 2.5444 10.3172C3.32183 11.1926 4.2734 11.9253 5.1138 12.5724C5.30431 12.7191 5.48911 12.8614 5.66486 12.9999C6.00636 13.2691 6.37295 13.5562 6.74447 13.7733C7.11582 13.9903 7.53965 14.1667 7.99992 14.1667C8.46018 14.1667 8.88401 13.9903 9.25537 13.7733C9.62689 13.5562 9.99348 13.2691 10.335 12.9999C10.5107 12.8614 10.6955 12.7191 10.886 12.5724C11.7264 11.9253 12.678 11.1926 13.4554 10.3172C14.4263 9.22404 15.1666 7.86842 15.1666 6.0914C15.1666 4.28336 14.1434 2.71528 12.6661 2.03998C11.2673 1.40058 9.54129 1.5935 7.99992 2.97255Z"/></svg>
-          </button>
-        </div>
+         {!item.is_available && (
+          <span className="absolute top-3 left-3 bg-gray-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
+            Out of Stock
+          </span>
+        )}
+        {item.is_available && (
+            <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-2.5 pb-4 pt-2 bg-gradient-to-t from-black/40 via-black/20 to-transparent ease-in-out duration-300 group-hover:translate-y-0 transition-transform">
+                <button
+                    onClick={handleQuickViewClick} // Corrected handler
+                    aria-label="Quick view product"
+                    title="Quick view"
+                    className="flex items-center justify-center w-9 h-9 rounded-full shadow-md ease-out duration-200 text-dark bg-white hover:text-white hover:bg-blue focus:outline-none focus:ring-2 focus:ring-blue focus:ring-opacity-50 transition-colors"
+                >
+                    <Eye size={16} />
+                </button>
+                <button
+                    onClick={handleAddToCart}
+                    aria-label="Add to cart"
+                    title="Add to cart"
+                    disabled={!item.is_available}
+                    className={`flex-grow inline-flex items-center justify-center gap-1 font-medium text-xs sm:text-sm py-2 px-3 sm:px-4 rounded-md text-white ease-out duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-colors ${
+                        item.is_available ? 'bg-blue hover:bg-blue-dark focus:ring-blue' : 'bg-gray-400 cursor-not-allowed'
+                    }`}
+                >
+                   <ShoppingCart size={16}/> Add
+                </button>
+                <button
+                    onClick={handleToggleWishlist}
+                    disabled={isWishlistLoading}
+                    aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                    title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                    className={`flex items-center justify-center w-9 h-9 rounded-full shadow-md text-dark bg-white hover:text-white focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-colors ${
+                        isWishlisted ? 'hover:bg-red-400 focus:ring-red-400' : 'hover:bg-red-500 focus:ring-red-500'
+                    } ${isWishlistLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                     <Heart size={16} className={isWishlisted ? "fill-red-500 text-red-500" : "text-gray-500"}/>
+                </button>
+            </div>
+        )}
       </div>
 
-      {/* Product Details Section */}
       <div className="p-4 flex flex-col flex-grow">
-        {/* Rating and Reviews */}
         <div className="flex items-center gap-1.5 mb-1.5">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <Image
-              key={index}
-              src={index < Math.round(rating) ? "/images/icons/icon-star.svg" : "/images/icons/icon-star-gray.svg"}
-              alt="star icon"
-              width={14}
-              height={14}
-            />
-          ))}
-          <p className="text-xs text-gray-600">({reviewCount})</p> {/* Use reviewCount */}
+          {renderStars()}
+          <p className="text-xs text-gray-600">({reviewCount})</p>
         </div>
-
-        {/* Product Name/Title */}
         <h3
           className="font-semibold text-sm text-dark hover:text-blue transition-colors duration-200 mb-1.5 flex-grow"
         >
           <Link href={`/shop-details/${item.slug}`} onClick={handleProductDetailsLink} className="line-clamp-2">
-            {item.name} {/* Use item.name */}
+            {item.name}
           </Link>
         </h3>
-
-        {/* Price Details - Pushed to bottom */}
         <div className="mt-auto">
           <span className="flex items-center gap-2 font-semibold text-base">
-            {item.discounted_price && parseFloat(item.discounted_price.toString()) < parseFloat(item.price.toString()) ? (
-              <>
-                <span className="text-red-600">${parseFloat(item.discounted_price.toString()).toFixed(2)}</span>
-                <span className="text-gray-500 line-through text-sm">${parseFloat(item.price.toString()).toFixed(2)}</span>
-              </>
-            ) : (
-              <span className="text-dark">${parseFloat(item.price.toString()).toFixed(2)}</span>
+            <span className={`${currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice ? 'text-red-600' : 'text-dark'}`}>
+              ${effectivePrice.toFixed(2)}
+            </span>
+            {currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice && (
+              <span className="text-gray-500 line-through text-sm">${currentPrice.toFixed(2)}</span>
             )}
           </span>
-          {/* Stock Status */}
            {!item.is_available && (
-            <p className="text-xs text-red-500 mt-1">Out of Stock</p>
+            <p className="text-xs text-red-500 mt-1 font-medium">Out of Stock</p>
           )}
         </div>
       </div>
