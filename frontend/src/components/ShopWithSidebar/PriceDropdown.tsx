@@ -85,9 +85,7 @@ const PriceDropdown = ({ onPriceChange, initialMin = 0, initialMax = 1000 }: Pri
     if (!isNaN(min) && !isNaN(max) && min <= max) {
       onPriceChange(min, max);
     } else {
-      // Handle invalid input, e.g., show a message or reset to slider values
-      console.warn("Invalid price input. Min:", minPriceInput, "Max:", maxPriceInput);
-      // Optionally reset inputs to current slider range if they are invalid
+      // Handle invalid input by resetting to the current slider values
       setMinPriceInput(priceRange[0].toString());
       setMaxPriceInput(priceRange[1].toString());
       onPriceChange(priceRange[0], priceRange[1]);

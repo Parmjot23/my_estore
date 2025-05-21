@@ -40,11 +40,7 @@ const Signin = () => {
     setIsLoading(true);
 
     try {
-      console.log("[Signin] Attempting login with:", { username: emailInput, password: "ENCRYPTED_PASSWORD_FOR_LOGGING" }); // Log credentials (password masked)
       const tokens: AuthTokens = await loginUser({ username: emailInput, password: password });
-
-      // Log the received tokens immediately
-      console.log("[Signin] Tokens received from loginUser:", tokens);
 
       if (!tokens || !tokens.access) {
         // If tokens or access token is missing, throw an error before proceeding
@@ -58,16 +54,13 @@ const Signin = () => {
 
       if (typeof window !== "undefined") {
         localStorage.setItem("access_token", tokens.access);
-        console.log("[Signin] Access token stored in localStorage:", localStorage.getItem("access_token"));
         if (tokens.refresh) {
           localStorage.setItem("refresh_token", tokens.refresh);
         }
       }
 
       // Now, attempt to get user details
-      console.log("[Signin] Attempting to get user details...");
       const userDetails = await getUserDetails();
-      console.log("[Signin] User details received:", userDetails);
 
 
       dispatch(setAuthState({ user: userDetails, tokens }));
@@ -138,6 +131,12 @@ const Signin = () => {
                   required
                   className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                 />
+              </div>
+
+              <div className="text-right mb-5">
+                <Link href="/password-reset" className="text-sm text-blue hover:underline">
+                  Forgot password?
+                </Link>
               </div>
 
               <button

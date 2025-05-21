@@ -21,11 +21,9 @@ const SearchParamsReader: React.FC<{
 }> = ({ onParamsRead }) => {
     const searchParams = useSearchParams();
     useEffect(() => {
-        console.log("[SearchParamsReader] Reading URL params...");
         const categorySlug = searchParams.get("category__slug");
         const brandSlug = searchParams.get("brand__slug"); // If you use this
         const searchQuery = searchParams.get("search");   // If you use this
-        console.log("[SearchParamsReader] Category Slug from URL:", categorySlug);
         onParamsRead({ categorySlug, brandSlug, searchQuery });
     }, [searchParams, onParamsRead]); // Re-run if searchParams object instance changes (important for Next.js)
     return null;
@@ -60,7 +58,6 @@ const ShopWithSidebarContent: React.FC = () => {
 
 
   const handleInitialUrlParams = useCallback((params: { categorySlug?: string | null, brandSlug?: string | null, searchQuery?: string | null }) => {
-    console.log("[ShopWithSidebarContent] Applying initial URL params to filters:", params);
     setFilters(prev => ({
         ...prev, // Keep existing defaults like ordering
         category__slug: params.categorySlug || undefined,
@@ -80,7 +77,6 @@ const ShopWithSidebarContent: React.FC = () => {
         page: currentPage,
         page_size: itemsPerPage,
     };
-    console.log("[ShopWithSidebarContent] Fetching products with final API params:", finalApiParams);
     try {
       const paginatedResponse: PaginatedResponse<Product> = await getProducts(finalApiParams);
       // ... (handle response as before)
@@ -121,7 +117,6 @@ const ShopWithSidebarContent: React.FC = () => {
   // It now waits for `initialUrlFiltersApplied` to be true before the first "real" fetch based on filters.
   useEffect(() => {
     if (initialUrlFiltersApplied) { // Only fetch if URL params have been processed
-        console.log("[ShopWithSidebarContent] Product Fetch useEffect - Filters updated or currentPage changed. Current Filters:", filters, "Current Page:", currentPage);
         fetchShopProducts(filters);
     } else {
         // Optionally, you could make an initial fetch here with no category filter
@@ -129,7 +124,6 @@ const ShopWithSidebarContent: React.FC = () => {
         // However, it's cleaner to wait for SearchParamsReader if URL params are common.
         // For now, if no URL params, filters will be default and this will run once initialUrlFiltersApplied becomes true.
         // If SearchParamsReader sets no category, filters.category__slug will be undefined, fetching all.
-        console.log("[ShopWithSidebarContent] Product Fetch useEffect - Waiting for initial URL filters to be applied.");
     }
   }, [filters, currentPage, fetchShopProducts, initialUrlFiltersApplied]);
 
@@ -140,7 +134,6 @@ const ShopWithSidebarContent: React.FC = () => {
   };
 
   const handleCategoryChange = (categorySlug: string | null) => {
-    console.log("[ShopWithSidebarContent] Category sidebar click, new slug:", categorySlug);
     setFilters(prev => ({ ...prev, category__slug: categorySlug || undefined }));
     setCurrentPage(1);
   };
@@ -235,7 +228,6 @@ const ShopWithSidebarContent: React.FC = () => {
               {!isLoading && !error && products.length === 0 && (<p className="text-gray-600 text-center py-10">No products found matching your criteria. (API returned {totalProducts} total for query)</p>)}
               {!isLoading && !error && products.length > 0 && (
                 <>
-                  {console.log("[ShopWithSidebarContent] Rendering products. Count:", products.length, "First product ID:", products[0]?.id)}
                   {viewMode === "grid" ? (
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
                       {products.map((product, index) => (!product || typeof product.id === 'undefined' ? <div key={`invalid-grid-${index}`} className="text-red-500 p-2 border border-red-300">Invalid product data</div> : <SingleGridItem key={product.id || `grid-fallback-${index}`} product={product} /> ))}

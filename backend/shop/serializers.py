@@ -3,9 +3,6 @@
 from rest_framework import serializers
 from .models import Brand, PhoneModel, Category, Product, ProductMedia
 
-# This print statement will show in your Django console when this file is loaded
-print("DEBUG: Loading shop/serializers.py. Importing ProductMedia.")
-
 
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:

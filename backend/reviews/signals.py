@@ -13,8 +13,6 @@ from shop.models import Product
 def update_product_rating_and_count(sender, instance, **kwargs):
     product = instance.product
     action = 'delete' if kwargs.get('signal') == post_delete else 'save'
-    print(
-        f"DEBUG (from signals.py): Signal fired for product ID {product.id} due to review ID {instance.id}. Action: {action}")
 
     # Filter for approved reviews if you have an is_approved field and want to use it
     # reviews_qs = Review.objects.filter(product=product, is_approved=True)
@@ -24,7 +22,5 @@ def update_product_rating_and_count(sender, instance, **kwargs):
     avg_rating_dict = reviews_qs.aggregate(avg_rating=Avg('rating'))
     product.average_rating = avg_rating_dict['avg_rating'] if avg_rating_dict['avg_rating'] is not None else 0.0
 
-    print(
-        f"DEBUG (from signals.py): Product ID {product.id} - New reviews_count: {product.reviews_count}, New average_rating: {product.average_rating}")
     product.save(update_fields=['reviews_count', 'average_rating'])
-    print(f"DEBUG (from signals.py): Product ID {product.id} saved with updated review stats.")
+
