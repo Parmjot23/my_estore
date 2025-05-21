@@ -2,7 +2,12 @@ from rest_framework import generics, permissions, viewsets
 from rest_framework.response import Response
 # from rest_framework_simplejwt.tokens import RefreshToken # If using JWT for auth
 from django.contrib.auth import get_user_model
-from .serializers import UserSerializer, RegisterSerializer, AddressSerializer #, UserProfileSerializer
+from .serializers import (
+    UserSerializer,
+    RegisterSerializer,
+    AddressSerializer,
+    PasswordResetSerializer,
+)
 from .models import Address #, UserProfile
 
 User = get_user_model()
@@ -29,6 +34,17 @@ class AddressViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class PasswordResetView(generics.CreateAPIView):
+    serializer_class = PasswordResetSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(request=request)
+        return Response({"detail": "Password reset instructions sent if the email exists."})
 
 # class UserProfileViewSet(viewsets.ModelViewSet):
 #     serializer_class = UserProfileSerializer

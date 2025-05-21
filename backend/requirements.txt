@@ -52,24 +52,3 @@ whitenoise>=6.0,<7.0
 # django-phonenumber-field>=7.0,<8.0 # For phone number validation and formatting
 # django-money>=2.2,<3.1 # For handling monetary values
 # django-mptt>=0.14,<0.16 # For tree-like structures (e.g., nested categories, if more complex than self-referential FK)
-```
-
-**Key Additions and Considerations:**
-
-* **`djangorestframework-simplejwt`**: Included directly for token-based authentication.
-* **`python-decouple`**: For managing environment variables (highly recommended).
-* **`psycopg2-binary`**: For PostgreSQL, a robust production database.
-* **`drf-yasg` / `drf-spectacular`**: For generating API documentation (Swagger/OpenAPI). Choose one. `drf-spectacular` is generally more modern.
-* **Celery & related packages**: For handling background tasks (e.g., sending confirmation emails, processing large data imports, etc.) asynchronously. `redis` is a common message broker for Celery.
-* **`django-imagekit`**: If you need more advanced image processing (like automatic thumbnail generation, watermarking) beyond what Pillow and simple model fields offer.
-* **Elasticsearch packages**: If you plan to implement a powerful search functionality using Elasticsearch.
-* **`stripe`**: Example for payment gateway integration. Replace/add based on your chosen provider(s).
-* **`gunicorn` & `whitenoise`**: Standard for production deployment.
-* **Testing libraries**: `coverage`, `factory-boy`, `pytest`, `pytest-django`, `pytest-cov` are very common for a robust testing setup.
-* **`django-ckeditor`**: If you need a rich text editor for product descriptions or a blog section within Django admin.
-* **Other Utilities**:
-    * `django-phonenumber-field`: For handling phone numbers.
-    * `django-money`: For accurately representing and working with monetary values.
-    * `django-mptt`: Useful for managing hierarchical data like deeply nested categories if the self-referential foreign key becomes cumbersome.
-
-Remember to uncomment the lines for the packages you decide to use. This list provides a strong foundation for most e-commerce backend nee
