@@ -27,3 +27,4 @@ class AddToWishlistSerializer(serializers.Serializer):
         if not Product.objects.filter(id=value).exists():
             raise serializers.ValidationError("Product not found.")
         return value
+
