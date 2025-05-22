@@ -21,6 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { store } from "@/redux/store"; // Import the store
 import { loadUserFromStorage } from "@/redux/features/auth-slice"; // Import the action
+import CartInitializer from "@/components/Common/CartInitializer";
 
 export default function RootLayout({
   children,
@@ -43,6 +44,7 @@ export default function RootLayout({
         ) : (
           <>
             <ReduxProvider> {/* ReduxProvider wraps everything */}
+              <CartInitializer />
               <CartModalProvider>
                 <QuickViewModalProvider>
                   <PreviewSliderProvider>
