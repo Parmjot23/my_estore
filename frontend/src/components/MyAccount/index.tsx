@@ -7,6 +7,7 @@ import AddressModal from "./AddressModal";
 import Orders from "../Orders"; // Ensure Orders component is correctly implemented
 import { useAppSelector, useAppDispatch } from "@/redux/store";
 import { logout, updateUserInState } from "@/redux/features/auth-slice";
+import { removeAllItemsFromCart } from "@/redux/features/cart-slice";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import {
@@ -188,11 +189,12 @@ const MyAccount = () => {
     }
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    toast.info("You have been logged out.");
-    router.push("/");
-  };
+const handleLogout = () => {
+  dispatch(logout());
+  dispatch(removeAllItemsFromCart());
+  toast.info("You have been logged out.");
+  router.push("/");
+};
 
   if (authIsLoading || (isAuthenticated && pageIsLoading)) {
     return (
