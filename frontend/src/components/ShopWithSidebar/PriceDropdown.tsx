@@ -12,7 +12,7 @@ interface PriceDropdownProps {
   initialMax?: number;
 }
 
-const PriceDropdown = ({ onPriceChange, initialMin = 0, initialMax = 1000 }: PriceDropdownProps) => {
+const PriceDropdown = ({ onPriceChange, initialMin = 0, initialMax = 50 }: PriceDropdownProps) => {
   const [toggleDropdown, setToggleDropdown] = useState(true); // Keep it open by default or manage as needed
   const [priceRange, setPriceRange] = useState<[number, number]>([initialMin, initialMax]);
   const [minPriceInput, setMinPriceInput] = useState<string>(initialMin.toString());
@@ -119,8 +119,8 @@ const PriceDropdown = ({ onPriceChange, initialMin = 0, initialMax = 1000 }: Pri
           <RangeSlider
             id="price-range-slider"
             min={0} // Absolute minimum
-            max={1000} // Absolute maximum, adjust as needed
-            step={10}
+            max={50} // Absolute maximum
+            step={1}
             value={priceRange}
             onInput={handleSliderChange} // Use onInput for continuous updates or onChange for on release
             className="h-2.5 w-full"
@@ -148,7 +148,7 @@ const PriceDropdown = ({ onPriceChange, initialMin = 0, initialMax = 1000 }: Pri
                 onBlur={handleApplyFilter} // Apply on blur
                 className="w-20 rounded border border-gray-300 px-2 py-1 text-sm text-dark focus:border-blue focus:outline-none"
                 min={initialMin} // Set min for input field
-                max="1000" // Absolute max
+                max={initialMax} // Absolute max
               />
             </div>
           </div>

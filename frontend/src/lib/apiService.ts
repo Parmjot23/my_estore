@@ -120,8 +120,6 @@ export interface GetProductsParams {
   min_price?: number;
   max_price?: number;
   brand__slug?: string;
-  color?: string;
-  size?: string;
   search?: string;
   ordering?: string;
   page?: number;
@@ -132,8 +130,14 @@ export const getProducts = (params?: GetProductsParams): Promise<PaginatedProduc
   const queryParams = new URLSearchParams();
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') { // Ensure empty strings are not appended
-        queryParams.append(key, String(value));
+      if (value !== undefined && value !== null && value !== '') {
+        if (key === 'min_price') {
+          queryParams.append('price__gte', String(value));
+        } else if (key === 'max_price') {
+          queryParams.append('price__lte', String(value));
+        } else {
+          queryParams.append(key, String(value));
+        }
       }
     });
   }

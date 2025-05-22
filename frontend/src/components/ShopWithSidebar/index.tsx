@@ -8,8 +8,6 @@ import SingleGridItem from "../Shop/SingleGridItem";
 import SingleListItem from "../Shop/SingleListItem";
 import CategoryDropdown from "./CategoryDropdown";
 import PriceDropdown from "./PriceDropdown";
-import SizeDropdown from "./SizeDropdown";
-import ColorsDropdown from "./ColorsDropdwon";
 import GenderDropdown from "./GenderDropdown"; // Assuming this is for Brands
 import { getProducts, GetProductsParams, PaginatedResponse, getCategories } from "@/lib/apiService";
 import { LayoutGrid, List } from "lucide-react";
@@ -46,11 +44,9 @@ const ShopWithSidebarContent: React.FC = () => {
   const [filters, setFilters] = useState<Omit<GetProductsParams, 'page' | 'page_size'>>({
     ordering: "-created_at",
     category__slug: undefined,
-    min_price: undefined,
-    max_price: undefined,
+    min_price: 0,
+    max_price: 50,
     brand__slug: undefined,
-    color: undefined,
-    size: undefined,
     search: undefined,
   });
   // Flag to indicate if the initial filters from URL have been applied
@@ -143,15 +139,6 @@ const ShopWithSidebarContent: React.FC = () => {
     setCurrentPage(1);
   };
 
-  const handleSizeChange = (size: string | null) => {
-    setFilters(prev => ({...prev, size: size || undefined }));
-    setCurrentPage(1);
-  };
-
-  const handleColorChange = (color: string | null) => {
-    setFilters(prev => ({...prev, color: color || undefined }));
-    setCurrentPage(1);
-  };
 
   const handleBrandSlugChange = (brandSlug: string | null) => {
     setFilters(prev => ({...prev, brand__slug: brandSlug || undefined }));
@@ -164,8 +151,6 @@ const ShopWithSidebarContent: React.FC = () => {
     }
   };
 
-  const uniqueColors = Array.from(new Set(products.flatMap(p => p.variants?.flatMap(v => v.attributes.filter(a => a.attribute.toLowerCase() === 'color').map(a => a.value)) || (p.color ? [p.color] : [])))).filter(Boolean) as string[];
-  const uniqueSizes = Array.from(new Set(products.flatMap(p => p.variants?.flatMap(v => v.attributes.filter(a => a.attribute.toLowerCase() === 'size').map(a => a.value)) || (p.size ? [p.size] : [])))).filter(Boolean) as string[];
   const uniqueBrandNames = Array.from(new Set(products.map(p => p.brand_details?.name).filter(Boolean))) as string[];
 
   const renderPagination = () => { /* ... keep your existing pagination logic ... */
@@ -197,8 +182,6 @@ const ShopWithSidebarContent: React.FC = () => {
               <div className="space-y-6">
                 <CategoryDropdown allCategories={allCategories} isLoading={isLoadingCategories} error={categoryError} onCategoryChange={handleCategoryChange} selectedCategory={filters.category__slug} />
                 <PriceDropdown onPriceChange={handlePriceChange} initialMin={filters.min_price} initialMax={filters.max_price} />
-                <ColorsDropdown availableColors={uniqueColors} onColorChange={handleColorChange} selectedColor={filters.color}/>
-                <SizeDropdown availableSizes={uniqueSizes} onSizeChange={handleSizeChange} selectedSize={filters.size}/>
                 <GenderDropdown availableBrands={uniqueBrandNames} onBrandChange={handleBrandSlugChange} selectedBrand={filters.brand__slug} isLoading={isLoading} />
               </div>
             </aside>
