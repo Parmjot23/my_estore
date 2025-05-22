@@ -3,7 +3,15 @@ import { Product, PaginatedProducts, Review, Tag, Order, CreateOrderPayload, Wis
 import { Category } from "@/types/category"; // Corrected: Removed 's'
 import { User, AuthTokens, LoginCredentials, RegisterData, Address, ChangePasswordData } from "@/types/user";
 
-const API_ROOT = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000/api";
+// Automatically determine a sensible default API root. If no environment
+// variable is set, assume the backend is running on the same host as the
+// frontend but on port 8000. This helps when accessing the app from another
+// device on the local network without needing to configure .env variables.
+const defaultBackendUrl =
+  typeof window !== "undefined"
+    ? `${window.location.protocol}//${window.location.hostname}:8000/api`
+    : "http://localhost:8000/api";
+const API_ROOT = process.env.NEXT_PUBLIC_API_BASE_URL || defaultBackendUrl;
 
 export interface PaginatedResponse<T> {
   count: number;

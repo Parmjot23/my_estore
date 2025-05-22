@@ -24,7 +24,9 @@ SECRET_KEY = 'django-insecure--q56@mk$%ov5u8so)8-hlpf1jbkrjwj)cxue4!9lm@94$9sm1!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+# Allow all hosts during local development so the server is reachable from other
+# devices on the network.  Remember to restrict this in production.
 
 # Application definition
 
@@ -77,13 +79,10 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10  # Default number of items per page
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Your Next.js development server
-    "http://127.0.0.1:3000",
-    # Add your production frontend URL here
-]
-# Or, for more permissive settings during development (not recommended for production):
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
+# During local development it can be helpful to allow CORS requests from any
+# origin, especially when testing from another device on the same network.  In
+# production you should configure specific origins instead.
 
 TEMPLATES = [
     {
