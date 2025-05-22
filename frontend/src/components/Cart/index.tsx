@@ -1,14 +1,37 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Discount from "./Discount";
 import OrderSummary from "./OrderSummary";
-import { useAppSelector } from "@/redux/store";
+import { useAppSelector, useAppDispatch } from "@/redux/store";
+import { setCartItems, removeAllItemsFromCart } from "@/redux/features/cart-slice";
 import SingleItem from "./SingleItem";
 import Breadcrumb from "../Common/Breadcrumb";
 import Link from "next/link";
+import { getCart as apiGetCart, clearCart as apiClearCart } from "@/lib/apiService";
 
 const Cart = () => {
   const cartItems = useAppSelector((state) => state.cartReducer.items);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const apiItems = await apiGetCart();
+        const mapped = apiItems.map(item => ({
+          id: item.product_details.id,
+          title: item.product_details.name,
+          price: Number(item.product_details.price),
+          discountedPrice: item.product_details.discounted_price ? Number(item.product_details.discounted_price) : Number(item.product_details.price),
+          quantity: item.quantity,
+          imgs: item.product_details.imgs,
+        }));
+        dispatch(setCartItems(mapped));
+      } catch (err) {
+        console.error('Failed to fetch cart', err);
+      }
+    };
+    fetchCart();
+  }, [dispatch]);
 
   return (
     <>
@@ -22,7 +45,14 @@ const Cart = () => {
           <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
             <div className="flex flex-wrap items-center justify-between gap-5 mb-7.5">
               <h2 className="font-medium text-dark text-2xl">Your Cart</h2>
-              <button className="text-blue">Clear Shopping Cart</button>
+              <button className="text-blue" onClick={async () => {
+                dispatch(removeAllItemsFromCart());
+                try {
+                  await apiClearCart();
+                } catch (err) {
+                  console.error('Failed to clear cart', err);
+                }
+              }}>Clear Shopping Cart</button>
             </div>
 
             <div className="bg-white rounded-[10px] shadow-1">

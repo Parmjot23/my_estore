@@ -5,6 +5,10 @@ import {
   removeItemFromCart,
   updateCartItemQuantity,
 } from "@/redux/features/cart-slice";
+import {
+  removeFromCart as apiRemoveFromCart,
+  updateCartItem as apiUpdateCartItem,
+} from "@/lib/apiService";
 
 import Image from "next/image";
 
@@ -13,21 +17,36 @@ const SingleItem = ({ item }) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleRemoveFromCart = () => {
+  const handleRemoveFromCart = async () => {
     dispatch(removeItemFromCart(item.id));
+    try {
+      await apiRemoveFromCart(item.id);
+    } catch (error) {
+      console.error('Failed to remove from cart', error);
+    }
   };
 
-  const handleIncreaseQuantity = () => {
-    setQuantity(quantity + 1);
-    dispatch(updateCartItemQuantity({ id: item.id, quantity: quantity + 1 }));
+  const handleIncreaseQuantity = async () => {
+    const newQty = quantity + 1;
+    setQuantity(newQty);
+    dispatch(updateCartItemQuantity({ id: item.id, quantity: newQty }));
+    try {
+      await apiUpdateCartItem(item.id, newQty);
+    } catch (error) {
+      console.error('Failed to update cart item', error);
+    }
   };
 
-  const handleDecreaseQuantity = () => {
+  const handleDecreaseQuantity = async () => {
     if (quantity > 1) {
-      setQuantity(quantity - 1);
-      dispatch(updateCartItemQuantity({ id: item.id, quantity: quantity - 1 }));
-    } else {
-      return;
+      const newQty = quantity - 1;
+      setQuantity(newQty);
+      dispatch(updateCartItemQuantity({ id: item.id, quantity: newQty }));
+      try {
+        await apiUpdateCartItem(item.id, newQty);
+      } catch (error) {
+        console.error('Failed to update cart item', error);
+      }
     }
   };
 
