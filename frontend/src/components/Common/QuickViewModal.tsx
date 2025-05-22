@@ -265,12 +265,28 @@ const QuickViewModal = () => {
             </div>
 
             <p className="mb-3 text-lg font-semibold">
-              <span className={`${(currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice) ? 'text-red-500' : 'text-primary'}`}>
-                 ${effectivePrice.toFixed(2)}
-              </span>
-              {currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice && (
-                <span className="ml-2 text-base text-body-color line-through dark:text-dark-6">
-                  ${currentPrice.toFixed(2)}
+              {isAuthenticated ? (
+                <>
+                  <span
+                    className={`${
+                      currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice
+                        ? 'text-red-500'
+                        : 'text-primary'
+                    }`}
+                  >
+                     ${effectivePrice.toFixed(2)}
+                  </span>
+                  {currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice && (
+                    <span className="ml-2 text-base text-body-color line-through dark:text-dark-6">
+                      ${currentPrice.toFixed(2)}
+                    </span>
+                  )}
+                </>
+              ) : (
+                <span className="inline-block font-semibold text-red-600 bg-red-50 px-2 py-1 rounded">
+                  {product.get_discount_percentage && product.get_discount_percentage > 0
+                    ? `${product.get_discount_percentage}% OFF`
+                    : 'Login to see price'}
                 </span>
               )}
             </p>
