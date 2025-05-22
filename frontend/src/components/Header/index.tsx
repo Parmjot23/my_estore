@@ -252,8 +252,8 @@ const Header = () => {
       <div className="border-t border-gray-200">
         <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
           <div className="flex items-center justify-between">
-            <nav className="hidden xl:flex">
-              <ul className="flex items-center gap-x-8">
+            <nav className="hidden xl:flex overflow-x-auto scrollbar-none">
+              <ul className="flex items-center gap-x-6 xl:gap-x-8">
                 {headerMenuData.map((menuItem, i) => (
                   menuItem.submenu ? (
                     <Dropdown key={i} item={menuItem} stickyMenu={stickyMenu} openSubMenu={openSubMenu} handleSubMenuToggle={handleSubMenuToggle} />
