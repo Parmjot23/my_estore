@@ -18,11 +18,10 @@ This project contains a Django backend and a Next.js frontend.
    ```bash
    cd frontend && npm install
    ```
-2. Ensure the frontend knows how to reach the backend when accessed from another device.
+2. Ensure the frontend can reach the backend when accessed from another device.
    Create a `frontend/.env.local` file and set the backend URL using your computer's IP address:
    ```bash
    NEXT_PUBLIC_API_BASE_URL=http://<YOUR_IP>:8000/api
-   NEXT_PUBLIC_DJANGO_API_URL=http://<YOUR_IP>:8000/api
    ```
 3. Start the Next.js dev server:
    ```bash
