@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useQuickViewModalContext } from "@/app/context/QuickViewModalContext";
 import { Product } from "@/types/product";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
+import { AppDispatch, useAppSelector } from "@/redux/store";
 import { addItemToCart } from "@/redux/features/cart-slice";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
 import { toast } from "react-toastify";
@@ -21,6 +21,7 @@ const QuickViewModal = () => {
     useQuickViewModalContext();
 
   const dispatch = useDispatch<AppDispatch>();
+  const isAuthenticated = useAppSelector((state) => state.authReducer.isAuthenticated);
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
@@ -72,14 +73,24 @@ const QuickViewModal = () => {
   };
 
   const handleAddToCart = () => {
-    if (product) {
-      if (!product.is_available) {
-        toast.warn(`${product.name} is out of stock.`);
-        return;
-      }
-      dispatch(addItemToCart({ ...product, quantity }));
-      toast.success(`${product.name} added to cart`);
+    if (!product) return;
+    if (!isAuthenticated) {
+      toast.info("Please login to add items to cart.");
+      return;
     }
+    if (!product.is_available) {
+      toast.warn(`${product.name} is out of stock.`);
+      return;
+    }
+    dispatch(
+      addItemToCart({
+        ...product,
+        quantity,
+        discountedPrice: effectivePrice,
+        price: Number(product.price),
+      })
+    );
+    toast.success(`${product.name} added to cart`);
   };
 
   const handleAddToWishlist = () => {

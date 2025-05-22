@@ -12,7 +12,7 @@ import {
     removeFromWishlist as apiRemoveFromWishlist
 } from "@/lib/apiService"; // For API calls
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
+import { AppDispatch, RootState, useAppSelector } from "@/redux/store";
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "react-toastify"; // For user feedback
@@ -47,13 +47,26 @@ const SingleListItem = ({ item }: { item: Product }) => {
     }
   };
 
+  const isAuthenticated = useAppSelector((state) => state.authReducer.isAuthenticated);
+
   const handleAddToCart = () => {
     if (!item) return; // Guard
+    if (!isAuthenticated) {
+      toast.info("Please login to add items to cart.");
+      return;
+    }
     if (!item.is_available) {
       toast.warn(`${item.name} is out of stock.`);
       return;
     }
-    dispatch(addItemToCart({ ...item, quantity: 1 }));
+    dispatch(
+      addItemToCart({
+        ...item,
+        quantity: 1,
+        discountedPrice: item.discounted_price ? Number(item.discounted_price) : Number(item.price),
+        price: Number(item.price),
+      })
+    );
     toast.success(`${item.name} added to cart!`);
   };
 
