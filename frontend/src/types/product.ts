@@ -91,6 +91,14 @@ export type ApiWishlistItem = {
   added_at: string;
 };
 
+export type ApiCartItem = {
+  id: number; // ID of the CartItem
+  product_id: number;
+  product_details: Product;
+  quantity: number;
+  added_at: string;
+};
+
 
 export type CategoryChild = {
   id: number;
@@ -169,3 +177,15 @@ export type CreateOrderPayload = Omit<Order, 'id' | 'user_id' | 'created_at' | '
 
 // This was previously in wishlist-slice.ts, ensure it aligns with Product type
 export type WishlistItem = Product; // Wishlist items in Redux store are Product objects
+
+export type CartItem = {
+  id: number;
+  title: string;
+  price: number;
+  discountedPrice: number;
+  quantity: number;
+  imgs?: {
+    thumbnails: string[];
+    previews: string[];
+  };
+};

@@ -10,6 +10,7 @@ import { addItemToCart } from "@/redux/features/cart-slice";
 import {
     addToWishlist as apiAddToWishlist,
     removeFromWishlist as apiRemoveFromWishlist,
+    addToCart as apiAddToCart,
 } from "@/lib/apiService";
 import { toast } from "react-toastify";
 import Link from "next/link";
@@ -43,7 +44,7 @@ const ProductItem = ({ item }: { item: Product }) => {
 
   const isAuthenticated = useAppSelector((state) => state.authReducer.isAuthenticated);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!isAuthenticated) {
       toast.info("Please login to add items to cart.");
       return;
@@ -52,15 +53,20 @@ const ProductItem = ({ item }: { item: Product }) => {
       toast.warn(`${item.name} is out of stock.`);
       return;
     }
-    dispatch(
-      addItemToCart({
-        ...item,
-        quantity: 1,
-        discountedPrice: item.discounted_price ? Number(item.discounted_price) : Number(item.price),
-        price: Number(item.price),
-      }) as any
-    );
-    toast.success(`${item.name} added to cart!`);
+    try {
+      await apiAddToCart(item.id, 1);
+      dispatch(
+        addItemToCart({
+          ...item,
+          quantity: 1,
+          discountedPrice: item.discounted_price ? Number(item.discounted_price) : Number(item.price),
+          price: Number(item.price),
+        }) as any
+      );
+      toast.success(`${item.name} added to cart!`);
+    } catch (error: any) {
+      toast.error(error.data?.detail || error.message || "Failed to add to cart.");
+    }
   };
 
   const handleToggleWishlist = async () => {

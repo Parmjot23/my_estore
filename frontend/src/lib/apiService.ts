@@ -1,5 +1,5 @@
 // src/lib/apiService.ts
-import { Product, PaginatedProducts, Review, Tag, Order, CreateOrderPayload, WishlistItem as ApiWishlistItem, Category as ProductCategoryType } from "@/types/product"; // Used ApiWishlistItem
+import { Product, PaginatedProducts, Review, Tag, Order, CreateOrderPayload, WishlistItem as ApiWishlistItem, ApiCartItem, Category as ProductCategoryType } from "@/types/product";
 import { Category } from "@/types/category"; // Corrected: Removed 's'
 import { User, AuthTokens, LoginCredentials, RegisterData, Address, ChangePasswordData } from "@/types/user";
 
@@ -341,5 +341,38 @@ export const clearWishlist = (): Promise<void> => {
     // WishlistViewSet's clear_wishlist action is at /clear
     return fetchWrapper<void>(`${WISHLIST_BASE_URL}/clear/`, {
         method: 'DELETE', // Usually a POST or DELETE for actions that modify state. Backend uses DELETE.
+    });
+};
+
+const CART_BASE_URL = `${API_ROOT}/carts`;
+
+export const getCart = (): Promise<ApiCartItem[]> => {
+    return fetchWrapper<{id: number; user: number; items: ApiCartItem[]}>(`${CART_BASE_URL}/`)
+        .then(data => data.items || []);
+};
+
+export const addToCart = (productId: number, quantity: number = 1): Promise<ApiCartItem> => {
+    return fetchWrapper<ApiCartItem>(`${CART_BASE_URL}/add-item/`, {
+        method: 'POST',
+        body: JSON.stringify({ product_id: productId, quantity }),
+    });
+};
+
+export const updateCartItem = (productId: number, quantity: number): Promise<ApiCartItem> => {
+    return fetchWrapper<ApiCartItem>(`${CART_BASE_URL}/update-item/${productId}/`, {
+        method: 'PUT',
+        body: JSON.stringify({ quantity }),
+    });
+};
+
+export const removeFromCart = (productId: number): Promise<void> => {
+    return fetchWrapper<void>(`${CART_BASE_URL}/remove-item/${productId}/`, {
+        method: 'DELETE',
+    });
+};
+
+export const clearCart = (): Promise<void> => {
+    return fetchWrapper<void>(`${CART_BASE_URL}/clear/`, {
+        method: 'DELETE',
     });
 };
