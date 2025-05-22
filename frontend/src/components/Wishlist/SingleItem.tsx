@@ -1,7 +1,7 @@
 // src/components/Wishlist/SingleItem.tsx
 "use client";
 import React, { useState } from "react";
-import { AppDispatch } from "@/redux/store";
+import { AppDispatch, useAppSelector } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { Product } from "@/types/product"; // Expecting a Product type
 import { addItemToCart } from "@/redux/features/cart-slice";
@@ -49,21 +49,25 @@ const SingleItem = ({ item, onRemoveSuccess }: { item: Product; onRemoveSuccess:
     ? currentDiscountedPrice
     : currentPrice;
 
+  const isAuthenticated = useAppSelector((state) => state.authReducer.isAuthenticated);
+
   const handleAddToCart = () => {
+    if (!isAuthenticated) {
+      toast.info("Please login to add items to cart.");
+      return;
+    }
     if (item.is_available) {
       dispatch(
         addItemToCart({
           id: item.id,
-          name: item.name, // Use name from Product type
-          price: currentPrice, // Original price
-          discountedPrice: effectivePrice, // The price customer pays
+          name: item.name,
+          price: currentPrice,
+          discountedPrice: effectivePrice,
           quantity: 1,
           slug: item.slug,
           cover_image_url: item.cover_image_url,
           imgs: item.imgs,
-          // is_available: item.is_available, // Already checked
-          // stock_quantity: item.stock_quantity, // Add if your CartItem needs it
-        } as any) // Cast as any if CartItem type is slightly different, ideally align them
+        } as any)
       );
       toast.success(`${item.name} added to cart`);
     } else {

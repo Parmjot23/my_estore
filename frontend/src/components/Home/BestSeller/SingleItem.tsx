@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react"; // Added useEffect, useState
 import { Product } from "@/types/product";
 import { useQuickViewModalContext } from "@/app/context/QuickViewModalContext";
 import { useDispatch, useSelector } from "react-redux"; // Added useSelector
-import { AppDispatch, RootState } from "@/redux/store"; // Added RootState
+import { AppDispatch, RootState, useAppSelector } from "@/redux/store"; // Added useAppSelector
 import { addItemToCart } from "@/redux/features/cart-slice";
 // Corrected: Using API services for wishlist actions directly
 import {
@@ -42,7 +42,13 @@ const SingleItem = ({ item }: { item: Product }) => {
     }
   };
 
+  const isAuthenticated = useAppSelector((state) => state.authReducer.isAuthenticated);
+
   const handleAddToCart = () => {
+    if (!isAuthenticated) {
+      toast.info("Please login to add items to cart.");
+      return;
+    }
     if (!item.is_available) {
       toast.warn(`${item.name} is out of stock.`);
       return;
@@ -54,7 +60,7 @@ const SingleItem = ({ item }: { item: Product }) => {
         // Ensure discountedPrice and price are numbers
         discountedPrice: item.discounted_price ? Number(item.discounted_price) : Number(item.price),
         price: Number(item.price),
-      } as any) // Cast if CartItem type has minor differences not covered by spread
+      } as any)
     );
     toast.success(`${item.name} added to cart!`);
   };

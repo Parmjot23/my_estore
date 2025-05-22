@@ -9,7 +9,7 @@ import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { Product, ProductMediaItem } from "@/types/product";
 import { Star, Heart, ShoppingCart } from "lucide-react";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
+import { AppDispatch, useAppSelector } from "@/redux/store";
 import { addItemToCart } from "@/redux/features/cart-slice";
 import { addItemToWishlist as addItemToWishlistAction } from "@/redux/features/wishlist-slice";
 import { updateproductDetails } from "@/redux/features/product-details"; // For PreviewSliderModal
@@ -117,15 +117,27 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
   const reviewCount = product.reviews || 0; // Using 'reviews' as per Product type
   const averageRating = product.average_rating ? Number(product.average_rating) : 0;
 
+  const isAuthenticated = useAppSelector((state) => state.authReducer.isAuthenticated);
+
   const handleAddToCart = () => {
-    if (product) {
-      if (!product.is_available) {
-        toast.warn(`${product.name} is out of stock.`);
-        return;
-      }
-      dispatch(addItemToCart({ ...product, quantity, discountedPrice: effectivePrice, price: Number(product.price) }));
-      toast.success(`${product.name} (x${quantity}) added to cart`);
+    if (!product) return;
+    if (!isAuthenticated) {
+      toast.info("Please login to add items to cart.");
+      return;
     }
+    if (!product.is_available) {
+      toast.warn(`${product.name} is out of stock.`);
+      return;
+    }
+    dispatch(
+      addItemToCart({
+        ...product,
+        quantity,
+        discountedPrice: effectivePrice,
+        price: Number(product.price),
+      })
+    );
+    toast.success(`${product.name} (x${quantity}) added to cart`);
   };
 
   const handleAddToWishlist = () => {
