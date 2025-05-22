@@ -1,32 +1,49 @@
-# Local Network Development
+# MadeByParm.com
 
-This project contains a Django backend and a Next.js frontend.
+This repo contains a simple full‑stack portfolio.
 
-## Backend
-1. Install dependencies:
-   ```bash
-   pip install -r backend/requirements.txt
-   ```
-2. Run the development server so it is reachable from other devices:
-   ```bash
-   python backend/manage.py runserver 0.0.0.0:8000
-   ```
-   The server will listen on port `8000` on all network interfaces.
+Directory structure:
+- `portfolio_backend/` – Django REST Framework project with `portfolio` app
+- `portfolio_frontend/` – React + Vite frontend
+- `backend/` – legacy e‑store project (kept for reference)
 
-## Frontend
-1. Install dependencies:
-   ```bash
-   cd frontend && npm install
-   ```
-2. Ensure the frontend can reach the backend when accessed from another device.
-   Create a `frontend/.env.local` file and set the backend URL using your computer's IP address:
-   ```bash
-   NEXT_PUBLIC_API_BASE_URL=http://<YOUR_IP>:8000/api
-   ```
-3. Start the Next.js dev server:
-   ```bash
-   npm run dev
-   ```
-   This runs `next dev -H 0.0.0.0 -p 3000`, so the frontend is available on port `3000` from other devices on the network.
+## Local Development
 
-Both the frontend and backend will now be accessible from devices connected to the same network (for example, via a phone hotspot).
+### Backend
+1. Install Python 3.10+
+2. Install dependencies:
+   ```bash
+   pip install -r portfolio_backend/requirements.txt
+   ```
+3. Run migrations and start the server:
+   ```bash
+   cd portfolio_backend
+   python manage.py migrate
+   python manage.py runserver 0.0.0.0:8000
+   ```
+   The API will be available at `http://localhost:8000/api/`.
+
+### Frontend
+1. Install Node.js 18+
+2. Install dependencies:
+   ```bash
+   cd portfolio_frontend
+   npm install
+   ```
+3. Start the dev server:
+   ```bash
+   npm run dev -- --host
+   ```
+   Access the site at `http://localhost:5173`.
+
+### Docker Compose
+Alternatively you can run both services with Docker Compose:
+```bash
+docker-compose up --build
+```
+
+### API Endpoints
+- `GET /api/projects/` – list projects
+- `POST /api/contact/` – submit the contact form
+
+Use the Django admin at `/admin/` to manage content.
