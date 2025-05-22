@@ -116,7 +116,7 @@ const SingleItem = ({ item, onRemoveSuccess }: { item: Product; onRemoveSuccess:
               <Link href={`/shop-details/${item.slug || item.id}`}> {item.name} </Link>
             </h3>
             {/* Display original price if there's a discount */}
-            {currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice && (
+            {isAuthenticated && currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice && (
                 <p className="text-xs text-gray-500 dark:text-gray-400 line-through">${currentPrice.toFixed(2)}</p>
             )}
           </div>
@@ -125,7 +125,14 @@ const SingleItem = ({ item, onRemoveSuccess }: { item: Product; onRemoveSuccess:
 
       {/* Unit Price */}
       <div className="hidden sm:block sm:min-w-[150px] md:min-w-[180px] xl:min-w-[205px] px-2 text-center">
-        <p className="text-dark dark:text-white font-medium">${effectivePrice.toFixed(2)}</p>
+        {isAuthenticated && (
+          <p className="text-dark dark:text-white font-medium">${effectivePrice.toFixed(2)}</p>
+        )}
+        {item.get_discount_percentage && item.get_discount_percentage > 0 ? (
+          <p className={`font-semibold text-red-600 ${isAuthenticated ? 'mt-1' : ''}`}>{item.get_discount_percentage}% OFF</p>
+        ) : (
+          !isAuthenticated && <p className="font-semibold text-red-600">Login to see price</p>
+        )}
       </div>
 
       {/* Stock Status */}

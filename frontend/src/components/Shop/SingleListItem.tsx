@@ -179,14 +179,33 @@ const SingleListItem = ({ item }: { item: Product }) => {
           </div>
 
           <div className="mt-auto">
-            <span className="flex items-center gap-2 font-semibold text-lg mb-3">
-              <span className={`${currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice ? 'text-red-600' : 'text-dark'}`}>
-                ${effectivePrice.toFixed(2)}
+            {isAuthenticated && (
+              <span className="flex items-center gap-2 font-semibold text-lg mb-3">
+                <span
+                  className={`${
+                    currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice
+                      ? 'text-red-600'
+                      : 'text-dark'
+                  }`}
+                >
+                  ${effectivePrice.toFixed(2)}
+                </span>
+                {currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice && (
+                  <span className="text-gray-500 line-through text-base">${currentPrice.toFixed(2)}</span>
+                )}
               </span>
-              {currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice && (
-                <span className="text-gray-500 line-through text-base">${currentPrice.toFixed(2)}</span>
-              )}
-            </span>
+            )}
+            {item.get_discount_percentage && item.get_discount_percentage > 0 ? (
+              <span className="inline-block font-semibold text-red-600 bg-red-50 px-2 py-1 rounded mb-3">
+                {item.get_discount_percentage}% OFF
+              </span>
+            ) : (
+              !isAuthenticated && (
+                <span className="inline-block font-semibold text-red-600 bg-red-50 px-2 py-1 rounded mb-3">
+                  Login to see price
+                </span>
+              )
+            )}
             {!item.is_available && (
                 <p className="text-xs text-red-500 mb-3 font-medium">Out of Stock</p>
             )}

@@ -266,14 +266,35 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
                 )}
               </div>
 
-              <h3 className="font-semibold text-2xl sm:text-3xl mb-5">
-                <span className={`text-dark dark:text-white ${(product.discounted_price != null && Number(product.discounted_price) < Number(product.price)) ? 'text-red-500' : 'text-primary'}`}>
-                    ${effectivePrice.toFixed(2)}
-                </span>
-                {product.discounted_price != null && Number(product.discounted_price) < Number(product.price) && (
-                    <span className="ml-2 text-lg line-through text-gray-500 dark:text-dark-6">
-                    ${Number(product.price).toFixed(2)}
+              <h3 className="font-semibold text-2xl sm:text-3xl mb-5 flex items-center gap-2">
+                {isAuthenticated && (
+                  <>
+                    <span
+                      className={`text-dark dark:text-white ${
+                        product.discounted_price != null && Number(product.discounted_price) < Number(product.price)
+                          ? 'text-red-500'
+                          : 'text-primary'
+                      }`}
+                    >
+                      ${effectivePrice.toFixed(2)}
                     </span>
+                    {product.discounted_price != null && Number(product.discounted_price) < Number(product.price) && (
+                      <span className="text-lg line-through text-gray-500 dark:text-dark-6">
+                        ${Number(product.price).toFixed(2)}
+                      </span>
+                    )}
+                  </>
+                )}
+                {product.get_discount_percentage && product.get_discount_percentage > 0 ? (
+                  <span className="inline-block font-semibold text-red-600 bg-red-50 px-2 py-1 rounded">
+                    {product.get_discount_percentage}% OFF
+                  </span>
+                ) : (
+                  !isAuthenticated && (
+                    <span className="inline-block font-semibold text-red-600 bg-red-50 px-2 py-1 rounded">
+                      Login to see price
+                    </span>
+                  )
                 )}
               </h3>
 

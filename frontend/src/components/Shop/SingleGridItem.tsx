@@ -199,15 +199,34 @@ const SingleGridItem = ({ product: item }: { product: Product }) => {
           </Link>
         </h3>
         <div className="mt-auto">
-          <span className="flex items-center gap-2 font-semibold text-base">
-            <span className={`${currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice ? 'text-red-600' : 'text-dark'}`}>
-              ${effectivePrice.toFixed(2)}
+          {isAuthenticated && (
+            <span className="flex items-center gap-2 font-semibold text-base">
+              <span
+                className={`${
+                  currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice
+                    ? 'text-red-600'
+                    : 'text-dark'
+                }`}
+              >
+                ${effectivePrice.toFixed(2)}
+              </span>
+              {currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice && (
+                <span className="text-gray-500 line-through text-sm">${currentPrice.toFixed(2)}</span>
+              )}
             </span>
-            {currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice && (
-              <span className="text-gray-500 line-through text-sm">${currentPrice.toFixed(2)}</span>
-            )}
-          </span>
-           {!item.is_available && (
+          )}
+          {item.get_discount_percentage && item.get_discount_percentage > 0 ? (
+            <span className="inline-block font-semibold text-red-600 bg-red-50 px-2 py-1 rounded">
+              {item.get_discount_percentage}% OFF
+            </span>
+          ) : (
+            !isAuthenticated && (
+              <span className="inline-block font-semibold text-red-600 bg-red-50 px-2 py-1 rounded">
+                Login to see price
+              </span>
+            )
+          )}
+          {!item.is_available && (
             <p className="text-xs text-red-500 mt-1 font-medium">Out of Stock</p>
           )}
         </div>

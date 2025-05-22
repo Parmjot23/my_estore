@@ -2,8 +2,10 @@ import React from "react";
 import HeroCarousel from "./HeroCarousel";
 import HeroFeature from "./HeroFeature";
 import Image from "next/image";
+import { useAppSelector } from "@/redux/store";
 
 const Hero = () => {
+  const isAuthenticated = useAppSelector((state) => state.authReducer.isAuthenticated);
   return (
     <section className="overflow-hidden pb-10 lg:pb-12.5 xl:pb-15 pt-57.5 sm:pt-45 lg:pt-30 xl:pt-51.5 bg-gradient-to-r from-blue-50 to-purple-50">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
@@ -37,11 +39,18 @@ const Hero = () => {
                         limited time offer
                       </p>
                       <span className="flex items-center gap-3">
-                        <span className="font-medium text-heading-5 text-red">
-                          $699
-                        </span>
-                        <span className="font-medium text-2xl text-dark-4 line-through">
-                          $999
+                        {isAuthenticated && (
+                          <>
+                            <span className="font-medium text-heading-5 text-red">
+                              $699
+                            </span>
+                            <span className="font-medium text-2xl text-dark-4 line-through">
+                              $999
+                            </span>
+                          </>
+                        )}
+                        <span className="font-medium text-heading-5 text-red-600 bg-red-50 px-2 py-1 rounded">
+                          30% OFF
                         </span>
                       </span>
                     </div>
@@ -69,11 +78,18 @@ const Hero = () => {
                         limited time offer
                       </p>
                       <span className="flex items-center gap-3">
-                        <span className="font-medium text-heading-5 text-red">
-                          $699
-                        </span>
-                        <span className="font-medium text-2xl text-dark-4 line-through">
-                          $999
+                        {isAuthenticated && (
+                          <>
+                            <span className="font-medium text-heading-5 text-red">
+                              $699
+                            </span>
+                            <span className="font-medium text-2xl text-dark-4 line-through">
+                              $999
+                            </span>
+                          </>
+                        )}
+                        <span className="font-medium text-heading-5 text-red-600 bg-red-50 px-2 py-1 rounded">
+                          30% OFF
                         </span>
                       </span>
                     </div>
