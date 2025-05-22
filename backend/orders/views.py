@@ -5,7 +5,7 @@ from .serializers import OrderSerializer
 
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
-    permission_classes = [permissions.IsAuthenticated] # Or custom permission
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         user = self.request.user
