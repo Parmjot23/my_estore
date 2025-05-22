@@ -158,13 +158,13 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed left-0 top-0 w-full z-[9999] bg-white/95 backdrop-blur-sm transition-all ease-in-out duration-300 ${
-        stickyMenu ? "shadow-nav animate-stickyBackground" : ""
+      className={`fixed left-0 top-0 w-full z-[9999] bg-gradient-to-r from-blue-50 via-white to-blue-50 backdrop-blur-sm transition-all ease-in-out duration-300 ${
+        stickyMenu ? "shadow-nav animate-stickyBackground" : "shadow-md"
       }`}
     >
       <div className={`max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0 ${stickyMenu ? "py-3 lg:py-3.5" : "py-4 lg:py-5"}`}> {/* Adjusted padding for sticky */}
         <div className="flex items-center justify-between gap-4">
-          <Link className="flex-shrink-0 text-2xl font-bold text-blue hover:opacity-90 transition-opacity" href="/">
+          <Link className="flex-shrink-0 text-3xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent hover:opacity-90 transition-opacity" href="/">
             {businessName}
           </Link>
 
