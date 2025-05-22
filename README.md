@@ -1,6 +1,6 @@
-# Local Network Development
+# TruckZone Development
 
-This project contains a Django backend and a Next.js frontend.
+This repository contains a minimal e-commerce stack for **TruckZone**, a semi-truck parts store. The backend is powered by Django and Django REST Framework while the frontend uses Next.js with TypeScript and TailwindCSS.
 
 ## Backend
 1. Install dependencies:
@@ -12,6 +12,13 @@ This project contains a Django backend and a Next.js frontend.
    python backend/manage.py runserver 0.0.0.0:8000
    ```
    The server will listen on port `8000` on all network interfaces.
+
+Key API endpoints:
+* `/api/shop/products/` – list products and view details
+* `/api/orders/` – submit a new order
+* `/api/contact/messages/` – send a message to TruckZone
+
+You can submit messages from the frontend at `/contact` which posts to this endpoint.
 
 ## Frontend
 1. Install dependencies:

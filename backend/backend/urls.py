@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/orders/', include('orders.urls')),
     path('api/wishlists/', include('wishlists.urls')),
     path('api/carts/', include('carts.urls')),
+    path('api/contact/', include('contact.urls')),
     # You would add other app API urls here, e.g.:
     # path('api/users/', include('users.urls')), # If 'users' app is at the root of backend/
     # path('api/orders/', include('orders.urls')), # If 'orders' app is at the root of backend/

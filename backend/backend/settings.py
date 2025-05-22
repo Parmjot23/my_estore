@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'wishlists.apps.WishlistsConfig',
     'carts.apps.CartsConfig',
     'reviews.apps.ReviewsConfig',
+    'contact.apps.ContactConfig',
     "rest_framework_simplejwt",
 ]
 

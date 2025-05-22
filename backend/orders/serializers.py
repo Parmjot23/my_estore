@@ -38,9 +38,8 @@ class OrderSerializer(serializers.ModelSerializer):
         return order
 
     def update(self, instance, validated_data):
-        # Basic update, order items update might be complex and handled separately or disallowed post-creation
+        """Basic update logic for Order."""
         instance.status = validated_data.get('status', instance.status)
         instance.is_paid = validated_data.get('is_paid', instance.is_paid)
-        # Add other updatable fields
         instance.save()
         return instance

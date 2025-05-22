@@ -2,6 +2,7 @@
 import { Product, PaginatedProducts, Review, Tag, Order, CreateOrderPayload, WishlistItem as ApiWishlistItem, ApiCartItem, Category as ProductCategoryType } from "@/types/product";
 import { Category } from "@/types/category"; // Corrected: Removed 's'
 import { User, AuthTokens, LoginCredentials, RegisterData, Address, ChangePasswordData } from "@/types/user";
+import { ContactMessage, ContactMessagePayload } from "@/types/contact";
 
 const API_ROOT = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000/api";
 
@@ -110,6 +111,7 @@ async function fetchWrapper<T>(url: string, options?: RequestInit): Promise<T> {
 }
 
 const SHOP_BASE_URL = `${API_ROOT}/shop`;
+const CONTACT_BASE_URL = `${API_ROOT}/contact`;
 
 export interface GetProductsParams {
   category__slug?: string;
@@ -378,5 +380,12 @@ export const removeFromCart = (productId: number): Promise<void> => {
 export const clearCart = (): Promise<void> => {
     return fetchWrapper<void>(`${CART_BASE_URL}/clear/`, {
         method: 'DELETE',
+    });
+};
+
+export const sendContactMessage = (data: ContactMessagePayload): Promise<ContactMessage> => {
+    return fetchWrapper<ContactMessage>(`${CONTACT_BASE_URL}/messages/`, {
+        method: 'POST',
+        body: JSON.stringify(data),
     });
 };
