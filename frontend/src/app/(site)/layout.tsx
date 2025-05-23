@@ -49,7 +49,7 @@ export default function RootLayout({
                 <QuickViewModalProvider>
                   <PreviewSliderProvider>
                     <HeaderWithSuspense />
-                    <main className="pt-20 md:pt-24">
+                    <main className="pt-20 md:pt-24 xl:pt-32">
                       {children}
                     </main>
                     <QuickViewModal />
