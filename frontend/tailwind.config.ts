@@ -12,6 +12,7 @@ const config: Config = {
   theme: {
     fontFamily: {
       "euclid-circular-a": ["Euclid Circular A"],
+      sans: ["Euclid Circular A", ...defaultTheme.fontFamily.sans],
     },
     container: {
       center: true,
