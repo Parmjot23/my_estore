@@ -17,6 +17,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { toast } from "react-toastify"; // For user feedback
 import { Heart, Eye, ShoppingCart } from 'lucide-react'; // Lucide icons
+import DiscountBadge from "@/components/Common/DiscountBadge";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/280x280/F0F0F0/777777?text=Image+Not+Available";
 
@@ -145,9 +146,7 @@ const SingleItem = ({ item }: { item: Product }) => {
           />
         </Link>
         {item.get_discount_percentage && item.get_discount_percentage > 0 && (
-          <span className="absolute top-3 right-3 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
-            {item.get_discount_percentage}% OFF
-          </span>
+          <DiscountBadge percentage={item.get_discount_percentage} className="absolute top-3 right-3" />
         )}
          {!item.is_available && (
           <span className="absolute top-3 left-3 bg-gray-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
@@ -209,6 +208,9 @@ const SingleItem = ({ item }: { item: Product }) => {
             </span>
             {currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice && (
               <span className="text-gray-500 line-through text-sm">${currentPrice.toFixed(2)}</span>
+            )}
+            {item.get_discount_percentage && item.get_discount_percentage > 0 && (
+              <DiscountBadge percentage={item.get_discount_percentage} className="ml-1" />
             )}
           </span>
            {!item.is_available && (
