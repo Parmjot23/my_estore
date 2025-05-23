@@ -3,108 +3,66 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 
 // Import Swiper styles
-import "swiper/css/pagination";
 import "swiper/css";
+import "swiper/css/pagination";
 
 import Image from "next/image";
+import Link from "next/link";
+import DiscountBadge from "@/components/Common/DiscountBadge";
+import shopData from "@/components/Shop/shopData";
+
+// Select top discounted products from the demo data
+const heroProducts = shopData
+  .map((p) => ({
+    title: p.title,
+    image: p.imgs?.previews?.[0] || p.imgs?.thumbnails?.[0] || "/images/hero/hero-01.png",
+    discount: Math.round(((p.price - p.discountedPrice) / p.price) * 100),
+  }))
+  .sort((a, b) => b.discount - a.discount)
+  .slice(0, 3);
+
+const gradientClasses = [
+  "from-pink-200 via-purple-200 to-indigo-200",
+  "from-teal-200 via-emerald-200 to-green-200",
+  "from-yellow-200 via-orange-200 to-red-200",
+];
 
 const HeroCarousal = () => {
   return (
     <Swiper
       spaceBetween={30}
-      centeredSlides={true}
-      autoplay={{
-        delay: 2500,
-        disableOnInteraction: false,
-      }}
-      pagination={{
-        clickable: true,
-      }}
+      centeredSlides
+      autoplay={{ delay: 3000, disableOnInteraction: false }}
+      pagination={{ clickable: true }}
       modules={[Autoplay, Pagination]}
       className="hero-carousel"
     >
-      <SwiperSlide>
-        <div className="flex items-center pt-6 sm:pt-0 flex-col-reverse sm:flex-row">
-          <div className="max-w-[394px] py-10 sm:py-15 lg:py-24.5 pl-4 sm:pl-7.5 lg:pl-12.5">
-            <div className="flex items-center gap-4 mb-7.5 sm:mb-10">
-              <span className="block font-semibold text-heading-3 sm:text-heading-1 text-blue">
-                30%
-              </span>
-              <span className="block text-dark text-sm sm:text-custom-1 sm:leading-[24px]">
-                Sale
-                <br />
-                Off
-              </span>
+      {heroProducts.map((item, idx) => (
+        <SwiperSlide key={idx}>
+          <div className="relative h-[70vh] flex items-center justify-between overflow-hidden px-4 sm:px-12">
+            <div className={`absolute inset-0 bg-gradient-to-r ${gradientClasses[idx % gradientClasses.length]}`}></div>
+            <div className="absolute inset-0 bg-white/60"></div>
+
+            <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left max-w-md">
+              <DiscountBadge percentage={item.discount} className="mb-4" />
+              <h2 className="font-bold text-3xl sm:text-4xl md:text-5xl text-dark-base mb-3">
+                {item.title}
+              </h2>
+              <p className="text-dark-base mb-6">Limited time deal on our best price.</p>
+              <Link
+                href="/shop"
+                className="inline-block bg-accent text-white py-3 px-9 rounded-md hover:bg-[#b88d4f] transition"
+              >
+                Shop Now
+              </Link>
             </div>
 
-            <h1 className="font-semibold text-dark text-xl sm:text-3xl mb-3">
-              <a href="#">True Wireless Noise Cancelling Headphone</a>
-            </h1>
-
-            <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi at ipsum at risus euismod lobortis in
-            </p>
-
-            <a
-              href="#"
-              className="inline-flex font-medium text-white text-custom-sm rounded-md bg-dark py-3 px-9 ease-out duration-200 hover:bg-blue mt-10"
-            >
-              Shop Now
-            </a>
-          </div>
-
-          <div>
-            <Image
-              src="/images/hero/hero-01.png"
-              alt="headphone"
-              width={351}
-              height={358}
-            />
-          </div>
-        </div>
-      </SwiperSlide>
-      <SwiperSlide>
-        {" "}
-        <div className="flex items-center pt-6 sm:pt-0 flex-col-reverse sm:flex-row">
-          <div className="max-w-[394px] py-10 sm:py-15 lg:py-26 pl-4 sm:pl-7.5 lg:pl-12.5">
-            <div className="flex items-center gap-4 mb-7.5 sm:mb-10">
-              <span className="block font-semibold text-heading-3 sm:text-heading-1 text-blue">
-                30%
-              </span>
-              <span className="block text-dark text-sm sm:text-custom-1 sm:leading-[24px]">
-                Sale
-                <br />
-                Off
-              </span>
+            <div className="relative z-10 hidden sm:block">
+              <Image src={item.image} alt={item.title} width={380} height={380} />
             </div>
-
-            <h1 className="font-semibold text-dark text-xl sm:text-3xl mb-3">
-              <a href="#">True Wireless Noise Cancelling Headphone</a>
-            </h1>
-
-            <p>
-              Lorem ipsum dolor sit, consectetur elit nunc suscipit non ipsum
-              nec suscipit.
-            </p>
-
-            <a
-              href="#"
-              className="inline-flex font-medium text-white text-custom-sm rounded-md bg-dark py-3 px-9 ease-out duration-200 hover:bg-blue mt-10"
-            >
-              Shop Now
-            </a>
           </div>
-
-          <div>
-            <Image
-              src="/images/hero/hero-01.png"
-              alt="headphone"
-              width={351}
-              height={358}
-            />
-          </div>
-        </div>
-      </SwiperSlide>
+        </SwiperSlide>
+      ))}
     </Swiper>
   );
 };
