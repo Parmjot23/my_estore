@@ -8,6 +8,7 @@ import { addItemToCart } from "@/redux/features/cart-slice";
 import { removeFromWishlist as apiRemoveFromWishlist } from "@/lib/apiService";
 import Image from "next/image";
 import Link from "next/link";
+import DiscountBadge from "@/components/Common/DiscountBadge";
 import { toast } from 'react-toastify';
 // No need to import removeItemFromWishlistAction from Redux slice here if parent handles Redux state update
 
@@ -126,7 +127,12 @@ const SingleItem = ({ item, onRemoveSuccess }: { item: Product; onRemoveSuccess:
       {/* Unit Price */}
       <div className="hidden sm:block sm:min-w-[150px] md:min-w-[180px] xl:min-w-[205px] px-2 text-center">
         {isAuthenticated ? (
-          <p className="text-dark dark:text-white font-medium">${effectivePrice.toFixed(2)}</p>
+          <p className="text-dark dark:text-white font-medium flex items-center justify-center gap-1">
+            ${effectivePrice.toFixed(2)}
+            {item.get_discount_percentage && item.get_discount_percentage > 0 && (
+              <DiscountBadge percentage={item.get_discount_percentage} />
+            )}
+          </p>
         ) : (
           <p className="font-semibold text-red-600">{item.get_discount_percentage && item.get_discount_percentage > 0 ? `${item.get_discount_percentage}% OFF` : 'Login to see price'}</p>
         )}

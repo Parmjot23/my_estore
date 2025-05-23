@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import PreviewSlider from "./PreviewSlider"; // Assuming this component is correctly implemented
 import { getProductBySlug } from "@/lib/apiService";
 import { Star, Heart, ShoppingCart, XCircle, RefreshCw } from "lucide-react"; // Lucide icons
+import DiscountBadge from "@/components/Common/DiscountBadge";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/600x400/eee/ccc?text=No+Image";
 
@@ -280,6 +281,9 @@ const QuickViewModal = () => {
                     <span className="ml-2 text-base text-body-color line-through dark:text-dark-6">
                       ${currentPrice.toFixed(2)}
                     </span>
+                  )}
+                  {product.get_discount_percentage && product.get_discount_percentage > 0 && (
+                    <DiscountBadge percentage={product.get_discount_percentage} className="ml-2" />
                   )}
                 </>
               ) : (

@@ -8,6 +8,7 @@ import RecentlyViewdItems from "./RecentlyViewd";
 import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { Product, ProductMediaItem } from "@/types/product";
 import { Star, Heart, ShoppingCart } from "lucide-react";
+import DiscountBadge from "@/components/Common/DiscountBadge";
 import { useDispatch } from "react-redux";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { addItemToCart } from "@/redux/features/cart-slice";
@@ -243,9 +244,7 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
                   {product.name || "Product Name"}
                 </h2>
                 {product.get_discount_percentage != null && product.get_discount_percentage > 0 && (
-                    <div className="ml-2 inline-flex font-medium text-xs sm:text-custom-sm text-white bg-red-500 rounded py-0.5 px-2 sm:px-2.5 whitespace-nowrap">
-                        {product.get_discount_percentage.toFixed(0)}% OFF
-                    </div>
+                    <DiscountBadge percentage={product.get_discount_percentage} className="ml-2" />
                 )}
               </div>
 
@@ -282,6 +281,9 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
                       <span className="ml-2 text-lg line-through text-gray-500 dark:text-dark-6">
                         ${Number(product.price).toFixed(2)}
                       </span>
+                    )}
+                    {product.get_discount_percentage != null && product.get_discount_percentage > 0 && (
+                      <DiscountBadge percentage={product.get_discount_percentage} className="ml-2" />
                     )}
                   </>
                 ) : (
