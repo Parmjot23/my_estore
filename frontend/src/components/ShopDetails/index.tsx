@@ -50,10 +50,10 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
 
   // Fetch reviews when the product changes or component mounts
   useEffect(() => {
-    if (product && product.slug) {
+    if (product && product.id) {
       setIsLoadingReviews(true);
       setReviewError(null);
-      getProductReviews(product.slug)
+      getProductReviews(product.id)
         .then(data => setReviews(data || []))
         .catch(err => {
           console.error("Failed to fetch reviews:", err);
@@ -150,6 +150,10 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isAuthenticated) {
+        toast.info("Please login to leave a review.");
+        return;
+    }
     if (!newReviewRating || !newReviewComment.trim() || !newReviewUserName.trim()) {
         toast.error("Please provide a rating, comment, and your name.");
         return;
