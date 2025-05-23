@@ -161,27 +161,11 @@ export const getCategoryBySlug = (slug: string): Promise<ProductCategoryType> =>
 };
 
 // Assuming product_pk is used in the URL structure as defined in backend's reviews/views.py
-export const getProductReviews = (productIdOrSlug: string | number): Promise<Review[]> => {
-  // The backend ProductReviewViewSet get_queryset uses self.kwargs.get('product_pk')
-  // This means the URL in the backend is nested, e.g., /products/{product_pk}/reviews/
-  // Ensure the DRF-Nested-Routers setup generates this URL for this viewset.
-  // If not using drf-nested-routers and you have a simpler, non-nested route like /reviews/?product=<id_or_slug>, adjust here.
-  // For now, assuming the nested structure is intended for full CRUD via ProductReviewViewSet.
-  // If ProductReviewViewSet is registered at /api/reviews/ and filters by product_pk query param:
-  // return fetchWrapper<PaginatedResponse<Review>>(`${API_ROOT}/reviews/?product=${productIdOrSlug}`)
-  // But current backend reviews/urls.py is empty and views.py refers to product_pk from kwargs,
-  // implying it expects to be nested under a product route.
-  // Let's assume the main urls.py nests it: path('api/shop/products/<slug:product_pk>/reviews/', include('reviews.urls')) - but reviews.urls is empty
-  // The most straightforward setup without drf-nested-routers in this case would be:
-  // 1. Create a simple list view in reviews/views.py that filters by product ID/slug from query param.
-  // 2. Register that view in reviews/urls.py.
-  // 3. Include reviews.urls in the main project urls.py at a path like 'api/reviews/'.
-  // Given current setup:
-  // It seems reviews might be intended to be fetched via a custom action on ProductViewSet or ProductReviewViewSet used as nested.
-  // For now, will assume a direct endpoint like the one below which is common. If it's nested, this needs adjustment.
-  // Let's adjust assuming the backend /reviews/ endpoint will filter by product ID.
-  return fetchWrapper<PaginatedResponse<Review>>(`${API_ROOT}/reviews/?product=${productIdOrSlug}`)
-    .then(data => data.results || []);
+export const getProductReviews = (productId: string | number): Promise<Review[]> => {
+  // Reviews endpoint is nested under products: /api/shop/products/<id>/reviews/
+  return fetchWrapper<PaginatedResponse<Review>>(
+    `${SHOP_BASE_URL}/products/${productId}/reviews/`
+  ).then((data) => data.results || []);
 };
 
 export const createProductReview = (productId: number, reviewData: Omit<Review, 'id' | 'created_at' | 'product' | 'user'>): Promise<Review> => {
