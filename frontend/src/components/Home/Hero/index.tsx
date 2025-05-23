@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import HeroCarousel from "./HeroCarousel";
 import HeroFeature from "./HeroFeature";
