@@ -36,6 +36,15 @@ export default function RootLayout({
     setTimeout(() => setLoading(false), 1000); // Simulating asset loading
   }, []);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedTheme = localStorage.getItem("theme");
+      if (storedTheme === "dark") {
+        document.documentElement.classList.add("dark");
+      }
+    }
+  }, []);
+
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body>
