@@ -1,16 +1,25 @@
 "use client";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { useCallback, useRef } from "react";
-import testimonialsData from "./testimonialsData";
+import { useCallback, useRef, useEffect, useState } from "react";
+import { getTestimonials } from "@/lib/apiService";
+import { Testimonial } from "@/types/testimonial";
 import Image from "next/image";
 
 // Import Swiper styles
 import "swiper/css/navigation";
 import "swiper/css";
 import SingleItem from "./SingleItem";
+import AddTestimonialForm from "./AddTestimonialForm";
 
 const Testimonials = () => {
   const sliderRef = useRef(null);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+
+  useEffect(() => {
+    getTestimonials()
+      .then((data) => setTestimonials(data))
+      .catch((err) => console.error('Failed to load testimonials', err));
+  }, []);
 
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;
@@ -102,12 +111,13 @@ const Testimonials = () => {
                 },
               }}
             >
-              {testimonialsData.map((item, key) => (
+              {testimonials.map((item, key) => (
                 <SwiperSlide key={key}>
                   <SingleItem testimonial={item} />
                 </SwiperSlide>
               ))}
             </Swiper>
+            <AddTestimonialForm />
           </div>
         </div>
       </div>

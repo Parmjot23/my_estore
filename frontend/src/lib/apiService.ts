@@ -1,5 +1,6 @@
 // src/lib/apiService.ts
 import { Product, PaginatedProducts, Review, Tag, Order, CreateOrderPayload, WishlistItem as ApiWishlistItem, ApiCartItem, Category as ProductCategoryType } from "@/types/product";
+import { Testimonial } from "@/types/testimonial";
 import { Category } from "@/types/category"; // Corrected: Removed 's'
 import { User, AuthTokens, LoginCredentials, RegisterData, Address, ChangePasswordData } from "@/types/user";
 
@@ -362,5 +363,20 @@ export const removeFromCart = (productId: number): Promise<void> => {
 export const clearCart = (): Promise<void> => {
     return fetchWrapper<void>(`${CART_BASE_URL}/clear/`, {
         method: 'DELETE',
+    });
+};
+
+// Testimonials
+const TESTIMONIALS_BASE_URL = `${API_ROOT}/testimonials`;
+
+export const getTestimonials = (): Promise<Testimonial[]> => {
+    return fetchWrapper<PaginatedResponse<Testimonial>>(`${TESTIMONIALS_BASE_URL}/`)
+        .then(data => (data as any).results || (data as any as Testimonial[]));
+};
+
+export const createTestimonial = (testimonialData: Omit<Testimonial, 'id' | 'created_at' | 'authorImg' | 'user'>): Promise<Testimonial> => {
+    return fetchWrapper<Testimonial>(`${TESTIMONIALS_BASE_URL}/`, {
+        method: 'POST',
+        body: JSON.stringify(testimonialData),
     });
 };
