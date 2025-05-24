@@ -39,7 +39,7 @@ const HeroCarousal = () => {
     >
       {heroProducts.map((item, idx) => (
         <SwiperSlide key={idx}>
-          <div className="relative h-[70vh] flex items-center justify-between overflow-hidden px-4 sm:px-12">
+          <div className="relative h-[70vh] flex items-center justify-center gap-8 sm:gap-12 overflow-hidden px-4 sm:px-8 xl:px-0 max-w-[1170px] mx-auto">
             <div className={`absolute inset-0 bg-gradient-to-r ${gradientClasses[idx % gradientClasses.length]}`}></div>
             <div className="absolute inset-0 bg-white/60"></div>
 
