@@ -252,7 +252,7 @@ const handleLogout = () => {
             <div className="xl:w-1/4 bg-white dark:bg-dark shadow-lg rounded-xl p-6 self-start">
               <div className="flex items-center gap-4 mb-8 pb-6 border-b border-gray-200 dark:border-dark-3">
                 <Image
-                  src={"/images/users/user-04.jpg"} // Replace with dynamic user avatar if available
+                  src={authUser?.profile_image || "/images/users/user-04.jpg"}
                   alt={authUser?.username || "User"}
                   width={64}
                   height={64}

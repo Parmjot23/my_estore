@@ -43,7 +43,7 @@ const SingleItem = ({ testimonial }: { testimonial: Testimonial }) => {
       <a href="#" className="flex items-center gap-4">
         <div className="w-12.5 h-12.5 rounded-full overflow-hidden">
           <Image
-            src={testimonial.authorImg}
+            src={testimonial.authorImg || "/images/users/user-04.jpg"}
             alt="author"
             className="w-12.5 h-12.5 rounded-full overflow-hidden"
             width={50}
