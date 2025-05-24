@@ -164,12 +164,15 @@ const Header = () => {
     >
       <div className={`max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0 ${stickyMenu ? "py-3 lg:py-3.5" : "py-4 lg:py-5"}`}> {/* Adjusted padding for sticky */}
         <div className="flex items-center justify-between gap-4">
-          <Link
-            className="flex-shrink-0 text-3xl font-extrabold text-accent hover:text-[#b88d4f] transition-colors"
-            href="/"
-          >
-            {businessName}
-          </Link>
+          <div className="flex flex-col leading-none">
+            <Link
+              className="flex-shrink-0 text-3xl font-extrabold text-accent hover:text-[#b88d4f] transition-colors"
+              href="/"
+            >
+              {businessName}
+            </Link>
+            <span className="text-xs text-gray-600">Since 2023</span>
+          </div>
 
           <div className="hidden lg:flex flex-grow max-w-[550px] w-full">
             <form onSubmit={handleSearchSubmit} className="w-full">
