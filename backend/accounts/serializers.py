@@ -59,8 +59,12 @@ class PasswordResetSerializer(serializers.Serializer):
     def save(self, request=None):
         form = PasswordResetForm({"email": self.validated_data["email"]})
         if form.is_valid():
-            form.save(request=request, use_https=request.is_secure() if request else False,
-                      email_template_name="registration/password_reset_email.html")
+            form.save(
+                request=request,
+                use_https=request.is_secure() if request else False,
+                email_template_name="registration/password_reset_email.txt",
+                html_email_template_name="registration/password_reset_email.html",
+            )
         return True
 
 # class UserProfileSerializer(serializers.ModelSerializer):

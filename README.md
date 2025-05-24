@@ -11,7 +11,22 @@ This project contains a Django backend and a Next.js frontend.
    ```bash
    python backend/manage.py runserver 0.0.0.0:8000
    ```
-   The server will listen on port `8000` on all network interfaces.
+The server will listen on port `8000` on all network interfaces.
+
+Create a `backend/.env` file to store sensitive settings. Example:
+
+```bash
+SECRET_KEY=changeme
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.example.com
+EMAIL_PORT=587
+EMAIL_HOST_USER=your-email@example.com
+EMAIL_HOST_PASSWORD=your-password
+EMAIL_USE_TLS=True
+DEFAULT_FROM_EMAIL=webmaster@example.com
+```
+
+The `.env` file is already listed in `.gitignore` so it won't be committed.
 
 ## Frontend
 1. Install dependencies:
