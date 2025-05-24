@@ -4,7 +4,7 @@ import Categories from "./Categories";
 import NewArrival from "./NewArrivals";
 import PromoBanner from "./PromoBanner";
 import BestSeller from "./BestSeller";
-import CounDown from "./Countdown";
+import Services from "./Services";
 import Testimonials from "./Testimonials";
 import Newsletter from "../Common/Newsletter";
 
@@ -16,7 +16,7 @@ const Home = () => {
       <NewArrival />
       <PromoBanner />
       <BestSeller />
-      <CounDown />
+      <Services />
       <Testimonials />
       <Newsletter />
     </main>
