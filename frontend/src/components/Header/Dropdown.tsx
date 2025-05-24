@@ -48,7 +48,7 @@ const Dropdown = ({
           <svg
             className={`ml-1.5 fill-current transition-transform duration-200 ease-in-out transform ${
               isSubMenuOpen ? "rotate-180" : "rotate-0"
-            }`}
+            } xl:group-hover:rotate-180`}
             width="10"
             height="10"
             viewBox="0 0 10 10"
@@ -60,9 +60,11 @@ const Dropdown = ({
         )}
       </Link>
 
-      {item.submenu && item.submenu.length > 0 && isSubMenuOpen && (
+      {item.submenu && item.submenu.length > 0 && (
         <ul
-          className="xl:absolute xl:left-0 xl:top-full xl:w-[220px] rounded-md bg-white xl:shadow-nav xl:py-2 static mt-2 pl-4 xl:pl-0"
+          className={`xl:absolute xl:left-0 xl:top-full xl:w-[220px] rounded-md bg-white xl:shadow-nav xl:py-2 static mt-2 pl-4 xl:pl-0 ${
+            isSubMenuOpen ? 'block' : 'hidden'
+          } xl:hidden xl:group-hover:block`}
         >
           {item.submenu.map((subItem, index) => {
             // Stricter check for subItem as well
