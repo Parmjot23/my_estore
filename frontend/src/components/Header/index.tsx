@@ -171,7 +171,6 @@ const Header = () => {
             >
               {businessName}
             </Link>
-            <span className="text-xs text-gray-600">Since 2023</span>
           </div>
 
           <div className="hidden lg:flex flex-grow max-w-[550px] w-full">
