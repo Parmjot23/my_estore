@@ -39,8 +39,8 @@ const Dropdown = ({
       <Link
         href={item.path || "#"}
         onClick={item.submenu && item.submenu.length > 0 ? onToggleSubMenu : undefined}
-        className={`hover:text-blue text-custom-sm font-medium text-dark flex items-center justify-between w-full xl:w-auto ${
-          stickyMenu ? "xl:py-4" : "xl:py-6"
+        className={`hover:text-blue text-custom-sm font-medium text-dark flex items-center justify-between w-full lg:w-auto ${
+          stickyMenu ? "lg:py-4" : "lg:py-6"
         } ${isSubMenuOpen ? "text-blue" : ""}`}
       >
         {item.title} {/* Safe to access item.title here */}
@@ -48,7 +48,7 @@ const Dropdown = ({
           <svg
             className={`ml-1.5 fill-current transition-transform duration-200 ease-in-out transform ${
               isSubMenuOpen ? "rotate-180" : "rotate-0"
-            } xl:group-hover:rotate-180`}
+            } lg:group-hover:rotate-180`}
             width="10"
             height="10"
             viewBox="0 0 10 10"
@@ -62,9 +62,9 @@ const Dropdown = ({
 
       {item.submenu && item.submenu.length > 0 && (
         <ul
-          className={`xl:absolute xl:left-0 xl:top-full xl:w-[220px] rounded-md bg-white xl:shadow-nav xl:py-2 static mt-2 pl-4 xl:pl-0 ${
+          className={`lg:absolute lg:left-0 lg:top-full lg:w-[220px] rounded-md bg-white lg:shadow-nav lg:py-2 static mt-2 pl-4 lg:pl-0 ${
             isSubMenuOpen ? 'block' : 'hidden'
-          } xl:hidden xl:group-hover:block`}
+          } lg:hidden lg:group-hover:block`}
         >
           {item.submenu.map((subItem, index) => {
             // Stricter check for subItem as well
@@ -76,7 +76,7 @@ const Dropdown = ({
               <li key={subItem.id || index}>
                 <Link
                   href={subItem.path || "#"}
-                  className="text-dark-4 hover:text-blue text-custom-sm font-medium block py-2.5 px-6 xl:px-4"
+                  className="text-dark-4 hover:text-blue text-custom-sm font-medium block py-2.5 px-6 lg:px-4"
                 >
                   {subItem.title}
                 </Link>
