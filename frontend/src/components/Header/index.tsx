@@ -152,13 +152,15 @@ const Header = () => {
 
   if (authIsLoading && typeof window !== "undefined" && localStorage.getItem("access_token")) {
     // Potentially show a minimal loading state or rely on the main app preloader
-    return <div className="h-[70px] sm:h-[80px] bg-transparent"></div>; // Placeholder height
+    return (
+      <div className="h-[70px] sm:h-[80px] bg-gradient-to-r from-accent via-orange-400 to-orange"></div>
+    ); // Placeholder height
   }
 
 
   return (
     <header
-      className={`fixed left-0 top-0 w-full z-[9999] bg-transparent transition-all ease-in-out duration-300 ${
+      className={`fixed left-0 top-0 w-full z-[9999] bg-gradient-to-r from-accent via-orange-400 to-orange transition-all ease-in-out duration-300 ${
         stickyMenu ? "shadow-nav" : "shadow-md"
       }`}
     >
