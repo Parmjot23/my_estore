@@ -18,6 +18,8 @@ class TestimonialSerializer(serializers.ModelSerializer):
             validated_data['user'] = request.user
             if not validated_data.get('author_name'):
                 validated_data['author_name'] = request.user.get_full_name() or request.user.username
+            if not validated_data.get('author_image') and getattr(request.user, 'profile_image', None):
+                validated_data['author_image'] = request.user.profile_image
         elif not validated_data.get('author_name'):
             raise serializers.ValidationError({'authorName': 'This field is required for guest testimonials.'})
         return super().create(validated_data)

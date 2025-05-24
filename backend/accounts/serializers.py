@@ -6,9 +6,11 @@ from .models import Address  # , UserProfile
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
+    profile_image = serializers.ImageField(read_only=True)
+
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_staff') # Add other fields as needed
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_staff', 'profile_image')
         read_only_fields = ('is_staff',)
 
 class RegisterSerializer(serializers.ModelSerializer):

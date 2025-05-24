@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
+    profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
 
     # Add or change related_name for groups and user_permissions
     # to avoid clashes with the default auth.User model.
