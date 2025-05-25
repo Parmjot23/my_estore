@@ -84,6 +84,11 @@ class SlideshowItemViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     ordering = ['order', 'created_at']
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
 
 class PromoBannerViewSet(viewsets.ModelViewSet):
     """API endpoint for promotional banners."""
@@ -92,3 +97,8 @@ class PromoBannerViewSet(viewsets.ModelViewSet):
     serializer_class = PromoBannerSerializer
     permission_classes = [permissions.AllowAny]
     ordering = ['order', 'created_at']
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
