@@ -2,8 +2,13 @@
 
 from rest_framework import viewsets, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend # For advanced filtering
-from .models import Category, Product
-from .serializers import CategorySerializer, ProductSerializer
+from .models import Category, Product, SlideshowItem, PromoBanner
+from .serializers import (
+    CategorySerializer,
+    ProductSerializer,
+    SlideshowItemSerializer,
+    PromoBannerSerializer,
+)
 from django.db.models import Count
 
 # Optional: Custom permissions (e.g., IsAdminOrReadOnly)
@@ -63,3 +68,21 @@ class ProductViewSet(viewsets.ModelViewSet):
         context = super().get_serializer_context()
         context.update({"request": self.request})
         return context
+
+
+class SlideshowItemViewSet(viewsets.ModelViewSet):
+    """API endpoint for hero carousel items."""
+
+    queryset = SlideshowItem.objects.filter(is_active=True).select_related('product')
+    serializer_class = SlideshowItemSerializer
+    permission_classes = [permissions.AllowAny]
+    ordering = ['order', 'created_at']
+
+
+class PromoBannerViewSet(viewsets.ModelViewSet):
+    """API endpoint for promotional banners."""
+
+    queryset = PromoBanner.objects.filter(is_active=True).select_related('product')
+    serializer_class = PromoBannerSerializer
+    permission_classes = [permissions.AllowAny]
+    ordering = ['order', 'created_at']

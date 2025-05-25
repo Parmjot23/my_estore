@@ -1,7 +1,15 @@
 # backend/shop/serializers.py
 
 from rest_framework import serializers
-from .models import Brand, PhoneModel, Category, Product, ProductMedia
+from .models import (
+    Brand,
+    PhoneModel,
+    Category,
+    Product,
+    ProductMedia,
+    SlideshowItem,
+    PromoBanner,
+)
 
 
 class BrandSerializer(serializers.ModelSerializer):
@@ -206,3 +214,38 @@ class ProductSerializer(serializers.ModelSerializer):
         if compatible_with_data is not None:
             instance.compatible_with.set(compatible_with_data)
         return instance
+
+
+class SlideshowItemSerializer(serializers.ModelSerializer):
+    product_details = ProductSerializer(source='product', read_only=True)
+
+    class Meta:
+        model = SlideshowItem
+        fields = [
+            'id',
+            'product',
+            'product_details',
+            'order',
+            'is_active',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'product_details', 'created_at', 'updated_at']
+
+
+class PromoBannerSerializer(serializers.ModelSerializer):
+    product_details = ProductSerializer(source='product', read_only=True)
+
+    class Meta:
+        model = PromoBanner
+        fields = [
+            'id',
+            'product',
+            'product_details',
+            'size',
+            'order',
+            'is_active',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'product_details', 'created_at', 'updated_at']
