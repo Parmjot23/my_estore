@@ -136,6 +136,7 @@ const SingleGridItem = ({ product: item }: { product: Product }) => {
             alt={item.name || "Product image"}
             width={250}
             height={250}
+            unoptimized
             className="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300 ease-in-out"
             onError={(e) => {
               (e.target as HTMLImageElement).onerror = null;

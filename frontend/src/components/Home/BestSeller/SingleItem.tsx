@@ -138,6 +138,7 @@ const SingleItem = ({ item }: { item: Product }) => {
             alt={item.name || "Best seller product image"}
             width={280}
             height={280}
+            unoptimized
             className="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300 ease-in-out"
             onError={(e) => {
               (e.target as HTMLImageElement).onerror = null;

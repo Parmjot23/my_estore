@@ -108,6 +108,7 @@ const SingleItem = ({ item, onRemoveSuccess }: { item: Product; onRemoveSuccess:
               alt={item.name}
               width={70}
               height={70}
+              unoptimized
               className="object-contain w-full h-full"
               onError={(e) => { (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE_URL;}}
             />

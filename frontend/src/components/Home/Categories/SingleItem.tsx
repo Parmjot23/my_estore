@@ -18,6 +18,7 @@ const SingleItem = ({ item }: { item: CategoryType }) => {
           alt={item.name || "Category"}
           width={82}
           height={62}
+          unoptimized
           className="object-contain"
           onError={(e) => {
             (e.target as HTMLImageElement).onerror = null;
