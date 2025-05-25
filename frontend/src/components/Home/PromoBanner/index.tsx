@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getPromoBanners } from "@/lib/apiService";
 import { PromoBanner as PromoBannerType } from "@/types/promoBanner";
+import { getProductImage } from "@/utils/productImage";
 
 const PromoBanner = () => {
   const [banners, setBanners] = useState<PromoBannerType[]>([]);
@@ -14,8 +15,12 @@ const PromoBanner = () => {
       .catch((err) => console.error("Failed to load banners", err));
   }, []);
 
-  const big = banners.find((b) => b.size === "large");
-  const smalls = banners.filter((b) => b.size === "small").slice(0, 2);
+  const getImage = (product?: any): string | undefined => getProductImage(product);
+
+  const big = banners.find((b) => b.size === "large" && getImage(b.product_details));
+  const smalls = banners
+    .filter((b) => b.size === "small" && getImage(b.product_details))
+    .slice(0, 2);
 
   return (
     <section className="overflow-hidden py-20">
@@ -39,10 +44,10 @@ const PromoBanner = () => {
               </Link>
             </div>
 
-            {big.product_details?.imgs?.previews?.[0] && (
+            {getImage(big.product_details) && (
               <Image
-                src={big.product_details.imgs.previews[0]}
-                alt={big.product_details.name}
+                src={getImage(big.product_details) as string}
+                alt={big.product_details?.name || "Promo image"}
                 className="absolute bottom-0 right-4 lg:right-26 -z-1"
                 width={274}
                 height={350}
@@ -57,10 +62,10 @@ const PromoBanner = () => {
               key={banner.id}
               className="relative z-1 overflow-hidden rounded-lg bg-[#DBF4F3] py-10 xl:py-16 px-4 sm:px-7.5 xl:px-10"
             >
-              {banner.product_details?.imgs?.previews?.[0] && (
+              {getImage(banner.product_details) && (
                 <Image
-                  src={banner.product_details.imgs.previews[0]}
-                  alt={banner.product_details.name}
+                  src={getImage(banner.product_details) as string}
+                  alt={banner.product_details?.name || "Promo image"}
                   className={`absolute top-1/2 -translate-y-1/2 ${idx === 0 ? 'left-3 sm:left-10' : 'right-3 sm:right-8.5'} -z-1`}
                   width={idx === 0 ? 241 : 200}
                   height={idx === 0 ? 241 : 200}

@@ -12,6 +12,7 @@ import DiscountBadge from "@/components/Common/DiscountBadge";
 import { useEffect, useState } from "react";
 import { getSlideshowItems } from "@/lib/apiService";
 import { SlideshowItem } from "@/types/slideshow";
+import { getProductImage } from "@/utils/productImage";
 
 const gradientClasses = [
   "from-pink-200 via-purple-200 to-indigo-200",
@@ -27,14 +28,18 @@ const HeroCarousal = () => {
       .then((data) => setSlides(data))
       .catch((err) => console.error("Failed to load slides", err));
   }, []);
-  const heroProducts = slides.map((s) => ({
-    title: s.product_details?.name || "",
-    image:
-      s.product_details?.imgs?.previews?.[0] ||
-      s.product_details?.imgs?.thumbnails?.[0] ||
-      "/images/hero/hero-01.png",
-    discount: s.product_details?.get_discount_percentage || 0,
-  }));
+  const heroProducts = slides
+    .map((s) => {
+      const p = s.product_details;
+      const imgSrc = getProductImage(p);
+      if (!imgSrc) return null;
+      return {
+        title: p?.name || "",
+        image: imgSrc,
+        discount: p?.get_discount_percentage || 0,
+      };
+    })
+    .filter(Boolean) as { title: string; image: string; discount: number }[];
 
   return (
     <Swiper
