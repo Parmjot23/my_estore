@@ -1,7 +1,15 @@
 # backend/shop/serializers.py
 
 from rest_framework import serializers
-from .models import Brand, PhoneModel, Category, Product, ProductMedia
+from .models import (
+    Brand,
+    PhoneModel,
+    Category,
+    Product,
+    ProductMedia,
+    SlideshowItem,
+    PromoBanner,
+)
 
 
 class BrandSerializer(serializers.ModelSerializer):
@@ -43,18 +51,26 @@ class ProductMediaSerializer(serializers.ModelSerializer):
 
     def get_file_url(self, obj):
         request = self.context.get('request')
-        if obj.file and request:
-            return request.build_absolute_uri(obj.file.url)
-        elif obj.file:
-            return obj.file.url
+        if obj.file:
+            try:
+                if obj.file.storage.exists(obj.file.name):
+                    return request.build_absolute_uri(obj.file.url) if request else obj.file.url
+            except Exception:
+                pass
         return None
 
     def get_video_thumbnail_url(self, obj):
         request = self.context.get('request')
-        if obj.video_thumbnail and request:
-            return request.build_absolute_uri(obj.video_thumbnail.url)
-        elif obj.video_thumbnail:
-            return obj.video_thumbnail.url
+        if obj.video_thumbnail:
+            try:
+                if obj.video_thumbnail.storage.exists(obj.video_thumbnail.name):
+                    return (
+                        request.build_absolute_uri(obj.video_thumbnail.url)
+                        if request
+                        else obj.video_thumbnail.url
+                    )
+            except Exception:
+                pass
         return None
 
 
@@ -148,10 +164,17 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_cover_image_url(self, obj):
         request = self.context.get('request')
-        if obj.cover_image and request:
-            return request.build_absolute_uri(obj.cover_image.url)
-        elif obj.cover_image:
-            return obj.cover_image.url
+        if obj.cover_image:
+            try:
+                storage = obj.cover_image.storage
+                if storage.exists(obj.cover_image.name):
+                    return (
+                        request.build_absolute_uri(obj.cover_image.url)
+                        if request
+                        else obj.cover_image.url
+                    )
+            except Exception:
+                pass
         return None
 
     def get_imgs(self, obj):
@@ -166,30 +189,68 @@ class ProductSerializer(serializers.ModelSerializer):
 
         for media_obj in thumbnail_media_items:
             if media_obj.file:
-                thumbnails.append(request.build_absolute_uri(media_obj.file.url) if request else media_obj.file.url)
+                try:
+                    if media_obj.file.storage.exists(media_obj.file.name):
+                        thumbnails.append(
+                            request.build_absolute_uri(media_obj.file.url) if request else media_obj.file.url
+                        )
+                except Exception:
+                    pass
 
         for media_obj in preview_media_items:
             if media_obj.file:
-                previews.append(request.build_absolute_uri(media_obj.file.url) if request else media_obj.file.url)
+                try:
+                    if media_obj.file.storage.exists(media_obj.file.name):
+                        previews.append(
+                            request.build_absolute_uri(media_obj.file.url) if request else media_obj.file.url
+                        )
+                except Exception:
+                    pass
 
         if not thumbnails and obj.cover_image:
-            thumbnails.append(request.build_absolute_uri(obj.cover_image.url) if request else obj.cover_image.url)
+            try:
+                if obj.cover_image.storage.exists(obj.cover_image.name):
+                    thumbnails.append(
+                        request.build_absolute_uri(obj.cover_image.url) if request else obj.cover_image.url
+                    )
+            except Exception:
+                pass
         if not previews and obj.cover_image:
-            previews.append(request.build_absolute_uri(obj.cover_image.url) if request else obj.cover_image.url)
+            try:
+                if obj.cover_image.storage.exists(obj.cover_image.name):
+                    previews.append(
+                        request.build_absolute_uri(obj.cover_image.url) if request else obj.cover_image.url
+                    )
+            except Exception:
+                pass
 
         all_image_media = obj.product_media.filter(media_type=ProductMedia.IMAGE).order_by('order')
         if not previews and all_image_media.exists():
             first_gallery_image = all_image_media.first()
             if first_gallery_image and first_gallery_image.file:
-                url = request.build_absolute_uri(
-                    first_gallery_image.file.url) if request else first_gallery_image.file.url
-                previews.append(url)
+                try:
+                    if first_gallery_image.file.storage.exists(first_gallery_image.file.name):
+                        url = (
+                            request.build_absolute_uri(first_gallery_image.file.url)
+                            if request
+                            else first_gallery_image.file.url
+                        )
+                        previews.append(url)
+                except Exception:
+                    pass
         if not thumbnails and all_image_media.exists():
             first_gallery_image = all_image_media.first()
             if first_gallery_image and first_gallery_image.file:
-                url = request.build_absolute_uri(
-                    first_gallery_image.file.url) if request else first_gallery_image.file.url
-                thumbnails.append(url)
+                try:
+                    if first_gallery_image.file.storage.exists(first_gallery_image.file.name):
+                        url = (
+                            request.build_absolute_uri(first_gallery_image.file.url)
+                            if request
+                            else first_gallery_image.file.url
+                        )
+                        thumbnails.append(url)
+                except Exception:
+                    pass
 
         return {'thumbnails': thumbnails, 'previews': previews}
 
@@ -206,3 +267,38 @@ class ProductSerializer(serializers.ModelSerializer):
         if compatible_with_data is not None:
             instance.compatible_with.set(compatible_with_data)
         return instance
+
+
+class SlideshowItemSerializer(serializers.ModelSerializer):
+    product_details = ProductSerializer(source='product', read_only=True)
+
+    class Meta:
+        model = SlideshowItem
+        fields = [
+            'id',
+            'product',
+            'product_details',
+            'order',
+            'is_active',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'product_details', 'created_at', 'updated_at']
+
+
+class PromoBannerSerializer(serializers.ModelSerializer):
+    product_details = ProductSerializer(source='product', read_only=True)
+
+    class Meta:
+        model = PromoBanner
+        fields = [
+            'id',
+            'product',
+            'product_details',
+            'size',
+            'order',
+            'is_active',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'product_details', 'created_at', 'updated_at']

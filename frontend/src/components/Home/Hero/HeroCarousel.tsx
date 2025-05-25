@@ -9,17 +9,9 @@ import "swiper/css/pagination";
 import Image from "next/image";
 import Link from "next/link";
 import DiscountBadge from "@/components/Common/DiscountBadge";
-import shopData from "@/components/Shop/shopData";
-
-// Select top discounted products from the demo data
-const heroProducts = shopData
-  .map((p) => ({
-    title: p.title,
-    image: p.imgs?.previews?.[0] || p.imgs?.thumbnails?.[0] || "/images/hero/hero-01.png",
-    discount: Math.round(((p.price - p.discountedPrice) / p.price) * 100),
-  }))
-  .sort((a, b) => b.discount - a.discount)
-  .slice(0, 3);
+import { useEffect, useState } from "react";
+import { getSlideshowItems } from "@/lib/apiService";
+import { SlideshowItem } from "@/types/slideshow";
 
 const gradientClasses = [
   "from-pink-200 via-purple-200 to-indigo-200",
@@ -28,6 +20,22 @@ const gradientClasses = [
 ];
 
 const HeroCarousal = () => {
+  const [slides, setSlides] = useState<SlideshowItem[]>([]);
+
+  useEffect(() => {
+    getSlideshowItems()
+      .then((data) => setSlides(data))
+      .catch((err) => console.error("Failed to load slides", err));
+  }, []);
+  const heroProducts = slides.map((s) => ({
+    title: s.product_details?.name || "",
+    image:
+      s.product_details?.imgs?.previews?.[0] ||
+      s.product_details?.imgs?.thumbnails?.[0] ||
+      "/images/hero/hero-01.png",
+    discount: s.product_details?.get_discount_percentage || 0,
+  }));
+
   return (
     <Swiper
       spaceBetween={30}

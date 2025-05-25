@@ -215,3 +215,37 @@ class ProductMedia(TimeStampedModel):  # <<<--- THIS IS THE CLASS DEFINITION
                 raise ValidationError(
                     f"Unsupported image file extension: {ext}. Allowed: {', '.join(valid_image_extensions)}")
             self.video_thumbnail = None
+
+
+class SlideshowItem(TimeStampedModel):
+    """Model to control which products appear in the hero carousel."""
+
+    product = models.ForeignKey(Product, related_name='slideshow_items', on_delete=models.CASCADE)
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['order', 'created_at']
+
+    def __str__(self):
+        return f"Slide: {self.product.name}"
+
+
+class PromoBanner(TimeStampedModel):
+    """Model for promotional banners displayed on the home page."""
+
+    SIZE_CHOICES = [
+        ('large', 'Large'),
+        ('small', 'Small'),
+    ]
+
+    product = models.ForeignKey(Product, related_name='promo_banners', on_delete=models.CASCADE)
+    size = models.CharField(max_length=10, choices=SIZE_CHOICES, default='small')
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['order', 'created_at']
+
+    def __str__(self):
+        return f"Banner: {self.product.name} ({self.size})"
