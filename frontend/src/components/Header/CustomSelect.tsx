@@ -58,7 +58,7 @@ const CustomSelect = ({ categories, selectedCategorySlug, onCategoryChange }: Cu
         type="button"
         onClick={toggleDropdown}
         // Classes from the provided Header/index.tsx for the select part of search
-        className={`flex items-center justify-between gap-2.5 rounded-l-md border border-r-0 border-gray-3 bg-gray-1 px-5 py-[11px] text-sm text-dark-4 focus:outline-none min-w-[170px] text-left ${
+        className={`flex items-center justify-between gap-2.5 rounded-l-md border border-r-0 border-black bg-white px-5 py-[11px] text-sm text-dark-4 focus:outline-none min-w-[170px] text-left duration-200 hover:border-blue focus:border-blue ${
           isOpen ? "select-arrow-active" : "" // Original class for arrow state
         }`}
       >

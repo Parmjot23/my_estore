@@ -23,7 +23,7 @@ const EditOrder = ({ order, toggleModal }: any) => {
       <p className="pb-2 font-medium text-dark">Order Status</p>
       <div className="w-full">
         <select
-          className="w-full rounded-[10px] border border-gray-3 bg-gray-1 text-dark py-3.5 px-5 text-custom-sm"
+          className="w-full rounded-[10px] border border-black bg-white text-dark py-3.5 px-5 text-custom-sm duration-200 hover:border-blue focus:border-blue focus:shadow-input focus:ring-2 focus:ring-blue/20"
           name="status"
           id="status"
           required

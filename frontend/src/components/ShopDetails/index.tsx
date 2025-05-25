@@ -464,7 +464,7 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
       <Newsletter />
        <style jsx>{`
         .form-input {
-          @apply block w-full px-3 py-2 text-sm text-dark dark:text-white bg-white dark:bg-dark border border-gray-300 dark:border-dark-3 rounded-md shadow-sm focus:outline-none focus:ring-blue focus:border-blue transition-colors;
+          @apply block w-full px-3 py-2 text-sm text-dark dark:text-white bg-white dark:bg-dark border border-black dark:border-dark-3 rounded-md shadow-sm focus:outline-none hover:border-blue focus:border-blue focus:ring-blue transition-colors;
         }
          .btn-primary {
           @apply inline-flex items-center justify-center px-5 py-2.5 bg-blue text-white text-sm font-medium rounded-md shadow-sm hover:bg-blue-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue dark:focus:ring-offset-dark transition-all duration-150 ease-in-out disabled:opacity-70;

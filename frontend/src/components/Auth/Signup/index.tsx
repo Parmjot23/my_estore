@@ -94,7 +94,7 @@ const Signup = () => {
                   value={formData.username}
                   onChange={handleChange}
                   required
-                  className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                  className="rounded-lg border border-black bg-white placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 hover:border-blue focus:border-blue focus:shadow-input focus:ring-2 focus:ring-blue/20"
                 />
                 {validationErrors.username && <p className="text-red-500 text-xs mt-1">{validationErrors.username.join(', ')}</p>}
               </div>
@@ -111,7 +111,7 @@ const Signup = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                  className="rounded-lg border border-black bg-white placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 hover:border-blue focus:border-blue focus:shadow-input focus:ring-2 focus:ring-blue/20"
                 />
                  {validationErrors.email && <p className="text-red-500 text-xs mt-1">{validationErrors.email.join(', ')}</p>}
               </div>
@@ -126,7 +126,7 @@ const Signup = () => {
                   placeholder="Enter your first name"
                   value={formData.first_name}
                   onChange={handleChange}
-                  className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                  className="rounded-lg border border-black bg-white placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 hover:border-blue focus:border-blue focus:shadow-input focus:ring-2 focus:ring-blue/20"
                 />
               </div>
                <div className="mb-5">
@@ -140,7 +140,7 @@ const Signup = () => {
                   placeholder="Enter your last name"
                   value={formData.last_name}
                   onChange={handleChange}
-                  className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                  className="rounded-lg border border-black bg-white placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 hover:border-blue focus:border-blue focus:shadow-input focus:ring-2 focus:ring-blue/20"
                 />
               </div>
 
@@ -157,7 +157,7 @@ const Signup = () => {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                  className="rounded-lg border border-black bg-white placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 hover:border-blue focus:border-blue focus:shadow-input focus:ring-2 focus:ring-blue/20"
                 />
                  {validationErrors.password && <p className="text-red-500 text-xs mt-1">{validationErrors.password.join(', ')}</p>}
               </div>
@@ -175,7 +175,7 @@ const Signup = () => {
                   value={formData.password2}
                   onChange={handleChange}
                   required
-                  className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                  className="rounded-lg border border-black bg-white placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 hover:border-blue focus:border-blue focus:shadow-input focus:ring-2 focus:ring-blue/20"
                 />
                  {validationErrors.password2 && <p className="text-red-500 text-xs mt-1">{validationErrors.password2.join(', ')}</p>}
               </div>

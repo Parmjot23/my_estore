@@ -80,7 +80,7 @@ const AddTestimonialForm = () => {
       </button>
       <style jsx>{`
         .form-input {
-          @apply block w-full px-3 py-2 text-sm text-dark bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue focus:border-blue transition-colors;
+          @apply block w-full px-3 py-2 text-sm text-dark bg-white border border-black rounded-md shadow-sm focus:outline-none hover:border-blue focus:border-blue focus:ring-blue transition-colors;
         }
         .btn-primary {
           @apply inline-flex items-center justify-center px-5 py-2.5 bg-blue text-white text-sm font-medium rounded-md shadow-sm hover:bg-blue-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue transition-all duration-150 ease-in-out disabled:opacity-70;

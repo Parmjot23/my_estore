@@ -195,7 +195,7 @@ const ShopWithSidebarContent: React.FC = () => {
                 <div className="flex items-center space-x-4">
                     <div className="flex items-center">
                     <label htmlFor="sort" className="mr-2 text-sm text-gray-700 shrink-0">Sort by:</label>
-                    <select id="sort" name="sort" value={filters.ordering} onChange={handleSortChange} className="block w-full rounded-md border-gray-300 py-1.5 pl-3 pr-10 text-gray-900 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 shadow-sm">
+                    <select id="sort" name="sort" value={filters.ordering} onChange={handleSortChange} className="block w-full rounded-md border border-black bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm duration-200 hover:border-blue focus:border-blue focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                         <option value="-created_at">Newest</option><option value="price">Price: Low to High</option><option value="-price">Price: High to Low</option><option value="name">Name: A to Z</option><option value="-name">Name: Z to A</option>
                     </select>
                     </div>

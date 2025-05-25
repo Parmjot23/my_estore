@@ -152,7 +152,7 @@ const AddressModal = ({ isOpen, closeModal, onSave, addressToEdit }: AddressModa
 
           {/* Is Default */}
           <div className="flex items-center">
-            <input type="checkbox" name="is_default" id="is_default" checked={addressData.is_default} onChange={handleChange} className="h-4 w-4 text-blue border-gray-300 rounded focus:ring-blue mr-2"/>
+            <input type="checkbox" name="is_default" id="is_default" checked={addressData.is_default} onChange={handleChange} className="h-4 w-4 text-blue border-black rounded focus:ring-blue mr-2"/>
             <label htmlFor="is_default" className="text-sm text-gray-700 dark:text-gray-300">Set as default address</label>
           </div>
 
@@ -171,7 +171,7 @@ const AddressModal = ({ isOpen, closeModal, onSave, addressToEdit }: AddressModa
           @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
         }
         .form-input {
-          @apply block w-full px-3 py-2 text-sm text-dark dark:text-white bg-gray-50 dark:bg-dark-2 border border-gray-300 dark:border-dark-3 rounded-md shadow-sm focus:outline-none focus:ring-blue focus:border-blue transition-colors;
+          @apply block w-full px-3 py-2 text-sm text-dark dark:text-white bg-white dark:bg-dark-2 border border-black dark:border-dark-3 rounded-md shadow-sm focus:outline-none hover:border-blue focus:border-blue focus:ring-blue transition-colors;
         }
       `}</style>
     </div>

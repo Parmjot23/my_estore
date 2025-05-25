@@ -191,7 +191,7 @@ const Header = () => {
                     name="search"
                     placeholder="I am shopping for..."
                     autoComplete="off"
-                    className="custom-search w-full rounded-r-md bg-gray-100 border-l-0 border border-gray-300 py-2.5 pl-4 pr-10 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                    className="custom-search w-full rounded-r-md bg-white border-l-0 border border-black py-2.5 pl-4 pr-10 text-sm outline-none transition-colors duration-200 hover:border-blue focus:border-blue focus:ring-1 focus:ring-blue-500"
                   />
                   <button
                     type="submit"
@@ -313,7 +313,7 @@ const Header = () => {
                   name="mobile-search"
                   placeholder="Search products..."
                   autoComplete="off"
-                  className="custom-search w-full rounded-r-md bg-gray-100 border-l-0 border border-gray-300 py-2.5 pl-4 pr-10 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                  className="custom-search w-full rounded-r-md bg-white border-l-0 border border-black py-2.5 pl-4 pr-10 text-sm outline-none transition-colors duration-200 hover:border-blue focus:border-blue focus:ring-1 focus:ring-blue-500"
                 />
                 <button
                   type="submit"

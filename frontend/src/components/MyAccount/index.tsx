@@ -437,7 +437,7 @@ const handleLogout = () => {
           @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
         }
         .form-input {
-          @apply block w-full px-4 py-3 text-sm text-dark dark:text-white bg-gray-50 dark:bg-dark-2 border border-gray-300 dark:border-dark-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue focus:border-blue transition-colors placeholder-gray-400 dark:placeholder-gray-500;
+          @apply block w-full px-4 py-3 text-sm text-dark dark:text-white bg-white dark:bg-dark-2 border border-black dark:border-dark-3 rounded-lg shadow-sm focus:outline-none hover:border-blue focus:border-blue focus:ring-2 focus:ring-blue transition-colors placeholder-gray-400 dark:placeholder-gray-500;
         }
         .form-input:read-only {
             @apply bg-gray-200 dark:bg-dark-3 cursor-not-allowed opacity-70;

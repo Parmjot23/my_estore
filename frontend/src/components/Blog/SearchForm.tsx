@@ -13,9 +13,9 @@ const SearchForm = () => {
             <input
               type="text"
               placeholder="Search here..."
-              className="w-full rounded-md border border-gray-3 py-3 pl-5 pr-13 outline-none ease-out duration-200 placeholder:text-dark-5 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+              className="w-full rounded-md border border-black py-3 pl-5 pr-13 outline-none ease-out duration-200 hover:border-blue placeholder:text-dark-5 focus:border-blue focus:shadow-input focus:ring-2 focus:ring-blue/20"
             />
-            <button className="text-dark-2 absolute right-0 top-0 px-4 py-3.5 ease-out duration-200 hover:text-blue">
+            <button className="text-dark-2 absolute right-0 top-0 px-4 py-3.5 ease-out duration-200 hover:border-blue hover:text-blue">
               <svg
                 className="fill-current"
                 width="20"

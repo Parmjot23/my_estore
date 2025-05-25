@@ -133,7 +133,7 @@ const PriceDropdown = ({ onPriceChange, initialMin = 0, initialMax = 50 }: Price
                 value={minPriceInput}
                 onChange={handleMinInputChange}
                 onBlur={handleApplyFilter} // Apply on blur if not using a button
-                className="w-20 rounded border border-gray-300 px-2 py-1 text-sm text-dark focus:border-blue focus:outline-none"
+                className="w-20 rounded border border-black bg-white px-2 py-1 text-sm text-dark duration-200 hover:border-blue focus:border-blue focus:outline-none"
                 min="0"
                 max={initialMax} // Set max for input field
               />
@@ -146,7 +146,7 @@ const PriceDropdown = ({ onPriceChange, initialMin = 0, initialMax = 50 }: Price
                 value={maxPriceInput}
                 onChange={handleMaxInputChange}
                 onBlur={handleApplyFilter} // Apply on blur
-                className="w-20 rounded border border-gray-300 px-2 py-1 text-sm text-dark focus:border-blue focus:outline-none"
+                className="w-20 rounded border border-black bg-white px-2 py-1 text-sm text-dark duration-200 hover:border-blue focus:border-blue focus:outline-none"
                 min={initialMin} // Set min for input field
                 max={initialMax} // Absolute max
               />
