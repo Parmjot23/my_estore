@@ -28,6 +28,9 @@ DEFAULT_FROM_EMAIL=webmaster@example.com
 
 The `.env` file is already listed in `.gitignore` so it won't be committed.
 
+User-uploaded product images should be placed inside `backend/media/`.
+This directory is ignored by Git to avoid committing large media files.
+
 ## Frontend
 1. Install dependencies:
    ```bash

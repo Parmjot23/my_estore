@@ -1,22 +1,22 @@
 /** @type {import('next').NextConfig} */
+const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
+const { protocol, hostname, port } = new URL(apiUrl);
+
 const nextConfig = {
-  reactStrictMode: true, // Or your existing config
+  reactStrictMode: true,
   images: {
     unoptimized: true,
     remotePatterns: [
       {
-        protocol: 'http', // Or 'https' if your local Django serves over HTTPS
-        hostname: 'localhost',
-        port: '8000', // Specify the port your Django backend is using for media
-        pathname: '/media/**', // Be more specific if all your media is under /media/
+        protocol: protocol.replace(':', ''),
+        hostname,
+        port,
+        pathname: '/media/**',
       },
       {
-        protocol: 'https', // For the placeholder images
+        protocol: 'https',
         hostname: 'placehold.co',
-        // port: '', // Default port for https is 443
-        // pathname: '/**', // Allow all paths from this placeholder domain
       },
-      // You can add other hostnames here if needed in the future
     ],
   },
 };
