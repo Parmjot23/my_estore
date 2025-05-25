@@ -4,19 +4,20 @@ const nextConfig = {
   images: {
     unoptimized: true,
     remotePatterns: [
+      // Allow media files from the Django backend regardless of the host IP.
+      // This lets the frontend load images when accessed from another device
+      // using the server's local network address (e.g. 192.168.x.x:8000).
       {
-        protocol: 'http', // Or 'https' if your local Django serves over HTTPS
-        hostname: 'localhost',
-        port: '8000', // Specify the port your Django backend is using for media
-        pathname: '/media/**', // Be more specific if all your media is under /media/
+        protocol: 'http',
+        hostname: '**',
+        port: '8000',
+        pathname: '/media/**',
       },
+      // Placeholder images
       {
-        protocol: 'https', // For the placeholder images
+        protocol: 'https',
         hostname: 'placehold.co',
-        // port: '', // Default port for https is 443
-        // pathname: '/**', // Allow all paths from this placeholder domain
       },
-      // You can add other hostnames here if needed in the future
     ],
   },
 };
