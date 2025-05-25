@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true, // Or your existing config
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'http', // Or 'https' if your local Django serves over HTTPS
