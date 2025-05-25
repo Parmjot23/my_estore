@@ -11,7 +11,9 @@ const nextConfig = {
       // This lets the frontend load images when accessed from another device
       // using the server's local network address (e.g. 192.168.x.x:8000).
       {
-
+        protocol: protocol.replace(':', ''),
+        hostname,
+        port,
         pathname: '/media/**',
       },
       // Placeholder images
