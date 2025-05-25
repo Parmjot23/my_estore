@@ -1,6 +1,7 @@
 // src/lib/apiService.ts
 import { Product, PaginatedProducts, Review, Tag, Order, CreateOrderPayload, WishlistItem as ApiWishlistItem, ApiCartItem, Category as ProductCategoryType } from "@/types/product";
 import { Testimonial } from "@/types/testimonial";
+import { Organization } from "@/types/organization";
 import { Category } from "@/types/category"; // Corrected: Removed 's'
 import { User, AuthTokens, LoginCredentials, RegisterData, Address, ChangePasswordData } from "@/types/user";
 
@@ -363,6 +364,21 @@ export const removeFromCart = (productId: number): Promise<void> => {
 export const clearCart = (): Promise<void> => {
     return fetchWrapper<void>(`${CART_BASE_URL}/clear/`, {
         method: 'DELETE',
+    });
+};
+
+// Organizations
+const ORGANIZATIONS_BASE_URL = `${API_ROOT}/organizations`;
+
+export const getOrganizations = (): Promise<Organization[]> => {
+    return fetchWrapper<PaginatedResponse<Organization>>(`${ORGANIZATIONS_BASE_URL}/`)
+        .then(data => (data as any).results || (data as any as Organization[]));
+};
+
+export const updateOrganization = (id: number, data: Partial<Organization>): Promise<Organization> => {
+    return fetchWrapper<Organization>(`${ORGANIZATIONS_BASE_URL}/${id}/`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
     });
 };
 

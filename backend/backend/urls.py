@@ -14,6 +14,7 @@ urlpatterns = [
     path('api/wishlists/', include('wishlists.urls')),
     path('api/carts/', include('carts.urls')),
     path('api/testimonials/', include('testimonials.urls')),
+    path('api/organizations/', include('organizations.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     # You would add other app API urls here, e.g.:
     # path('api/users/', include('users.urls')), # If 'users' app is at the root of backend/

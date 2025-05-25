@@ -18,9 +18,11 @@ import {
   updateAddress as apiUpdateAddress,
   deleteAddress as apiDeleteAddress,
   changePassword as apiChangePassword, // Import the new function
+  getOrganizations,
+  updateOrganization as apiUpdateOrganization,
 } from "@/lib/apiService";
 import { User, Address, ChangePasswordData } from "@/types/user";
-import { Eye, Edit3, Trash2, PlusCircle, ShoppingBag, LogOut, UserCircle2, KeyRound, Save } from 'lucide-react';
+import { Eye, Edit3, Trash2, PlusCircle, ShoppingBag, LogOut, UserCircle2, KeyRound, Save, Building2 } from 'lucide-react';
 import Link from "next/link";
 
 const MyAccount = () => {
@@ -46,6 +48,8 @@ const MyAccount = () => {
   const [addressToEdit, setAddressToEdit] = useState<Address | null>(null);
   const [isProfileUpdating, setIsProfileUpdating] = useState(false);
   const [isPasswordChanging, setIsPasswordChanging] = useState(false);
+  const [organizationData, setOrganizationData] = useState<any>(null);
+  const [isOrgUpdating, setIsOrgUpdating] = useState(false);
 
 
   useEffect(() => {
@@ -58,8 +62,8 @@ const MyAccount = () => {
   useEffect(() => {
     if (isAuthenticated && authUser) {
       setPageIsLoading(true);
-      Promise.all([getUserDetails(), getUserAddresses()])
-        .then(([userDetails, userAddresses]) => {
+      Promise.all([getUserDetails(), getUserAddresses(), getOrganizations()])
+        .then(([userDetails, userAddresses, orgs]) => {
           setUserData({
             username: userDetails.username || "",
             first_name: userDetails.first_name || "",
@@ -67,6 +71,9 @@ const MyAccount = () => {
             email: userDetails.email || "",
           });
           setAddresses(userAddresses || []);
+          if (orgs && orgs.length > 0) {
+            setOrganizationData(orgs[0]);
+          }
         })
         .catch((err) => {
           console.error("Failed to fetch account data:", err);
@@ -189,6 +196,27 @@ const MyAccount = () => {
     }
   };
 
+  const handleOrgInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setOrganizationData((prev: any) => ({ ...prev, [name]: value }));
+  };
+
+  const handleUpdateOrganization = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!organizationData) return;
+    setIsOrgUpdating(true);
+    try {
+      const updated = await apiUpdateOrganization(organizationData.id, organizationData);
+      setOrganizationData(updated);
+      toast.success("Organization updated successfully!");
+    } catch (err: any) {
+      console.error("Failed to update organization:", err);
+      toast.error(err.data?.detail || err.message || "Failed to update organization.");
+    } finally {
+      setIsOrgUpdating(false);
+    }
+  };
+
 const handleLogout = () => {
   dispatch(logout());
   dispatch(removeAllItemsFromCart());
@@ -270,6 +298,7 @@ const handleLogout = () => {
                   { id: "dashboard", label: "Dashboard", icon: <Eye size={18}/> },
                   { id: "orders", label: "Orders", icon: <ShoppingBag size={18}/> },
                   { id: "addresses", label: "Addresses", icon: <UserCircle2 size={18}/> },
+                  { id: "organization", label: "Organization", icon: <Building2 size={18}/> },
                   { id: "account-details", label: "Account Details", icon: <Edit3 size={18}/> },
                   { id: "logout", label: "Logout", icon: <LogOut size={18}/> },
                 ].map((tab) => (
@@ -356,6 +385,46 @@ const handleLogout = () => {
                             <PlusCircle size={18} /> Add Your First Address
                         </button>
                     </div>
+                )}
+              </div>
+
+              {/* Organization Tab Content */}
+              <div className={`${activeTab === "organization" ? "block" : "hidden"} bg-white dark:bg-dark shadow-lg rounded-xl p-6 md:p-10`}>
+                <div className="mb-6">
+                    <h3 className="text-2xl font-semibold text-dark dark:text-white mb-2">Organization</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">View or update your organization information.</p>
+                </div>
+                {organizationData ? (
+                  <form onSubmit={handleUpdateOrganization} className="space-y-6">
+                    <div>
+                      <label htmlFor="org_name" className="form-label">Name</label>
+                      <input type="text" id="org_name" name="name" value={organizationData.name || ''} onChange={handleOrgInputChange} className="form-input" required />
+                    </div>
+                    <div>
+                      <label htmlFor="org_description" className="form-label">Description</label>
+                      <textarea id="org_description" name="description" value={organizationData.description || ''} onChange={handleOrgInputChange} className="form-input" />
+                    </div>
+                    <div>
+                      <label htmlFor="org_address" className="form-label">Address</label>
+                      <input type="text" id="org_address" name="address" value={organizationData.address || ''} onChange={handleOrgInputChange} className="form-input" />
+                    </div>
+                    <div>
+                      <label htmlFor="org_phone" className="form-label">Phone</label>
+                      <input type="text" id="org_phone" name="phone" value={organizationData.phone || ''} onChange={handleOrgInputChange} className="form-input" />
+                    </div>
+                    <div>
+                      <label htmlFor="org_email" className="form-label">Email</label>
+                      <input type="email" id="org_email" name="email" value={organizationData.email || ''} onChange={handleOrgInputChange} className="form-input" />
+                    </div>
+                    <div className="pt-2">
+                      <button type="submit" className="btn-primary flex items-center gap-2" disabled={isOrgUpdating}>
+                        {isOrgUpdating ? (<div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>) : <Save size={18}/>}
+                        {isOrgUpdating ? 'Saving...' : 'Save Changes'}
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <p className="text-gray-600 dark:text-gray-400">No organization data available.</p>
                 )}
               </div>
 

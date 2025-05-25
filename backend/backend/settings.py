@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'carts.apps.CartsConfig',
     'reviews.apps.ReviewsConfig',
     'testimonials.apps.TestimonialsConfig',
+    'organizations.apps.OrganizationsConfig',
     "rest_framework_simplejwt",
 ]
 
