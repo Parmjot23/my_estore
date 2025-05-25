@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getPromoBanners } from "@/lib/apiService";
 import { PromoBanner as PromoBannerType } from "@/types/promoBanner";
+import { getProductImage } from "@/utils/productImage";
 
 
 const PromoBanner = () => {
@@ -21,23 +22,6 @@ const PromoBanner = () => {
   const smalls = banners
     .filter((b) => b.size === "small" && getImage(b.product_details))
     .slice(0, 2);
-
-  const getImage = (product?: any): string | undefined => {
-    if (!product) return undefined;
-    let img: string | undefined;
-    if (product.product_media && product.product_media.length > 0) {
-      const media = product.product_media
-        .filter((m: ProductMediaItem) => m.media_type === "IMG" && (m.is_preview || m.is_thumbnail))
-        .sort((a: ProductMediaItem, b: ProductMediaItem) => (a.order || 0) - (b.order || 0))[0];
-      img = media?.file_url;
-    }
-    return (
-      img ||
-      product.cover_image_url ||
-      product.imgs?.previews?.[0] ||
-      product.imgs?.thumbnails?.[0]
-    );
-  };
 
   return (
     <section className="overflow-hidden py-20">
