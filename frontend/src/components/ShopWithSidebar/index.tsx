@@ -177,15 +177,13 @@ const ShopWithSidebarContent: React.FC = () => {
       <Breadcrumb pageName={"Shop"} />
       <section className="py-12 sm:py-16 lg:py-20">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-            <aside className="lg:col-span-3">
-              <div className="space-y-6">
-                <CategoryDropdown allCategories={allCategories} isLoading={isLoadingCategories} error={categoryError} onCategoryChange={handleCategoryChange} selectedCategory={filters.category__slug} />
-                <PriceDropdown onPriceChange={handlePriceChange} initialMin={filters.min_price} initialMax={filters.max_price} />
-                <GenderDropdown availableBrands={uniqueBrandNames} onBrandChange={handleBrandSlugChange} selectedBrand={filters.brand__slug} isLoading={isLoading} />
-              </div>
-            </aside>
-            <div className="lg:col-span-9">
+          <div className="space-y-8">
+            <div className="bg-white rounded-lg shadow p-4 flex flex-col md:flex-row gap-4">
+              <CategoryDropdown allCategories={allCategories} isLoading={isLoadingCategories} error={categoryError} onCategoryChange={handleCategoryChange} selectedCategory={filters.category__slug} />
+              <PriceDropdown onPriceChange={handlePriceChange} initialMin={filters.min_price} initialMax={filters.max_price} />
+              <GenderDropdown availableBrands={uniqueBrandNames} onBrandChange={handleBrandSlugChange} selectedBrand={filters.brand__slug} isLoading={isLoading} />
+            </div>
+            <div>
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 p-4 bg-white rounded-lg shadow">
                 {/* ... (Top bar with sort and view mode) ... */}
                 <p className="text-sm text-gray-600 mb-4 sm:mb-0">
