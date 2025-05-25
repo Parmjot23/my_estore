@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getPromoBanners } from "@/lib/apiService";
 import { PromoBanner as PromoBannerType } from "@/types/promoBanner";
-import { ProductMediaItem } from "@/types/product";
+
 
 const PromoBanner = () => {
   const [banners, setBanners] = useState<PromoBannerType[]>([]);
@@ -15,8 +15,12 @@ const PromoBanner = () => {
       .catch((err) => console.error("Failed to load banners", err));
   }, []);
 
-  const big = banners.find((b) => b.size === "large");
-  const smalls = banners.filter((b) => b.size === "small").slice(0, 2);
+  const getImage = (product?: any): string | undefined => getProductImage(product);
+
+  const big = banners.find((b) => b.size === "large" && getImage(b.product_details));
+  const smalls = banners
+    .filter((b) => b.size === "small" && getImage(b.product_details))
+    .slice(0, 2);
 
   const getImage = (product?: any): string | undefined => {
     if (!product) return undefined;
