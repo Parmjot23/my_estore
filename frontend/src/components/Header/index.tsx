@@ -158,8 +158,10 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed left-0 top-0 w-full z-[9999] bg-transparent transition-all ease-in-out duration-300 ${
-        stickyMenu ? "shadow-nav" : "shadow-md"
+      className={`fixed left-0 top-0 w-full z-[9999] transition-all ease-in-out duration-300 ${
+        stickyMenu
+          ? "bg-white/80 dark:bg-dark-base/80 backdrop-blur-md shadow-nav"
+          : "bg-transparent shadow-md"
       }`}
     >
       <div className={`max-w-[1170px] mx-auto px-4 sm:px-7.5 lg:px-0 ${stickyMenu ? "py-3 lg:py-3.5" : "py-4 lg:py-5"}`}> {/* Adjusted padding for sticky */}
