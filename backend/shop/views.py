@@ -40,6 +40,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'description']
     ordering_fields = ['name', 'created_at', 'product_count'] # Allow ordering by product_count
 
+    # Ensure serializers can build absolute image URLs
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
