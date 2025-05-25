@@ -1,0 +1,16 @@
+{
+  "name": "ANC Power Sound",
+  "slug": "anc_power_sound",
+  "description": "",
+  "category": "headphones",
+  "brand": null,
+  "price": 0.0,
+  "sku": null,
+  "images": [
+    "anc_power_sound_img1.jpeg"
+  ],
+  "color": null,
+  "material": null,
+  "connectivity_type": null,
+  "wattage": null
+}

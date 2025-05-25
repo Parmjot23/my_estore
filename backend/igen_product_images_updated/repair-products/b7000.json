@@ -1,0 +1,16 @@
+{
+  "name": "B7000",
+  "slug": "b7000",
+  "description": "",
+  "category": "repair-products",
+  "brand": null,
+  "price": 0.0,
+  "sku": null,
+  "images": [
+    "b7000_img1.jpg"
+  ],
+  "color": null,
+  "material": null,
+  "connectivity_type": null,
+  "wattage": null
+}
