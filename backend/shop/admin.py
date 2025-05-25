@@ -1,5 +1,13 @@
 from django.contrib import admin
-from .models import Brand, PhoneModel, Category, Product, ProductMedia  # Changed ProductImage to ProductMedia
+from .models import (
+    Brand,
+    PhoneModel,
+    Category,
+    Product,
+    ProductMedia,
+    SlideshowItem,
+    PromoBanner,
+)
 
 
 class ProductMediaInline(admin.TabularInline):
@@ -145,3 +153,17 @@ class ProductMediaAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         # Optimize queries by prefetching related product data
         return super().get_queryset(request).select_related('product')
+
+
+@admin.register(SlideshowItem)
+class SlideshowItemAdmin(admin.ModelAdmin):
+    list_display = ('product', 'order', 'is_active', 'created_at')
+    list_editable = ('order', 'is_active')
+    list_select_related = ('product',)
+
+
+@admin.register(PromoBanner)
+class PromoBannerAdmin(admin.ModelAdmin):
+    list_display = ('product', 'size', 'order', 'is_active', 'created_at')
+    list_editable = ('size', 'order', 'is_active')
+    list_select_related = ('product',)

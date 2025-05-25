@@ -3,6 +3,8 @@ import { Product, PaginatedProducts, Review, Tag, Order, CreateOrderPayload, Wis
 import { Testimonial } from "@/types/testimonial";
 import { Category } from "@/types/category"; // Corrected: Removed 's'
 import { User, AuthTokens, LoginCredentials, RegisterData, Address, ChangePasswordData } from "@/types/user";
+import { SlideshowItem } from "@/types/slideshow";
+import { PromoBanner } from "@/types/promoBanner";
 
 const API_ROOT = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000/api";
 
@@ -379,4 +381,18 @@ export const createTestimonial = (testimonialData: Omit<Testimonial, 'id' | 'cre
         method: 'POST',
         body: JSON.stringify(testimonialData),
     });
+};
+
+// Slideshow and Promo Banners
+const SLIDES_BASE_URL = `${SHOP_BASE_URL}/slides`;
+const BANNERS_BASE_URL = `${SHOP_BASE_URL}/banners`;
+
+export const getSlideshowItems = (): Promise<SlideshowItem[]> => {
+    return fetchWrapper<PaginatedResponse<SlideshowItem>>(`${SLIDES_BASE_URL}/`)
+        .then(data => (data as any).results || (data as any as SlideshowItem[]));
+};
+
+export const getPromoBanners = (): Promise<PromoBanner[]> => {
+    return fetchWrapper<PaginatedResponse<PromoBanner>>(`${BANNERS_BASE_URL}/`)
+        .then(data => (data as any).results || (data as any as PromoBanner[]));
 };
