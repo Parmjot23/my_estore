@@ -164,7 +164,7 @@ const Header = () => {
           : "bg-transparent shadow-md"
       }`}
     >
-      <div className={`max-w-[1170px] mx-auto px-4 sm:px-7.5 lg:px-0 ${stickyMenu ? "py-3 lg:py-3.5" : "py-4 lg:py-5"}`}> {/* Adjusted padding for sticky */}
+      <div className={`max-w-[1170px] mx-auto px-4 sm:px-7.5 lg:px-0 ${stickyMenu ? "py-2 lg:py-2.5" : "py-4 lg:py-5"}`}> {/* Adjusted padding for sticky */}
         <div className="flex items-center justify-between gap-4">
           <div className="flex flex-col leading-none">
             <Link
@@ -266,7 +266,7 @@ const Header = () => {
                     <Dropdown key={i} item={menuItem} stickyMenu={stickyMenu} openSubMenu={openSubMenu} handleSubMenuToggle={handleSubMenuToggle} />
                   ) : (
                     <li key={i} className="group relative">
-                      <Link href={menuItem.path || "#"} className={`text-sm font-medium text-gray-700 hover:text-accent transition-colors duration-200 flex items-center ${stickyMenu ? "py-3.5" : "py-5"}`}> {/* Adjusted padding */}
+                      <Link href={menuItem.path || "#"} className={`text-sm font-medium text-gray-700 hover:text-accent transition-colors duration-200 flex items-center ${stickyMenu ? "py-2.5" : "py-5"}`}> {/* Adjusted padding */}
                         {menuItem.title}
                       </Link>
                       <span className="absolute bottom-0 left-0 w-full h-0.5 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
