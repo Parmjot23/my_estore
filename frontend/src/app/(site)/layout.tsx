@@ -49,7 +49,8 @@ export default function RootLayout({
                 <QuickViewModalProvider>
                   <PreviewSliderProvider>
                     <HeaderWithSuspense />
-                    <main className="pt-24 md:pt-28 xl:pt-36">
+                    {/* Further reduce top padding so breadcrumbs align just below the navbar */}
+                    <main className="pt-16 md:pt-20 xl:pt-28">
                       {children}
                     </main>
                     <QuickViewModal />

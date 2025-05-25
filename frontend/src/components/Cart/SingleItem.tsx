@@ -12,6 +12,9 @@ import {
 
 import Image from "next/image";
 
+const PLACEHOLDER_IMAGE_URL =
+  "https://placehold.co/200x200/F0F0F0/777777?text=No+Image";
+
 const SingleItem = ({ item }) => {
   const [quantity, setQuantity] = useState(item.quantity);
 
@@ -56,7 +59,16 @@ const SingleItem = ({ item }) => {
         <div className="flex items-center justify-between gap-5">
           <div className="w-full flex items-center gap-5.5">
             <div className="flex items-center justify-center rounded-[5px] bg-gray-2 max-w-[80px] w-full h-17.5">
-              <Image width={200} height={200} src={item.imgs?.thumbnails[0]} alt="product" />
+              <Image
+                width={200}
+                height={200}
+                src={item.imgs?.thumbnails[0] || PLACEHOLDER_IMAGE_URL}
+                alt="product"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).onerror = null;
+                  (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE_URL;
+                }}
+              />
             </div>
 
             <div>
