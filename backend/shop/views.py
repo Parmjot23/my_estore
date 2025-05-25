@@ -52,13 +52,15 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     # Filtering, Searching, Ordering
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = { # More advanced filtering setup
+    filterset_fields = {
         'category__slug': ['exact'],
         'category__name': ['exact', 'icontains'],
         'price': ['gte', 'lte', 'exact'],
         'name': ['icontains'],
         'is_available': ['exact'],
-    } # Example: /api/shop/products/?category__slug=laptops&price__gte=500
+        'is_new_arrival': ['exact'],
+        'is_best_seller': ['exact'],
+    }  # Example: /api/shop/products/?category__slug=laptops&price__gte=500
     search_fields = ['name', 'description', 'sku', 'category__name'] # Example: /api/shop/products/?search=apple
     ordering_fields = ['name', 'price', 'created_at', 'average_rating']
     ordering = ['-created_at'] # Default ordering

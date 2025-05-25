@@ -4,8 +4,12 @@ import React, { useEffect, useState } from "react";
 import SingleItem from "./SingleItem"; // Uses the updated SingleItem for BestSellers
 import Image from "next/image";
 import Link from "next/link";
-import { getProducts , PaginatedProducts } from "@/lib/apiService"; // Import getProducts
-import { Product as ProductType } from "@/types/product"; // Import ProductType
+import {
+  getProducts,
+  PaginatedProducts,
+  GetProductsParams,
+} from "@/lib/apiService";
+import { Product as ProductType } from "@/types/product";
 
 const BestSeller = () => {
   const [bestSellerProducts, setBestSellerProducts] = useState<ProductType[]>([]);
@@ -17,11 +21,12 @@ const BestSeller = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const params = new URLSearchParams();
-        params.append('is_best_seller', 'true'); // Filter by best sellers
-        params.append('limit', '6'); // Show up to 6 best sellers on the home page
+        const params: GetProductsParams = {
+          is_best_seller: true,   // Only fetch items flagged as best sellers
+          page_size: 6,           // Limit to 6 items on the homepage
+        };
 
-        const paginatedData: PaginatedProducts = await getProducts (params);
+        const paginatedData: PaginatedProducts = await getProducts(params);
         setBestSellerProducts(paginatedData.results || []);
       } catch (err) {
         console.error("Failed to fetch best seller products:", err);
