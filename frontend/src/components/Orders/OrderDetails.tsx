@@ -8,7 +8,7 @@ interface OrderDetailsProps {
   orderItem: OrderType; // Renamed prop to 'order' for clarity
 }
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/60x60/F0F0F0/777777?text=N/A";
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/60x60/F0F0F0/777777.jpg?text=N/A";
 
 
 const OrderDetails = ({ orderItem: order }: OrderDetailsProps) => {

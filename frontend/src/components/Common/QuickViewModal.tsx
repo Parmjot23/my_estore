@@ -15,7 +15,7 @@ import { getProductBySlug } from "@/lib/apiService";
 import { Star, Heart, ShoppingCart, XCircle, RefreshCw } from "lucide-react"; // Lucide icons
 import DiscountBadge from "@/components/Common/DiscountBadge";
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/600x400/eee/ccc?text=No+Image";
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/600x400/eee/ccc.jpg?text=No+Image";
 
 const QuickViewModal = () => {
   const { isQuickViewModalOpen, closeModal, productSlug, setProductSlug: setContextProductSlug } =

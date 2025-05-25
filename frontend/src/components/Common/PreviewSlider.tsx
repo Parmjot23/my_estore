@@ -13,7 +13,7 @@ import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { useAppSelector } from "@/redux/store";
 import { ProductMediaItem } from "@/types/product"; // Import ProductMediaItem
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/770x500/eee/ccc?text=No+Image";
+const PLACEHOLDER_IMAGE_URL = "https://placehold.co/770x500/eee/ccc.jpg?text=No+Image";
 
 
 const PreviewSliderModal = () => {
