@@ -17,7 +17,8 @@ import Link from "next/link";
 import { Heart, Eye, ShoppingCart } from 'lucide-react';
 import DiscountBadge from "./DiscountBadge";
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/250x250/F0F0F0/777777?text=No+Image";
+// Using via.placeholder.com ensures the placeholder is delivered as PNG
+const PLACEHOLDER_IMAGE_URL = "https://via.placeholder.com/250x250/F0F0F0/777777.png?text=No+Image";
 
 const ProductItem = ({ item }: { item: Product }) => {
   // ADD THIS CONSOLE.LOG

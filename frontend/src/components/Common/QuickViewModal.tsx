@@ -15,7 +15,8 @@ import { getProductBySlug } from "@/lib/apiService";
 import { Star, Heart, ShoppingCart, XCircle, RefreshCw } from "lucide-react"; // Lucide icons
 import DiscountBadge from "@/components/Common/DiscountBadge";
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/600x400/eee/ccc?text=No+Image";
+// Use via.placeholder.com so Next.js gets a PNG instead of SVG
+const PLACEHOLDER_IMAGE_URL = "https://via.placeholder.com/600x400/eee/ccc.png?text=No+Image";
 
 const QuickViewModal = () => {
   const { isQuickViewModalOpen, closeModal, productSlug, setProductSlug: setContextProductSlug } =

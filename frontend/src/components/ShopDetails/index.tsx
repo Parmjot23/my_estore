@@ -22,7 +22,8 @@ import { getProductReviews, createProductReview } from "@/lib/apiService";
 import { Review } from "@/types/product";
 
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/600x400/eee/ccc?text=No+Image";
+// Placeholder served as PNG to avoid SVG warnings
+const PLACEHOLDER_IMAGE_URL = "https://via.placeholder.com/600x400/eee/ccc.png?text=No+Image";
 
 interface ShopDetailsProps {
   product: Product;
