@@ -13,7 +13,8 @@ import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { useAppSelector } from "@/redux/store";
 import { ProductMediaItem } from "@/types/product"; // Import ProductMediaItem
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/770x500/eee/ccc?text=No+Image";
+// Using via.placeholder.com ensures the server actually returns a PNG
+const PLACEHOLDER_IMAGE_URL = "https://via.placeholder.com/770x500/eee/ccc.png?text=No+Image";
 
 
 const PreviewSliderModal = () => {

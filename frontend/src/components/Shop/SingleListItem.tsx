@@ -19,7 +19,8 @@ import { toast } from "react-toastify"; // For user feedback
 import { Heart, Eye, ShoppingCart } from 'lucide-react'; // Lucide icons
 import DiscountBadge from "@/components/Common/DiscountBadge";
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/250x250/F0F0F0/777777?text=No+Image";
+// Use via.placeholder.com to guarantee PNG response
+const PLACEHOLDER_IMAGE_URL = "https://via.placeholder.com/250x250/F0F0F0/777777.png?text=No+Image";
 
 // Component expects a prop named 'item'
 const SingleListItem = ({ item }: { item: Product }) => {

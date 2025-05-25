@@ -12,7 +12,8 @@ import DiscountBadge from "@/components/Common/DiscountBadge";
 import { toast } from 'react-toastify';
 // No need to import removeItemFromWishlistAction from Redux slice here if parent handles Redux state update
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/80x70/F0F0F0/777777?text=No+Image";
+// Use via.placeholder.com for a PNG placeholder
+const PLACEHOLDER_IMAGE_URL = "https://via.placeholder.com/80x70/F0F0F0/777777.png?text=No+Image";
 
 // Component now expects 'item' to be a Product and 'onRemoveSuccess' to take product ID
 const SingleItem = ({ item, onRemoveSuccess }: { item: Product; onRemoveSuccess: (productId: number) => void }) => {

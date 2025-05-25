@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Category as CategoryType } from '@/types/product'; // Using the richer Category type
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/82x62/F2F3F8/3C50E0?text=No+Image";
+// Use via.placeholder.com for a PNG placeholder
+const PLACEHOLDER_IMAGE_URL = "https://via.placeholder.com/82x62/F2F3F8/3C50E0.png?text=No+Image";
 
 const SingleItem = ({ item }: { item: CategoryType }) => {
   const imageUrl = item.image_url || item.image || PLACEHOLDER_IMAGE_URL; // Use image_url or fallback to image

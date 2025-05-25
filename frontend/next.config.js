@@ -11,7 +11,7 @@ const nextConfig = {
       },
       {
         protocol: 'https', // For the placeholder images
-        hostname: 'placehold.co',
+        hostname: 'via.placeholder.com',
         // port: '', // Default port for https is 443
         // pathname: '/**', // Allow all paths from this placeholder domain
       },
