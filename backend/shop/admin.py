@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import F
 from .models import (
     Brand,
     PhoneModel,
@@ -157,13 +158,92 @@ class ProductMediaAdmin(admin.ModelAdmin):
 
 @admin.register(SlideshowItem)
 class SlideshowItemAdmin(admin.ModelAdmin):
-    list_display = ('product', 'order', 'is_active', 'created_at')
+    list_display = (
+        'product',
+        'product_image_display',
+        'product_discount_percentage',
+        'order',
+        'is_active',
+        'created_at',
+    )
     list_editable = ('order', 'is_active')
     list_select_related = ('product',)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request).select_related('product')
+        return qs.filter(
+            product__discounted_price__isnull=False,
+            product__discounted_price__lt=F('product__price'),
+        )
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'product':
+            kwargs['queryset'] = Product.objects.filter(
+                discounted_price__isnull=False,
+                discounted_price__lt=F('price'),
+            )
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def product_discount_percentage(self, obj):
+        return obj.product.get_discount_percentage
+
+    product_discount_percentage.short_description = 'Discount %'
+
+    def product_image_display(self, obj):
+        from django.utils.html import format_html
+        img_url = obj.product.get_primary_thumbnail_url
+        if img_url:
+            return format_html(
+                '<img src="{}" width="50" height="50" style="object-fit: cover;" />',
+                img_url,
+            )
+        return 'No Image'
+
+    product_image_display.short_description = 'Image'
 
 
 @admin.register(PromoBanner)
 class PromoBannerAdmin(admin.ModelAdmin):
-    list_display = ('product', 'size', 'order', 'is_active', 'created_at')
+    list_display = (
+        'product',
+        'product_image_display',
+        'product_discount_percentage',
+        'size',
+        'order',
+        'is_active',
+        'created_at',
+    )
     list_editable = ('size', 'order', 'is_active')
     list_select_related = ('product',)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request).select_related('product')
+        return qs.filter(
+            product__discounted_price__isnull=False,
+            product__discounted_price__lt=F('product__price'),
+        )
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'product':
+            kwargs['queryset'] = Product.objects.filter(
+                discounted_price__isnull=False,
+                discounted_price__lt=F('price'),
+            )
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def product_discount_percentage(self, obj):
+        return obj.product.get_discount_percentage
+
+    product_discount_percentage.short_description = 'Discount %'
+
+    def product_image_display(self, obj):
+        from django.utils.html import format_html
+        img_url = obj.product.get_primary_thumbnail_url
+        if img_url:
+            return format_html(
+                '<img src="{}" width="50" height="50" style="object-fit: cover;" />',
+                img_url,
+            )
+        return 'No Image'
+
+    product_image_display.short_description = 'Image'
