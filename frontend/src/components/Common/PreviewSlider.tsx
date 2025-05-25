@@ -110,6 +110,7 @@ const PreviewSliderModal = () => {
                   alt={`${productData.name} - Image ${index + 1}`}
                   width={770} // Max width for the image
                   height={500} // Corresponding height (adjust aspect ratio as needed)
+                  unoptimized
                   className="object-contain max-h-[70vh] w-auto" // Ensure it fits
                   onError={(e) => { (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE_URL;}}
                 />
@@ -154,6 +155,7 @@ const PreviewSliderModal = () => {
                         alt={`Thumbnail ${index + 1}`}
                         width={80}
                         height={80}
+                        unoptimized
                         className="object-cover w-full h-full"
                         onError={(e) => { (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE_URL;}}
                     />

@@ -70,6 +70,7 @@ const OrderDetails = ({ orderItem: order }: OrderDetailsProps) => {
                   alt={item.product_details?.name || "Product Image"}
                   width={60}
                   height={60}
+                  unoptimized
                   className="object-contain"
                   onError={(e) => { (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE_URL;}}
                 />

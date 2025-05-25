@@ -205,13 +205,14 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
                       alt={product.name || "Product image"}
                       width={400}
                       height={400}
+                      unoptimized
                       className="rounded-lg object-contain max-h-[450px] transition-transform duration-300 ease-out group-hover:scale-105"
                       onError={(e) => { (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE_URL; }}
                       priority={true}
                     />
                   </>
                 ) : (
-                  <Image src={PLACEHOLDER_IMAGE_URL} alt="Product image placeholder" width={400} height={400} className="rounded-lg object-contain max-h-[450px] transition-transform duration-300 ease-out group-hover:scale-105" />
+                  <Image src={PLACEHOLDER_IMAGE_URL} alt="Product image placeholder" width={400} height={400} unoptimized className="rounded-lg object-contain max-h-[450px] transition-transform duration-300 ease-out group-hover:scale-105" />
                 )}
               </div>
 
@@ -232,6 +233,7 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
                         height={70}
                         src={imgSrc || PLACEHOLDER_IMAGE_URL}
                         alt={`Thumbnail ${key + 1}`}
+                        unoptimized
                         className="object-contain w-full h-full"
                         onError={(e) => { (e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE_URL; }}
                       />

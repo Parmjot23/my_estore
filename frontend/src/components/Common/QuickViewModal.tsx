@@ -230,6 +230,7 @@ const QuickViewModal = () => {
                     alt={product.name || "Product image"}
                     width={600}
                     height={400}
+                    unoptimized
                     className="h-auto w-full rounded-lg object-cover"
                     onError={(e) => {
                         // Fallback to placeholder if the single product image fails to load
@@ -244,6 +245,7 @@ const QuickViewModal = () => {
                     alt={product.name || "Product image placeholder"}
                     width={600}
                     height={400}
+                    unoptimized
                     className="h-auto w-full rounded-lg object-cover"
                     // No onError needed here as it's already the placeholder
                  />
