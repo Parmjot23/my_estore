@@ -7,6 +7,8 @@ from .views import (
     ProductViewSet,
     SlideshowItemViewSet,
     PromoBannerViewSet,
+    BrandViewSet,
+    PhoneModelViewSet,
 )
 from reviews.views import ProductReviewViewSet
 
@@ -14,6 +16,8 @@ from reviews.views import ProductReviewViewSet
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet, basename='category')
 router.register(r'products', ProductViewSet, basename='product')
+router.register(r'brands', BrandViewSet, basename='brand')
+router.register(r'phone-models', PhoneModelViewSet, basename='phonemodel')
 router.register(r'slides', SlideshowItemViewSet, basename='slideshowitem')
 router.register(r'banners', PromoBannerViewSet, basename='promobanner')
 

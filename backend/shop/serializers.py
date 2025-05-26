@@ -12,13 +12,6 @@ from .models import (
 )
 
 
-class BrandSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Brand
-        fields = ['id', 'name', 'slug', 'logo', 'description']
-        read_only_fields = ['id', 'slug']
-
-
 class PhoneModelSerializer(serializers.ModelSerializer):
     brand_name = serializers.CharField(source='brand.name', read_only=True)
 
@@ -26,6 +19,15 @@ class PhoneModelSerializer(serializers.ModelSerializer):
         model = PhoneModel
         fields = ['id', 'name', 'slug', 'brand', 'brand_name']
         read_only_fields = ['id', 'slug', 'brand_name']
+
+
+class BrandSerializer(serializers.ModelSerializer):
+    phone_models = PhoneModelSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Brand
+        fields = ['id', 'name', 'slug', 'logo', 'description', 'phone_models']
+        read_only_fields = ['id', 'slug']
 
 
 class ProductMediaSerializer(serializers.ModelSerializer):

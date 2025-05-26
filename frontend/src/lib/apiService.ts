@@ -2,6 +2,7 @@
 import { Product, PaginatedProducts, Review, Tag, Order, CreateOrderPayload, WishlistItem as ApiWishlistItem, ApiCartItem, Category as ProductCategoryType } from "@/types/product";
 import { Testimonial } from "@/types/testimonial";
 import { Category } from "@/types/category"; // Corrected: Removed 's'
+import { Brand, PhoneModel } from "@/types/brand";
 import { User, AuthTokens, LoginCredentials, RegisterData, Address, ChangePasswordData } from "@/types/user";
 import { SlideshowItem } from "@/types/slideshow";
 import { PromoBanner } from "@/types/promoBanner";
@@ -161,6 +162,15 @@ export const getCategories = (): Promise<ProductCategoryType[]> => {
 
 export const getCategoryBySlug = (slug: string): Promise<ProductCategoryType> => {
   return fetchWrapper<ProductCategoryType>(`${SHOP_BASE_URL}/categories/${slug}/`);
+};
+
+export const getBrands = (): Promise<Brand[]> => {
+  return fetchWrapper<PaginatedResponse<Brand>>(`${SHOP_BASE_URL}/brands/?limit=100`).then(data => data.results || []);
+};
+
+export const getPhoneModels = (brandSlug?: string): Promise<PhoneModel[]> => {
+  const url = brandSlug ? `${SHOP_BASE_URL}/phone-models/?brand__slug=${brandSlug}&limit=100` : `${SHOP_BASE_URL}/phone-models/?limit=100`;
+  return fetchWrapper<PaginatedResponse<PhoneModel>>(url).then(data => data.results || []);
 };
 
 // Assuming product_pk is used in the URL structure as defined in backend's reviews/views.py

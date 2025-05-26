@@ -2,12 +2,14 @@
 
 from rest_framework import viewsets, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend # For advanced filtering
-from .models import Category, Product, SlideshowItem, PromoBanner
+from .models import Category, Product, SlideshowItem, PromoBanner, Brand, PhoneModel
 from .serializers import (
     CategorySerializer,
     ProductSerializer,
     SlideshowItemSerializer,
     PromoBannerSerializer,
+    BrandSerializer,
+    PhoneModelSerializer,
 )
 from django.db.models import Count
 
@@ -60,8 +62,11 @@ class ProductViewSet(viewsets.ModelViewSet):
         'is_available': ['exact'],
         'is_new_arrival': ['exact'],
         'is_best_seller': ['exact'],
+        'brand__slug': ['exact'],
+        'brand__name': ['exact', 'icontains'],
+        'compatible_with__slug': ['exact'],
     }  # Example: /api/shop/products/?category__slug=laptops&price__gte=500
-    search_fields = ['name', 'description', 'sku', 'category__name'] # Example: /api/shop/products/?search=apple
+    search_fields = ['name', 'description', 'sku', 'category__name', 'brand__name', 'compatible_with__name']
     ordering_fields = ['name', 'price', 'created_at', 'average_rating']
     ordering = ['-created_at'] # Default ordering
 
@@ -70,6 +75,27 @@ class ProductViewSet(viewsets.ModelViewSet):
         context = super().get_serializer_context()
         context.update({"request": self.request})
         return context
+
+
+class BrandViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Brand.objects.all().prefetch_related('phone_models')
+    serializer_class = BrandSerializer
+    permission_classes = [permissions.AllowAny]
+    lookup_field = 'slug'
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name']
+    ordering_fields = ['name', 'created_at']
+
+
+class PhoneModelViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = PhoneModel.objects.select_related('brand')
+    serializer_class = PhoneModelSerializer
+    permission_classes = [permissions.AllowAny]
+    lookup_field = 'slug'
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['brand__slug', 'brand__name']
+    search_fields = ['name']
+    ordering_fields = ['name', 'created_at']
 
 
 class SlideshowItemViewSet(viewsets.ModelViewSet):
