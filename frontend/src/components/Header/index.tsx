@@ -10,8 +10,9 @@ import { selectTotalPrice, removeAllItemsFromCart } from "@/redux/features/cart-
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { getCategories, refreshToken as callRefreshTokenApi } from "@/lib/apiService"; // Import refreshToken
+import { getCategories, getBrands, refreshToken as callRefreshTokenApi } from "@/lib/apiService"; // Import refreshToken and brand API
 import { Category as CategoryType } from "@/types/category";
+import { Brand } from "@/types/brand";
 import { Menu as MenuType } from "@/types/Menu";
 import { logout, setAuthState, loadUserFromStorage } from "@/redux/features/auth-slice"; // Import auth actions
 import { User, AuthTokens } from "@/types/user"; // Import User and AuthTokens types
@@ -30,6 +31,7 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [allCategories, setAllCategories] = useState<CategoryType[]>([]);
   const [selectedSearchCategorySlug, setSelectedSearchCategorySlug] = useState<string | null>(null);
+  const [brands, setBrands] = useState<Brand[]>([]);
 
   // Mobile navigation state
   const [navigationOpen, setNavigationOpen] = useState(false);
@@ -48,6 +50,27 @@ const Header = () => {
   const headerMenuData: MenuType[] = Array.isArray(headerMenuDataImport)
     ? headerMenuDataImport.filter(item => item && typeof item.title !== 'undefined')
     : [];
+
+  const brandMenu: MenuType = {
+    id: 9999,
+    title: "Brands",
+    newTab: false,
+    path: "#",
+    submenu: brands.map(brand => ({
+      id: brand.id,
+      title: brand.name,
+      newTab: false,
+      path: `/shop-with-sidebar?brand__slug=${brand.slug}`,
+      submenu: (brand.phone_models || []).map(model => ({
+        id: model.id,
+        title: model.name,
+        newTab: false,
+        path: `/shop-with-sidebar?compatible_with__slug=${model.slug}`,
+      }))
+    }))
+  };
+
+  const finalMenuData: MenuType[] = [...headerMenuData, brandMenu];
 
   const businessName = "Celtrix Wireless Ltd";
 
@@ -70,6 +93,18 @@ const Header = () => {
       }
     };
     loadCategories();
+  }, []);
+
+  useEffect(() => {
+    const loadBrands = async () => {
+      try {
+        const fetchedBrands = await getBrands();
+        setBrands(fetchedBrands || []);
+      } catch (err) {
+        console.error("Header: Failed to fetch brands", err);
+      }
+    };
+    loadBrands();
   }, []);
 
   useEffect(() => {
@@ -261,7 +296,7 @@ const Header = () => {
           <div className="flex items-center justify-between">
             <nav className="hidden lg:flex overflow-x-auto scrollbar-none">
               <ul className="flex items-center gap-x-6 lg:gap-x-8">
-                {headerMenuData.map((menuItem, i) => (
+                {finalMenuData.map((menuItem, i) => (
                   menuItem.submenu ? (
                     <Dropdown key={i} item={menuItem} stickyMenu={stickyMenu} openSubMenu={openSubMenu} handleSubMenuToggle={handleSubMenuToggle} />
                   ) : (
@@ -326,7 +361,7 @@ const Header = () => {
             </div>
           </form>
 
-          {headerMenuData.map((menuItem) => (
+          {finalMenuData.map((menuItem) => (
             menuItem.submenu ? (
               <div key={menuItem.id} className="py-1 border-b border-gray-100 last:border-b-0">
                 <button

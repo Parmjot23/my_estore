@@ -67,19 +67,29 @@ const Dropdown = ({
           } lg:hidden lg:group-hover:block`}
         >
           {item.submenu.map((subItem, index) => {
-            // Stricter check for subItem as well
             if (!subItem || typeof subItem.title !== 'string' || subItem.title.trim() === '') {
-                // console.warn("Dropdown submenu: subItem or subItem.title is invalid.", JSON.stringify(subItem));
                 return null;
             }
+            const hasThird = subItem.submenu && subItem.submenu.length > 0;
             return (
-              <li key={subItem.id || index}>
+              <li key={subItem.id || index} className={hasThird ? 'group relative' : undefined}>
                 <Link
                   href={subItem.path || "#"}
                   className="text-dark-4 hover:text-blue text-custom-sm font-medium block py-2.5 px-6 lg:px-4"
                 >
                   {subItem.title}
                 </Link>
+                {hasThird && (
+                  <ul className="lg:absolute lg:left-full lg:top-0 lg:w-[220px] rounded-md bg-white lg:shadow-nav lg:py-2 hidden group-hover:block">
+                    {subItem.submenu!.map((thirdItem, idx) => (
+                      <li key={thirdItem.id || idx}>
+                        <Link href={thirdItem.path || '#'} className="text-dark-4 hover:text-blue text-custom-sm font-medium block py-2.5 px-6 lg:px-4">
+                          {thirdItem.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             );
           })}
