@@ -10,13 +10,15 @@ interface DropdownProps {
   stickyMenu?: boolean;
   openSubMenu?: number | null;
   handleSubMenuToggle?: (id: number) => void;
+  onSubMenuItemClick?: () => void;
 }
 
 const Dropdown = ({
   item,
   stickyMenu,
   openSubMenu,
-  handleSubMenuToggle
+  handleSubMenuToggle,
+  onSubMenuItemClick
 }: DropdownProps) => {
 
   // Stricter check: Ensure item exists and has a title of type string.
@@ -76,6 +78,7 @@ const Dropdown = ({
                 <Link
                   href={subItem.path || "#"}
                   className="text-dark-4 hover:text-blue text-custom-sm font-medium block py-2.5 px-6 lg:px-4"
+                  onClick={onSubMenuItemClick}
                 >
                   {subItem.title}
                 </Link>
@@ -83,7 +86,11 @@ const Dropdown = ({
                   <ul className="lg:absolute lg:left-full lg:top-0 lg:w-[220px] rounded-md bg-white lg:shadow-nav lg:py-2 hidden group-hover:block">
                     {subItem.submenu!.map((thirdItem, idx) => (
                       <li key={thirdItem.id || idx}>
-                        <Link href={thirdItem.path || '#'} className="text-dark-4 hover:text-blue text-custom-sm font-medium block py-2.5 px-6 lg:px-4">
+                        <Link
+                          href={thirdItem.path || '#'}
+                          className="text-dark-4 hover:text-blue text-custom-sm font-medium block py-2.5 px-6 lg:px-4"
+                          onClick={onSubMenuItemClick}
+                        >
                           {thirdItem.title}
                         </Link>
                       </li>
