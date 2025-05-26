@@ -51,26 +51,20 @@ const Header = () => {
     ? headerMenuDataImport.filter(item => item && typeof item.title !== 'undefined')
     : [];
 
-  const brandMenu: MenuType = {
-    id: 9999,
-    title: "Brands",
+  const brandMenuItems: MenuType[] = brands.map((brand) => ({
+    id: brand.id,
+    title: brand.name,
     newTab: false,
-    path: "#",
-    submenu: brands.map(brand => ({
-      id: brand.id,
-      title: brand.name,
+    path: `/shop-with-sidebar?brand__slug=${brand.slug}`,
+    submenu: (brand.phone_models || []).map((model) => ({
+      id: model.id,
+      title: model.name,
       newTab: false,
-      path: `/shop-with-sidebar?brand__slug=${brand.slug}`,
-      submenu: (brand.phone_models || []).map(model => ({
-        id: model.id,
-        title: model.name,
-        newTab: false,
-        path: `/shop-with-sidebar?compatible_with__slug=${model.slug}`,
-      }))
-    }))
-  };
+      path: `/shop-with-sidebar?compatible_with__slug=${model.slug}`,
+    })),
+  }));
 
-  const finalMenuData: MenuType[] = [...headerMenuData, brandMenu];
+  const finalMenuData: MenuType[] = [...headerMenuData, ...brandMenuItems];
 
   const businessName = "Celtrix Wireless Ltd";
 
