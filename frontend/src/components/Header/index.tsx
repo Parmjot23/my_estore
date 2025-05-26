@@ -133,6 +133,11 @@ const Header = () => {
     setOpenSubMenu(openSubMenu === id ? null : id);
   };
 
+  const handleMenuItemClick = () => {
+    setOpenSubMenu(null);
+    setNavigationOpen(false);
+  };
+
   const handleLogout = () => {
     dispatch(logout());
     dispatch(removeAllItemsFromCart());
@@ -292,7 +297,14 @@ const Header = () => {
               <ul className="flex items-center gap-x-6 lg:gap-x-8">
                 {finalMenuData.map((menuItem, i) => (
                   menuItem.submenu ? (
-                    <Dropdown key={i} item={menuItem} stickyMenu={stickyMenu} openSubMenu={openSubMenu} handleSubMenuToggle={handleSubMenuToggle} />
+                    <Dropdown
+                      key={i}
+                      item={menuItem}
+                      stickyMenu={stickyMenu}
+                      openSubMenu={openSubMenu}
+                      handleSubMenuToggle={handleSubMenuToggle}
+                      onSubMenuItemClick={handleMenuItemClick}
+                    />
                   ) : (
                     <li key={i} className="group relative">
                       <Link href={menuItem.path || "#"} className={`text-sm font-medium text-gray-700 hover:text-accent transition-colors duration-200 flex items-center ${stickyMenu ? "py-3.5" : "py-5"}`}> {/* Adjusted padding */}
@@ -369,7 +381,12 @@ const Header = () => {
                 {openSubMenu === menuItem.id && menuItem.submenu && (
                   <div className="pl-4 mt-1 flex flex-col gap-y-1">
                     {menuItem.submenu.map(subItem => (
-                      <Link key={subItem.id} href={subItem.path || '#'} className="block text-sm text-gray-600 hover:text-accent py-1.5 transition-colors" onClick={() => setNavigationOpen(false)}>
+                      <Link
+                        key={subItem.id}
+                        href={subItem.path || '#'}
+                        className="block text-sm text-gray-600 hover:text-accent py-1.5 transition-colors"
+                        onClick={handleMenuItemClick}
+                      >
                         {subItem.title}
                       </Link>
                     ))}
@@ -378,7 +395,11 @@ const Header = () => {
               </div>
             ) : (
               <div key={menuItem.id} className="py-1 border-b border-gray-100 last:border-b-0">
-                <Link href={menuItem.path || "#"} className="block text-gray-700 hover:text-accent py-2.5 font-medium transition-colors" onClick={() => setNavigationOpen(false)}>
+                <Link
+                  href={menuItem.path || "#"}
+                  className="block text-gray-700 hover:text-accent py-2.5 font-medium transition-colors"
+                  onClick={handleMenuItemClick}
+                >
                   {menuItem.title}
                 </Link>
               </div>
@@ -387,7 +408,13 @@ const Header = () => {
           {isAuthenticated ? (
             <>
               <div className="py-1 border-b border-gray-100">
-                <Link href="/my-account" className="block text-gray-700 hover:text-accent py-2.5 font-medium transition-colors" onClick={() => setNavigationOpen(false)}>My Account</Link>
+                <Link
+                  href="/my-account"
+                  className="block text-gray-700 hover:text-accent py-2.5 font-medium transition-colors"
+                  onClick={handleMenuItemClick}
+                >
+                  My Account
+                </Link>
               </div>
               <div className="py-1">
                 <button onClick={handleLogout} className="block w-full text-left text-gray-700 hover:text-red-500 py-2.5 font-medium transition-colors">Logout</button>
@@ -395,7 +422,13 @@ const Header = () => {
             </>
           ) : (
             <div className="py-1 border-b border-gray-100">
-              <Link href="/signin" className="block text-gray-700 hover:text-accent py-2.5 font-medium transition-colors" onClick={() => setNavigationOpen(false)}>Sign In</Link>
+              <Link
+                href="/signin"
+                className="block text-gray-700 hover:text-accent py-2.5 font-medium transition-colors"
+                onClick={handleMenuItemClick}
+              >
+                Sign In
+              </Link>
             </div>
           )}
         </nav>
