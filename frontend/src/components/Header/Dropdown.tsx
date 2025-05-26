@@ -62,7 +62,7 @@ const Dropdown = ({
 
       {item.submenu && item.submenu.length > 0 && (
         <ul
-          className={`lg:absolute lg:left-0 lg:top-full lg:w-[220px] rounded-md bg-white lg:shadow-nav lg:py-2 static mt-2 pl-4 lg:pl-0 ${
+          className={`lg:absolute lg:left-0 lg:top-full lg:w-[220px] rounded-md bg-white lg:shadow-nav lg:py-2 static mt-2 lg:mt-0 pl-4 lg:pl-0 ${
             isSubMenuOpen ? 'block' : 'hidden'
           } lg:hidden lg:group-hover:block`}
         >
