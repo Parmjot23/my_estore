@@ -288,7 +288,7 @@ const Header = () => {
       <div className="border-t border-gray-200">
         <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 lg:px-0">
           <div className="flex items-center justify-between">
-            <nav className="hidden lg:flex overflow-x-auto scrollbar-none">
+            <nav className="hidden lg:flex overflow-visible">
               <ul className="flex items-center gap-x-6 lg:gap-x-8">
                 {finalMenuData.map((menuItem, i) => (
                   menuItem.submenu ? (
