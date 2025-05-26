@@ -15,14 +15,15 @@ import Breadcrumb from "../Common/Breadcrumb";
 
 // Helper component to read search params
 const SearchParamsReader: React.FC<{
-    onParamsRead: (params: { categorySlug?: string | null, brandSlug?: string | null, searchQuery?: string | null }) => void;
+    onParamsRead: (params: { categorySlug?: string | null; brandSlug?: string | null; phoneModelSlug?: string | null; searchQuery?: string | null }) => void;
 }> = ({ onParamsRead }) => {
     const searchParams = useSearchParams();
     useEffect(() => {
         const categorySlug = searchParams.get("category__slug");
-        const brandSlug = searchParams.get("brand__slug"); // If you use this
-        const searchQuery = searchParams.get("search");   // If you use this
-        onParamsRead({ categorySlug, brandSlug, searchQuery });
+        const brandSlug = searchParams.get("brand__slug");
+        const phoneModelSlug = searchParams.get("compatible_with__slug");
+        const searchQuery = searchParams.get("search");
+        onParamsRead({ categorySlug, brandSlug, phoneModelSlug, searchQuery });
     }, [searchParams, onParamsRead]); // Re-run if searchParams object instance changes (important for Next.js)
     return null;
 };
@@ -47,17 +48,19 @@ const ShopWithSidebarContent: React.FC = () => {
     min_price: 0,
     max_price: 50,
     brand__slug: undefined,
+    compatible_with__slug: undefined,
     search: undefined,
   });
   // Flag to indicate if the initial filters from URL have been applied
   const [initialUrlFiltersApplied, setInitialUrlFiltersApplied] = useState(false);
 
 
-  const handleInitialUrlParams = useCallback((params: { categorySlug?: string | null, brandSlug?: string | null, searchQuery?: string | null }) => {
+  const handleInitialUrlParams = useCallback((params: { categorySlug?: string | null; brandSlug?: string | null; phoneModelSlug?: string | null; searchQuery?: string | null }) => {
     setFilters(prev => ({
         ...prev, // Keep existing defaults like ordering
         category__slug: params.categorySlug || undefined,
         brand__slug: params.brandSlug || undefined,
+        compatible_with__slug: params.phoneModelSlug || undefined,
         search: params.searchQuery || undefined,
     }));
     setCurrentPage(1); // Reset to page 1 for any new filter set from URL
@@ -142,6 +145,11 @@ const ShopWithSidebarContent: React.FC = () => {
 
   const handleBrandSlugChange = (brandSlug: string | null) => {
     setFilters(prev => ({...prev, brand__slug: brandSlug || undefined }));
+    setCurrentPage(1);
+  };
+
+  const handlePhoneModelSlugChange = (modelSlug: string | null) => {
+    setFilters(prev => ({ ...prev, compatible_with__slug: modelSlug || undefined }));
     setCurrentPage(1);
   };
 

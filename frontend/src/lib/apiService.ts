@@ -124,6 +124,7 @@ export interface GetProductsParams {
   min_price?: number;
   max_price?: number;
   brand__slug?: string;
+  compatible_with__slug?: string;
   search?: string;
   ordering?: string;
   page?: number;
