@@ -3,7 +3,7 @@ import json
 import random
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
-from shop.models import Category, Brand, Product, ProductMedia
+from shop.models import Category, Brand, Product, ProductMedia, PhoneModel
 from reviews.models import Review  # If Review is in a separate app, import accordingly
 from wishlists.models import Wishlist, WishlistItem
 from orders.models import Order, OrderItem  # Change to your app name if different
@@ -13,6 +13,18 @@ from django.utils.text import slugify
 DATA_ROOT = "igen_product_images_updated"
 User = get_user_model()
 
+def parse_phone_models_from_name(product_name):
+    """
+    Example:
+      "Air Bag Tempered Glass – iPhone 11 Pro Max/XS Max"
+      => returns ["iPhone 11 Pro Max", "XS Max"]
+    We simply split by the dash, take the last portion, then split by slash.
+    """
+    if "–" in product_name:
+        last_part = product_name.split("–")[-1]
+        # Might contain multiple phone models separated by "/"
+        return [m.strip() for m in last_part.split("/") if m.strip()]
+    return []
 
 class Command(BaseCommand):
     help = "Imports products and adds sample data for new models"
@@ -52,18 +64,19 @@ class Command(BaseCommand):
                     )
 
                 # 3. Prepare Product fields
-                slug = data.get('slug') or slugify(data['name'])
+                raw_name = data['name']
+                slug_val = data.get('slug') or slugify(raw_name)
                 # Ensure slug uniqueness
-                orig_slug = slug
+                orig_slug = slug_val
                 i = 1
-                while Product.objects.filter(slug=slug).exists():
-                    slug = f"{orig_slug}-{i}"
+                while Product.objects.filter(slug=slug_val).exists():
+                    slug_val = f"{orig_slug}-{i}"
                     i += 1
 
                 # 4. Create Product
                 product = Product.objects.create(
-                    name=data['name'],
-                    slug=slug,
+                    name=raw_name,
+                    slug=slug_val,
                     description=data.get('description', ''),
                     category=category,
                     brand=brand,
@@ -85,17 +98,38 @@ class Command(BaseCommand):
                         with open(img_path, 'rb') as img_file:
                             django_file = File(img_file, name=os.path.basename(img_path))
                             if idx == 0:
+                                # The first image is the cover
                                 product.cover_image.save(os.path.basename(img_path), django_file, save=True)
                             else:
+                                # Additional images go to ProductMedia
                                 with open(img_path, 'rb') as img_file2:
                                     django_file2 = File(img_file2, name=os.path.basename(img_path))
                                     ProductMedia.objects.create(
                                         product=product,
                                         media_type=ProductMedia.IMAGE,
                                         file=django_file2,
+                                        # This is arbitrary, just as an example
                                         is_thumbnail=(idx == 1),
                                         is_preview=(idx == 1)
                                     )
+
+                # 6. Handle phone models
+                detected_models = data.get('detected_phone_models', [])
+                # If none were detected from the JSON, we try to parse from the product name
+                if not detected_models:
+                    detected_models = parse_phone_models_from_name(raw_name)
+
+                # For each phone model, create or get a PhoneModel, linking with the brand
+                # If there's no brand, you can decide how to handle that (maybe skip or create a "Generic" brand)
+                if brand and detected_models:
+                    for model_name in detected_models:
+                        # Remove brand name from model_name if it's repeated, or keep it if you want
+                        # e.g. "iPhone 11 Pro Max" includes "iPhone" => brand=Apple => that's fine
+                        phone_model, _ = PhoneModel.objects.get_or_create(
+                            brand=brand,
+                            name=model_name
+                        )
+                        product.compatible_with.add(phone_model)
 
                 print(f"✅ Imported: {product.name}")
 
@@ -116,7 +150,7 @@ class Command(BaseCommand):
                     wishlist, _ = Wishlist.objects.get_or_create(user=user)
                     WishlistItem.objects.get_or_create(wishlist=wishlist, product=product)
 
-                # === DEMO: Add 1–2 orders containing this product ===
+                # === DEMO: Add 1–2 orders containing this product for random users ===
                 for _ in range(random.randint(1, 2)):
                     user = random.choice(demo_users)
                     order = Order.objects.create(
