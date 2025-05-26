@@ -19,7 +19,7 @@ import { toast } from "react-toastify"; // For user feedback
 import { Heart, Eye, ShoppingCart } from 'lucide-react'; // Lucide icons
 import DiscountBadge from "@/components/Common/DiscountBadge";
 
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/280x280/F0F0F0/777777?text=Image+Not+Available";
+const PLACEHOLDER_IMAGE_URL = "/images/no-image.svg";
 
 const SingleItem = ({ item }: { item: Product }) => {
   const { openModal, setProductSlug } = useQuickViewModalContext();
