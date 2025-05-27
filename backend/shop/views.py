@@ -76,12 +76,17 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
         root_categories = (
             Category.objects.filter(parent__isnull=True)
-            .annotate(product_count=Count("products", filter=product_filter))
+            .annotate(
+                product_count=Count("products", filter=product_filter),
+                child_product_count=Count(
+                    "children__products", filter=product_filter
+                ),
+            )
             .prefetch_related(Prefetch("children", queryset=children_qs))
         )
 
         return root_categories.filter(
-            Q(product_count__gt=0) | Q(children__product_count__gt=0)
+            Q(product_count__gt=0) | Q(child_product_count__gt=0)
         ).distinct()
 
 
