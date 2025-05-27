@@ -131,7 +131,7 @@ const ShopWithoutSidebar = () => {
               >
                 {shopData.map((item, key) =>
                   productStyle === "grid" ? (
-                    <SingleGridItem item={item} key={key} />
+                    <SingleGridItem product={item} gridSize={4} key={key} />
                   ) : (
                     <SingleListItem item={item} key={key} />
                   )
