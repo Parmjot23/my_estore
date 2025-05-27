@@ -247,9 +247,9 @@ const handleLogout = () => {
       <Breadcrumb pageName={"My Account"} />
       <section className="overflow-hidden py-10 md:py-16 lg:py-20 bg-gray-100 dark:bg-dark-2">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col xl:flex-row gap-8">
+          <div className="flex flex-col lg:flex-row gap-8">
             {/* Sidebar Navigation */}
-            <div className="xl:w-1/4 bg-white dark:bg-dark shadow-lg rounded-xl p-6 self-start">
+            <div className="lg:w-1/4 bg-white dark:bg-dark shadow-lg rounded-xl p-6 self-start">
               <div className="flex items-center gap-4 mb-8 pb-6 border-b border-gray-200 dark:border-dark-3">
                 <Image
                   src={authUser?.profile_image || "/images/users/user-04.jpg"}
@@ -292,7 +292,7 @@ const handleLogout = () => {
             </div>
 
             {/* Main Content Area */}
-            <div className="xl:w-3/4">
+            <div className="lg:w-3/4">
               {/* Dashboard */}
               <div className={`${activeTab === "dashboard" ? "block" : "hidden"} bg-white dark:bg-dark shadow-lg rounded-xl p-6 md:p-10`}>
                 <h3 className="text-2xl font-semibold text-dark dark:text-white mb-6">Dashboard</h3>
@@ -437,7 +437,7 @@ const handleLogout = () => {
           @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
         }
         .form-input {
-          @apply block w-full px-4 py-3 text-sm text-dark dark:text-white bg-gray-50 dark:bg-dark-2 border border-gray-300 dark:border-dark-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue focus:border-blue transition-colors placeholder-gray-400 dark:placeholder-gray-500;
+          @apply block w-full px-4 py-3 text-sm text-dark dark:text-white bg-gray-100 dark:bg-dark-2 border border-gray-300 dark:border-dark-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue focus:border-blue transition-colors placeholder-gray-500 dark:placeholder-gray-500;
         }
         .form-input:read-only {
             @apply bg-gray-200 dark:bg-dark-3 cursor-not-allowed opacity-70;

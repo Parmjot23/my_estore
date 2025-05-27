@@ -171,7 +171,7 @@ const AddressModal = ({ isOpen, closeModal, onSave, addressToEdit }: AddressModa
           @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
         }
         .form-input {
-          @apply block w-full px-3 py-2 text-sm text-dark dark:text-white bg-gray-50 dark:bg-dark-2 border border-gray-300 dark:border-dark-3 rounded-md shadow-sm focus:outline-none focus:ring-blue focus:border-blue transition-colors;
+          @apply block w-full px-3 py-2 text-sm text-dark dark:text-white bg-gray-100 dark:bg-dark-2 border border-gray-300 dark:border-dark-3 rounded-md shadow-sm focus:outline-none focus:ring-blue focus:border-blue transition-colors placeholder-gray-500 dark:placeholder-gray-500;
         }
       `}</style>
     </div>
