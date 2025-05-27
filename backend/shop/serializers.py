@@ -78,7 +78,7 @@ class CategorySerializer(serializers.ModelSerializer):
     parent_slug = serializers.SlugRelatedField(slug_field='slug', source='parent', read_only=True)
     children = serializers.SerializerMethodField()
     image_url = serializers.SerializerMethodField()
-    product_count = serializers.IntegerField(read_only=True) # Add this if annotated in view, or make it SerializerMethodField
+    product_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Category
@@ -101,6 +101,9 @@ class CategorySerializer(serializers.ModelSerializer):
         elif obj.image:
             return obj.image.url
         return None
+
+    def get_product_count(self, obj):
+        return getattr(obj, "product_count", 0)
 
 
 class ProductSerializer(serializers.ModelSerializer):
