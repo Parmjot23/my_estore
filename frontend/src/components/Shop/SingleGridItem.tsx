@@ -19,8 +19,9 @@ import DiscountBadge from "@/components/Common/DiscountBadge";
 const PLACEHOLDER_IMAGE_URL = "/images/no-image.svg";
 
 // The component expects a prop named 'product' from its parent.
-// Internally, this 'product' prop is aliased to 'item'.
-const SingleGridItem = ({ product: item }: { product: Product }) => {
+// Internally, this 'product' prop is aliased to 'item'. Optionally accepts
+// a `gridSize` to adapt thumbnail dimensions.
+const SingleGridItem = ({ product: item, gridSize = 3 }: { product: Product; gridSize?: number }) => {
   // ADD THIS GUARD AT THE TOP
   if (!item || typeof item.id === 'undefined') {
     // Optionally log this occurrence to help debug why an invalid item is being passed
@@ -100,6 +101,7 @@ const SingleGridItem = ({ product: item }: { product: Product }) => {
 
   // These calculations should now be safe due to the guard at the top
   const imageUrl = item.cover_image_url || item.imgs?.previews?.[0] || PLACEHOLDER_IMAGE_URL;
+  const imageDimension = gridSize === 4 ? 150 : gridSize === 2 ? 300 : 220;
   const rating = item.average_rating ? parseFloat(String(item.average_rating)) : 0;
   const reviewCount = typeof item.reviews_count === 'number' ? item.reviews_count : 0;
 
@@ -134,8 +136,8 @@ const SingleGridItem = ({ product: item }: { product: Product }) => {
           <Image
             src={imageUrl}
             alt={item.name || "Product image"}
-            width={250}
-            height={250}
+            width={imageDimension}
+            height={imageDimension}
             className="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300 ease-in-out"
             onError={(e) => {
               (e.target as HTMLImageElement).onerror = null;
