@@ -208,6 +208,15 @@ const ShopWithSidebarContent: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
             <aside className="lg:col-span-3">
+              <div className="flex justify-end lg:justify-start mb-4">
+                <Link
+                  href="/shop-without-sidebar"
+                  className="p-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  aria-label="Go to shop without sidebar"
+                >
+                  <PanelLeft size={20} />
+                </Link>
+              </div>
               <div className="space-y-6">
                 <CategoryDropdown allCategories={allCategories} isLoading={isLoadingCategories} error={categoryError} onCategoryChange={handleCategoryChange} selectedCategory={filters.category__slug} />
                 <PriceDropdown onPriceChange={handlePriceChange} initialMin={filters.min_price} initialMax={filters.max_price} />
@@ -222,9 +231,6 @@ const ShopWithSidebarContent: React.FC = () => {
                     {Math.min(currentPage * itemsPerPage, totalProducts)} of {totalProducts} results
                 </p>
                 <div className="flex items-center space-x-4">
-                    <Link href="/shop-without-sidebar" className="p-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300" aria-label="Go to shop without sidebar">
-                        <PanelLeft size={20} />
-                    </Link>
                     <div className="flex items-center">
                     <label htmlFor="sort" className="mr-2 text-sm text-gray-700 shrink-0">Sort by:</label>
                     <select id="sort" name="sort" value={filters.ordering} onChange={handleSortChange} className="block w-full rounded-md border-gray-300 py-1.5 pl-3 pr-10 text-gray-900 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 shadow-sm">
