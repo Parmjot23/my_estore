@@ -125,4 +125,30 @@ export const menuData: Menu[] = [
       },
     ],
   },
+  {
+    id: 8,
+    title: "Operations",
+    newTab: false,
+    path: "/",
+    submenu: [
+      {
+        id: 81,
+        title: "Orders",
+        newTab: false,
+        path: "/orders",
+      },
+      {
+        id: 82,
+        title: "Trips",
+        newTab: false,
+        path: "/trips",
+      },
+      {
+        id: 83,
+        title: "Driver Settlement",
+        newTab: false,
+        path: "/driver-settlement",
+      },
+    ],
+  },
 ];
