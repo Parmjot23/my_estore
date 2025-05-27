@@ -1,47 +1,55 @@
-# Local Network Development
+# My E‑Store
 
-This project contains a Django backend and a Next.js frontend.
+This project combines a Django backend and a Next.js frontend. The steps below
+explain how to set up and run both parts locally after cloning the repository
+from GitHub.
 
-## Backend
-1. Install dependencies:
-   ```bash
-   pip install -r backend/requirements.txt
-   ```
-2. Run the development server so it is reachable from other devices:
-   ```bash
-   python backend/manage.py runserver 0.0.0.0:8000
-   ```
-The server will listen on port `8000` on all network interfaces.
+## Prerequisites
+- Python 3.10+
+- Node.js 18+
+- npm
 
-Create a `backend/.env` file to store sensitive settings. Example:
+## Quick start
 
+### 1. Clone the repository
 ```bash
-SECRET_KEY=changeme
-EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
-EMAIL_HOST=smtp.example.com
-EMAIL_PORT=587
-EMAIL_HOST_USER=your-email@example.com
-EMAIL_HOST_PASSWORD=your-password
-EMAIL_USE_TLS=True
-DEFAULT_FROM_EMAIL=webmaster@example.com
+git clone <REPOSITORY_URL>
+cd my_estore
 ```
 
-The `.env` file is already listed in `.gitignore` so it won't be committed.
+### 2. Backend setup
+Create and activate a virtual environment and install the Python dependencies:
+```bash
+python -m venv venv
+source venv/bin/activate      # On Windows use "venv\\Scripts\\activate"
+pip install -r requirements.txt
+```
 
-## Frontend
-1. Install dependencies:
-   ```bash
-   cd frontend && npm install
-   ```
-2. Ensure the frontend can reach the backend when accessed from another device.
-   Create a `frontend/.env.local` file and set the backend URL using your computer's IP address:
-   ```bash
-   NEXT_PUBLIC_API_BASE_URL=http://<YOUR_IP>:8000/api
-   ```
-3. Start the Next.js dev server:
-   ```bash
-   npm run dev
-   ```
-   This runs `next dev -H 0.0.0.0 -p 3000`, so the frontend is available on port `3000` from other devices on the network.
+Copy the example environment file and adjust values as needed:
+```bash
+cp backend/.env.example backend/.env
+```
+Run migrations and start the development server:
+```bash
+python backend/manage.py migrate
+python backend/manage.py runserver 0.0.0.0:8000
+```
+The API will be available at `http://localhost:8000/`.
 
-Both the frontend and backend will now be accessible from devices connected to the same network (for example, via a phone hotspot).
+### 3. Frontend setup
+Install Node dependencies and start the Next.js dev server:
+```bash
+cd frontend
+npm install
+cp .env.local.example .env.local
+npm run dev
+```
+This runs `next dev` on port `3000`. The frontend will be reachable at
+`http://localhost:3000/`.
+
+### 4. Access from other devices
+If you need to access the servers from other devices on the same network,
+update `NEXT_PUBLIC_API_BASE_URL` in `frontend/.env.local` with your computer's
+IP address and ensure the backend is started with `0.0.0.0:8000` as shown above.
+
+With both servers running you can explore the e‑commerce site locally.
