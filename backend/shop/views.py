@@ -11,7 +11,7 @@ from .serializers import (
     BrandSerializer,
     PhoneModelSerializer,
 )
-from django.db.models import Count
+from django.db.models import Count, Q, Prefetch
 
 # Optional: Custom permissions (e.g., IsAdminOrReadOnly)
 # class IsAdminOrReadOnly(permissions.BasePermission):
@@ -26,21 +26,63 @@ from django.db.models import Count
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows categories to be viewed or edited.
-    """
-    # Annotate the queryset to include product_count
-    queryset = Category.objects.annotate(product_count=Count('products')).filter(parent__isnull=True).prefetch_related('children')
-    # Or if you want all categories with counts:
-    # queryset = Category.objects.annotate(product_count=Count('products')).all().prefetch_related('children')
+    """API endpoint that allows categories to be viewed or edited."""
+
     serializer_class = CategorySerializer
     permission_classes = [permissions.AllowAny]
     lookup_field = 'slug'
 
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['name', 'parent__slug'] # Allow filtering by parent slug
+    filterset_fields = ['name', 'parent__slug']  # Allow filtering by parent slug
     search_fields = ['name', 'description']
-    ordering_fields = ['name', 'created_at', 'product_count'] # Allow ordering by product_count
+    ordering_fields = ['name', 'created_at', 'product_count']
+
+    def get_queryset(self):
+        """Return categories annotated with product counts respecting product filters."""
+        request = self.request
+
+        product_filter = Q(products__is_available=True)
+        brand_slug = request.query_params.get('brand__slug')
+        if brand_slug:
+            product_filter &= Q(products__brand__slug=brand_slug)
+
+        phone_model_slug = request.query_params.get('compatible_with__slug')
+        if phone_model_slug:
+            product_filter &= Q(products__compatible_with__slug=phone_model_slug)
+
+        search_query = request.query_params.get('search')
+        if search_query:
+            product_filter &= (
+                Q(products__name__icontains=search_query)
+                | Q(products__description__icontains=search_query)
+                | Q(products__sku__icontains=search_query)
+                | Q(products__brand__name__icontains=search_query)
+                | Q(products__compatible_with__name__icontains=search_query)
+            )
+
+        min_price = request.query_params.get('price__gte')
+        if min_price is not None:
+            product_filter &= Q(products__price__gte=min_price)
+        max_price = request.query_params.get('price__lte')
+        if max_price is not None:
+            product_filter &= Q(products__price__lte=max_price)
+
+        children_qs = (
+            Category.objects.annotate(
+                product_count=Count("products", filter=product_filter)
+            )
+            .filter(product_count__gt=0)
+        )
+
+        root_categories = (
+            Category.objects.filter(parent__isnull=True)
+            .annotate(product_count=Count("products", filter=product_filter))
+            .prefetch_related(Prefetch("children", queryset=children_qs))
+        )
+
+        return root_categories.filter(
+            Q(product_count__gt=0) | Q(children__product_count__gt=0)
+        ).distinct()
 
 
 class ProductViewSet(viewsets.ModelViewSet):

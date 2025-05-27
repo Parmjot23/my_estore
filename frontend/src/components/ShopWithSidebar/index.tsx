@@ -9,7 +9,7 @@ import SingleListItem from "../Shop/SingleListItem";
 import CategoryDropdown from "./CategoryDropdown";
 import PriceDropdown from "./PriceDropdown";
 import GenderDropdown from "./GenderDropdown"; // Assuming this is for Brands
-import { getProducts, GetProductsParams, PaginatedResponse, getCategories } from "@/lib/apiService";
+import { getProducts, GetProductsParams, PaginatedResponse, getCategories, GetCategoriesParams } from "@/lib/apiService";
 import { LayoutGrid, List } from "lucide-react";
 import Breadcrumb from "../Common/Breadcrumb";
 
@@ -101,9 +101,16 @@ const ShopWithSidebarContent: React.FC = () => {
 
   useEffect(() => {
     const loadCategories = async () => {
-      setIsLoadingCategories(true); setCategoryError(null);
+      setIsLoadingCategories(true);
+      setCategoryError(null);
       try {
-        const fetchedCategories = await getCategories();
+        const fetchedCategories = await getCategories({
+          brand__slug: filters.brand__slug,
+          compatible_with__slug: filters.compatible_with__slug,
+          search: filters.search,
+          price__gte: filters.min_price,
+          price__lte: filters.max_price,
+        });
         setAllCategories(fetchedCategories || []);
       } catch (err: any) {
         setCategoryError(err.message || "Failed to load categories.");
@@ -113,7 +120,7 @@ const ShopWithSidebarContent: React.FC = () => {
       }
     };
     loadCategories();
-  }, []);
+  }, [filters.brand__slug, filters.compatible_with__slug, filters.search, filters.min_price, filters.max_price]);
 
   // This useEffect is responsible for fetching products when filters or currentPage change.
   // It now waits for `initialUrlFiltersApplied` to be true before the first "real" fetch based on filters.
