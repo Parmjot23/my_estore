@@ -153,12 +153,27 @@ export const getProductBySlug = (slug: string): Promise<Product> => {
   return fetchWrapper<Product>(`${SHOP_BASE_URL}/products/${slug}/`);
 };
 
-export const getCategories = (): Promise<ProductCategoryType[]> => {
-    // Assuming the direct response is PaginatedResponse<ProductCategoryType>
-    // If it can sometimes be just ProductCategoryType[], the original logic was fine,
-    // but it's safer to expect a consistent paginated structure or handle both explicitly.
-    return fetchWrapper<PaginatedResponse<ProductCategoryType>>(`${SHOP_BASE_URL}/categories/?limit=100`) // Fetch more categories
-        .then(data => data.results || []); // Always expect results from a paginated response
+export interface GetCategoriesParams {
+  brand__slug?: string;
+  compatible_with__slug?: string;
+  search?: string;
+  price__gte?: number;
+  price__lte?: number;
+}
+
+export const getCategories = (params?: GetCategoriesParams): Promise<ProductCategoryType[]> => {
+  const queryParams = new URLSearchParams();
+  queryParams.append('limit', '100');
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        queryParams.append(key, String(value));
+      }
+    });
+  }
+  return fetchWrapper<PaginatedResponse<ProductCategoryType>>(
+    `${SHOP_BASE_URL}/categories/?${queryParams.toString()}`
+  ).then((data) => data.results || []);
 };
 
 export const getCategoryBySlug = (slug: string): Promise<ProductCategoryType> => {
