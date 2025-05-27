@@ -36,7 +36,10 @@ const ShopWithSidebarContent: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalProducts, setTotalProducts] = useState<number>(0);
-  const itemsPerPage = 9;
+  // Number of columns/rows for the grid view. 3 corresponds to the previous 3x3 layout.
+  const [gridSize, setGridSize] = useState<number>(3);
+  // Items per page is derived from the grid size (e.g., 3 => 9 items)
+  const itemsPerPage = gridSize * gridSize;
 
   const [allCategories, setAllCategories] = useState<CategoryType[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
@@ -94,7 +97,7 @@ const ShopWithSidebarContent: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, itemsPerPage]);
+  }, [currentPage, gridSize]);
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -153,6 +156,11 @@ const ShopWithSidebarContent: React.FC = () => {
     setCurrentPage(1);
   };
 
+  const handleGridSizeChange = (size: number) => {
+    setGridSize(size);
+    setCurrentPage(1);
+  };
+
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages && newPage !== currentPage) {
       setCurrentPage(newPage);
@@ -160,6 +168,12 @@ const ShopWithSidebarContent: React.FC = () => {
   };
 
   const uniqueBrandNames = Array.from(new Set(products.map(p => p.brand_details?.name).filter(Boolean))) as string[];
+
+  const gridColsClass = gridSize === 4
+    ? "sm:grid-cols-2 xl:grid-cols-4"
+    : gridSize === 2
+    ? "sm:grid-cols-2 xl:grid-cols-2"
+    : "sm:grid-cols-2 xl:grid-cols-3";
 
   const renderPagination = () => { /* ... keep your existing pagination logic ... */
     if (totalPages <= 1) return null;
@@ -211,6 +225,19 @@ const ShopWithSidebarContent: React.FC = () => {
                     <button onClick={() => setViewMode("grid")} className={`p-2 rounded-md ${viewMode === "grid" ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"}`} aria-label="Grid view"><LayoutGrid size={20} /></button>
                     <button onClick={() => setViewMode("list")} className={`p-2 rounded-md ${viewMode === "list" ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"}`} aria-label="List view"><List size={20} /></button>
                     </div>
+                    <div className="flex items-center ml-4">
+                      <label htmlFor="gridSize" className="mr-2 text-sm text-gray-700 shrink-0">Grid:</label>
+                      <select
+                        id="gridSize"
+                        value={gridSize}
+                        onChange={(e) => handleGridSizeChange(parseInt(e.target.value))}
+                        className="block rounded-md border-gray-300 py-1.5 pl-3 pr-3 text-gray-900 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 shadow-sm"
+                      >
+                        <option value={2}>2 x 2</option>
+                        <option value={3}>3 x 3</option>
+                        <option value={4}>4 x 4</option>
+                      </select>
+                    </div>
                 </div>
               </div>
               {/* Product list rendering logic from previous correct version */}
@@ -220,7 +247,7 @@ const ShopWithSidebarContent: React.FC = () => {
               {!isLoading && !error && products.length > 0 && (
                 <>
                   {viewMode === "grid" ? (
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                    <div className={`grid grid-cols-1 gap-6 ${gridColsClass}`}>
                       {products.map((product, index) => (!product || typeof product.id === 'undefined' ? <div key={`invalid-grid-${index}`} className="text-red-500 p-2 border border-red-300">Invalid product data</div> : <SingleGridItem key={product.id || `grid-fallback-${index}`} product={product} /> ))}
                     </div>
                   ) : (
