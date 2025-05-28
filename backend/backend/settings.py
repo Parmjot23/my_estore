@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'reviews.apps.ReviewsConfig',
     'testimonials.apps.TestimonialsConfig',
     "rest_framework_simplejwt",
+    "django_filters",
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
