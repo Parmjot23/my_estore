@@ -1,4 +1,4 @@
-import MyAccount from "@/components/MyAccount";
+import AccountDashboard from "@/components/AccountDashboard";
 import React from "react";
 
 import { Metadata } from "next";
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const MyAccountPage = () => {
   return (
     <main>
-      <MyAccount />
+      <AccountDashboard />
     </main>
   );
 };
