@@ -440,6 +440,7 @@ const handleLogout = () => {
             </div>
           </div>
         </div>
+        </div>
       </section>
       {isAddressModalOpen && (
         <AddressModal
