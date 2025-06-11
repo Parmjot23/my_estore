@@ -1,7 +1,7 @@
 // src/components/AccountDashboard.jsx
 "use client";
 import React, { useState, useEffect } from "react";
-import Breadcrumb from "../Common/Breadcrumb";
+import Breadcrumb from "./Common/Breadcrumb";
 import Image from "next/image";
 import AddressModal from "./AddressModal";
 import Orders from "../Orders"; // Ensure Orders component is correctly implemented
