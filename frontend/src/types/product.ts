@@ -189,3 +189,11 @@ export type CartItem = {
     previews: string[];
   };
 };
+
+// Paginated product response used throughout the frontend
+export interface PaginatedProducts {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Product[];
+}
