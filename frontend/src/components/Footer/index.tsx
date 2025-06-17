@@ -272,9 +272,19 @@ const Footer = () => {
       <div className="py-5 xl:py-7.5 bg-gray-1">
         <div className="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex gap-5 flex-wrap items-center justify-between">
-            <p className="text-dark font-medium">
-              &copy; {year}. All rights reserved by PimjoLabs.
-            </p>
+            <div className="flex items-center gap-4">
+              <p className="text-dark font-medium">
+                &copy; {year}. All rights reserved by Celtrix Wireless Ltd.
+              </p>
+              <a
+                className="text-dark font-medium"
+                href="https://madebyparm.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                madebyparm.com
+              </a>
+            </div>
 
             <div className="flex flex-wrap items-center gap-4">
               <p className="font-medium">We Accept:</p>
