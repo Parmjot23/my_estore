@@ -149,7 +149,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-# STATIC_ROOT = BASE_DIR / 'staticfiles' # For production 'collectstatic'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 # STATICFILES_DIRS = [BASE_DIR / 'static'] # For development static files outside apps
 
 # Media files (User-uploaded content like product images)
