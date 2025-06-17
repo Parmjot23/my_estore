@@ -11,6 +11,18 @@ from GitHub.
 
 ## Quick start
 
+The repository includes a helper script `setup_local.sh` that automates the
+most common steps. After cloning the repo simply run:
+
+```bash
+./setup_local.sh
+```
+
+The script creates a Python virtual environment, installs backend dependencies,
+sets up the example environment files, runs migrations and installs the frontend
+packages. Afterwards you can start the backend and frontend servers manually as
+shown below.
+
 ### 1. Clone the repository
 ```bash
 git clone <REPOSITORY_URL>
