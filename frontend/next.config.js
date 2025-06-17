@@ -1,23 +1,28 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true, // Or your existing config
+  reactStrictMode: true,
   images: {
     remotePatterns: [
       {
-        protocol: 'http', // Or 'https' if your local Django serves over HTTPS
+        protocol: 'http',
         hostname: 'localhost',
-        port: '8000', // Specify the port your Django backend is using for media
-        pathname: '/media/**', // Be more specific if all your media is under /media/
+        port: '8000',
+        pathname: '/media/**',
       },
       {
-        protocol: 'https', // For the placeholder images
+        protocol: 'https',
         hostname: 'placehold.co',
-        // port: '', // Default port for https is 443
-        // pathname: '/**', // Allow all paths from this placeholder domain
       },
-      // You can add other hostnames here if needed in the future
     ],
   },
 };
+
+if (process.env.NEXT_PUBLIC_BACKEND_HOST) {
+  nextConfig.images.remotePatterns.push({
+    protocol: 'https',
+    hostname: process.env.NEXT_PUBLIC_BACKEND_HOST,
+    pathname: '/media/**',
+  });
+}
 
 module.exports = nextConfig;
