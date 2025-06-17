@@ -8,3 +8,12 @@ __pycache__/
 # Node modules
 frontend/node_modules/
 frontend/.env.local
+
+# Virtual environments
+venv/
+.venv/
+
+# Local database and media files
+backend/db.sqlite3
+backend/media/
+backend/staticfiles/
