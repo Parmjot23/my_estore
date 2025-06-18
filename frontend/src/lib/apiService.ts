@@ -7,7 +7,9 @@ import { User, AuthTokens, LoginCredentials, RegisterData, Address, ChangePasswo
 import { SlideshowItem } from "@/types/slideshow";
 import { PromoBanner } from "@/types/promoBanner";
 
-const API_ROOT = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000/api";
+// Exported so other modules can use the same base URL logic
+export const API_ROOT = process.env.NEXT_PUBLIC_API_BASE_URL ||
+  "http://localhost:8000/api";
 
 export interface PaginatedResponse<T> {
   count: number;

@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/navigation";
 import "swiper/css";
 
-import { getCategories } from '@/lib/apiService'; // Corrected import
+import { getCategories, API_ROOT } from '@/lib/apiService';
 import { Category as CategoryType } from '@/types/product'; // Using richer Category type from product.ts
 import SingleItem from "./SingleItem";
 import Image from "next/image"; // For navigation button icons
@@ -62,7 +62,7 @@ const Categories = () => {
           <div className="mb-10 text-center">
             <h2 className="font-semibold text-xl text-red-500">Error Loading Categories</h2>
             <p className="text-red-400">{error}</p>
-            <p className="text-xs text-gray-500 mt-1">Tried to fetch from: {process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000/api'}/shop/categories/</p>
+            <p className="text-xs text-gray-500 mt-1">Tried to fetch from: {API_ROOT}/shop/categories/</p>
             <p className="text-xs text-gray-500 mt-1">Please ensure the backend server is running and accessible.</p>
           </div>
         </div>
