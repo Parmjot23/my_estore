@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 // Adjust these import paths if your files are located elsewhere!
-import { getCategories, getProducts, PaginatedProducts } from '@/lib/apiService';
+import { getCategories, getProducts, API_ROOT, PaginatedProducts } from '@/lib/apiService';
 import { Category } from '@/types/category';
 import { Product, PaginatedProducts } from '@/types/product';
 
@@ -16,12 +16,12 @@ const APITestComponent = () => {
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
 
   useEffect(() => {
-    console.log("API_BASE_URL from env:", process.env.NEXT_PUBLIC_API_BASE_URL);
+    console.log("API_BASE_URL from env:", API_ROOT);
 
     const getCategories = async () => {
       setIsLoadingCategories(true);
       setCategoryError(null);
-      const categoriesUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000/api'}/shop/categories/?limit=100`;
+      const categoriesUrl = `${API_ROOT}/shop/categories/?limit=100`;
       console.log("Attempting to fetch categories from URL:", categoriesUrl);
       try {
         const response = await fetch(categoriesUrl);
@@ -58,7 +58,7 @@ const APITestComponent = () => {
     const getProducts = async () => {
       setIsLoadingProducts(true);
       setProductError(null);
-      const productsUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000/api'}/shop/products/`;
+      const productsUrl = `${API_ROOT}/shop/products/`;
       console.log("Attempting to fetch products from URL:", productsUrl);
       try {
         const response = await fetch(productsUrl);
@@ -99,7 +99,7 @@ const APITestComponent = () => {
   return (
     <div style={{ padding: '20px', border: '1px solid #ccc', margin: '20px', backgroundColor: '#f9f9f9' }}>
       <h2>API Connection Test Component</h2>
-      <p><strong>API Base URL (from env):</strong> {process.env.NEXT_PUBLIC_API_BASE_URL || 'Not Set - Using default http://127.0.0.1:8000/api'}</p>
+      <p><strong>API Base URL:</strong> {API_ROOT}</p>
 
       <div style={{ marginTop: '15px', padding: '10px', border: '1px dashed #aaa' }}>
         <h3>Categories Status:</h3>
