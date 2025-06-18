@@ -22,13 +22,6 @@ const PLACEHOLDER_IMAGE_URL = "/images/no-image.svg";
 // Internally, this 'product' prop is aliased to 'item'. Optionally accepts
 // a `gridSize` to adapt thumbnail dimensions.
 const SingleGridItem = ({ product: item, gridSize = 3 }: { product: Product; gridSize?: number }) => {
-  // ADD THIS GUARD AT THE TOP
-  if (!item || typeof item.id === 'undefined') {
-    // Optionally log this occurrence to help debug why an invalid item is being passed
-    console.warn("SingleGridItem rendered with invalid item prop:", item);
-    return null; // Or return some placeholder/error UI for this specific item
-  }
-
   const { openModal, setProductSlug } = useQuickViewModalContext();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -37,9 +30,15 @@ const SingleGridItem = ({ product: item, gridSize = 3 }: { product: Product; gri
   const [isWishlistLoading, setIsWishlistLoading] = useState(false);
 
   useEffect(() => {
-    // This effect will only run if 'item' is valid due to the guard above
-    setIsWishlisted(wishlistItems.some(wishlistItem => wishlistItem && wishlistItem.id === item.id));
-  }, [wishlistItems, item.id]);
+    if (item && item.id) {
+      setIsWishlisted(wishlistItems.some(wishlistItem => wishlistItem && wishlistItem.id === item.id));
+    }
+  }, [wishlistItems, item?.id]);
+
+  if (!item || typeof item.id === 'undefined') {
+    console.warn("SingleGridItem rendered with invalid item prop:", item);
+    return null;
+  }
 
 
   const handleQuickViewClick = () => {

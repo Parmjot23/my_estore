@@ -18,6 +18,7 @@ const PLACEHOLDER_IMAGE_URL = "/images/no-image.svg";
 const SingleItem = ({ item, onRemoveSuccess }: { item: Product; onRemoveSuccess: (productId: number) => void }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isRemoving, setIsRemoving] = useState(false);
+  const isAuthenticated = useAppSelector((state) => state.authReducer.isAuthenticated);
 
   if (!item || typeof item.id === 'undefined') {
     console.warn("Wishlist SingleItem rendered with invalid item prop:", item);
@@ -49,8 +50,6 @@ const SingleItem = ({ item, onRemoveSuccess }: { item: Product; onRemoveSuccess:
   const effectivePrice = (currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice)
     ? currentDiscountedPrice
     : currentPrice;
-
-  const isAuthenticated = useAppSelector((state) => state.authReducer.isAuthenticated);
 
   const handleAddToCart = () => {
     if (!isAuthenticated) {
