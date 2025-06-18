@@ -191,7 +191,9 @@ const SingleGridItem = ({ product: item, gridSize = 3 }: { product: Product; gri
       <div className="p-4 flex flex-col flex-grow">
         <div className="flex items-center gap-1.5 mb-1.5">
           {renderStars()}
-          <p className="text-xs text-gray-600">({reviewCount})</p>
+          {reviewCount > 0 && (
+            <p className="text-xs text-gray-600">({reviewCount})</p>
+          )}
         </div>
         <h3 className="font-semibold text-sm text-dark hover:text-blue transition-colors duration-200 mb-1.5 flex-grow">
           <Link href={`/shop-details/${item.slug}`} className="line-clamp-2">
