@@ -3,14 +3,12 @@ import React from 'react';
 import ShopDetailsComponent from '@/components/ShopDetails'; // Assuming your main component is named ShopDetails
 import { getProductBySlug } from '@/lib/apiService';
 import { Product } from '@/types/product';
-import { Metadata, ResolvingMetadata } from 'next';
+import { Metadata, ResolvingMetadata, type PageProps } from 'next';
 import APITestComponent from '@/components/Common/APITestComponent'; // For easy debugging
 
-interface ProductDetailsPageProps {
-  params: {
-    slug: string;
-  };
-}
+type ProductDetailsPageProps = PageProps<{
+  slug: string;
+}>;
 
 // Function to generate metadata dynamically
 export async function generateMetadata(
