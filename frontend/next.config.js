@@ -10,7 +10,7 @@ const nextConfig = {
         protocol: 'http',
         hostname: 'localhost',
         port: '8000',
-        pathname: '/uploads/**',
+        pathname: '/media/**',
       },
       {
         protocol: 'https',
@@ -24,7 +24,7 @@ if (process.env.NEXT_PUBLIC_BACKEND_HOST) {
   nextConfig.images.remotePatterns.push({
     protocol: 'https',
     hostname: process.env.NEXT_PUBLIC_BACKEND_HOST,
-    pathname: '/media/uploads/**',
+    pathname: '/media/**',
   });
 }
 
