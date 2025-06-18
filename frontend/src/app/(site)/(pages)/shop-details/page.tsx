@@ -2,7 +2,7 @@
 import React from 'react';
 // Page route parameters are passed via the `params` prop
 
-import type { PageProps } from 'next';
+import type { PageProps } from '@/types/PageProps';
 
 type ProductDetailsPageProps = PageProps<{
   slug: string;

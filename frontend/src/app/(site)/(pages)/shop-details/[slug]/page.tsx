@@ -3,7 +3,8 @@ import React from 'react';
 import ShopDetailsComponent from '@/components/ShopDetails'; // Assuming your main component is named ShopDetails
 import { getProductBySlug } from '@/lib/apiService';
 import { Product } from '@/types/product';
-import type { Metadata, ResolvingMetadata, PageProps } from 'next';
+import type { Metadata, ResolvingMetadata } from 'next';
+import type { PageProps } from '@/types/PageProps';
 import APITestComponent from '@/components/Common/APITestComponent'; // For easy debugging
 
 type ProductDetailsPageProps = PageProps<{
