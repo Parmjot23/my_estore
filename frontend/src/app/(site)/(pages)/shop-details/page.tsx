@@ -1,10 +1,12 @@
 // src/app/(site)/(pages)/shop-details/[slug]/page.tsx
 import React from 'react';
-import type { PageProps } from 'next';
+// Page route parameters are passed via the `params` prop
 
-type ProductDetailsPageProps = PageProps<{
-  slug: string;
-}>;
+type ProductDetailsPageProps = {
+  params: {
+    slug: string;
+  };
+};
 
 export default function TemporaryProductDetailsPage({ params }: ProductDetailsPageProps) {
   return (
