@@ -51,13 +51,16 @@ const Header = () => {
     ? headerMenuDataImport.filter(item => item && typeof item.title !== 'undefined')
     : [];
 
+  // Offset brand and model IDs to avoid collisions with the static menu items
+  // that are defined in `menuData`. Without unique IDs React may log warnings
+  // about duplicate keys when rendering the combined menu.
   const brandMenuItems: MenuType[] = brands.map((brand) => ({
-    id: brand.id,
+    id: brand.id + 1000,
     title: brand.name,
     newTab: false,
     path: `/shop-with-sidebar?brand__slug=${brand.slug}`,
     submenu: (brand.phone_models || []).map((model) => ({
-      id: model.id,
+      id: model.id + 100000,
       title: model.name,
       newTab: false,
       path: `/shop-with-sidebar?compatible_with__slug=${model.slug}`,
