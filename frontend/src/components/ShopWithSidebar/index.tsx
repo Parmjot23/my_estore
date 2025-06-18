@@ -97,7 +97,7 @@ const ShopWithSidebarContent: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, gridSize]);
+  }, [currentPage, gridSize, itemsPerPage]);
 
   useEffect(() => {
     const loadCategories = async () => {
