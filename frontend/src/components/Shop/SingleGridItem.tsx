@@ -144,8 +144,11 @@ const SingleGridItem = ({ product: item, gridSize = 3 }: { product: Product; gri
             }}
           />
         </Link>
-        {item.get_discount_percentage && item.get_discount_percentage > 0 && (
-          <DiscountBadge percentage={item.get_discount_percentage} className="absolute top-3 right-3" />
+        {Number(item.get_discount_percentage) > 0 && (
+          <DiscountBadge
+            percentage={Number(item.get_discount_percentage)}
+            className="absolute top-3 right-3"
+          />
         )}
         {!item.is_available && (
           <span className="absolute top-3 left-3 bg-gray-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
@@ -215,13 +218,13 @@ const SingleGridItem = ({ product: item, gridSize = 3 }: { product: Product; gri
               {currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice && (
                 <span className="text-gray-500 line-through text-sm">${currentPrice.toFixed(2)}</span>
               )}
-              {item.get_discount_percentage && item.get_discount_percentage > 0 && (
-                <DiscountBadge percentage={item.get_discount_percentage} className="ml-1" />
+              {Number(item.get_discount_percentage) > 0 && (
+                <DiscountBadge percentage={Number(item.get_discount_percentage)} className="ml-1" />
               )}
             </span>
           ) : (
             <span className="inline-block font-semibold text-red-600 bg-red-50 px-2 py-1 rounded">
-              {item.get_discount_percentage && item.get_discount_percentage > 0
+              {Number(item.get_discount_percentage) > 0
                 ? `${item.get_discount_percentage}% OFF`
                 : 'Login to see price'}
             </span>

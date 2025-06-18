@@ -154,8 +154,11 @@ const ProductItem = ({ item }: { item: Product }) => {
             priority={false} // Generally false for list items, true for LCP images
           />
         </Link>
-        {item.get_discount_percentage && item.get_discount_percentage > 0 && (
-          <DiscountBadge percentage={item.get_discount_percentage} className="absolute top-3 right-3" />
+        {Number(item.get_discount_percentage) > 0 && (
+          <DiscountBadge
+            percentage={Number(item.get_discount_percentage)}
+            className="absolute top-3 right-3"
+          />
         )}
         {!item.is_available && (
           <span className="absolute top-3 left-3 bg-gray-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
@@ -219,7 +222,9 @@ const ProductItem = ({ item }: { item: Product }) => {
             </span>
           ) : (
             <span className="inline-block font-semibold text-red-600 bg-red-50 px-2 py-1 rounded">
-              {item.get_discount_percentage && item.get_discount_percentage > 0 ? `${item.get_discount_percentage}% OFF` : 'Login to see price'}
+              {Number(item.get_discount_percentage) > 0
+                ? `${item.get_discount_percentage}% OFF`
+                : 'Login to see price'}
             </span>
           )}
           {!item.is_available && (
