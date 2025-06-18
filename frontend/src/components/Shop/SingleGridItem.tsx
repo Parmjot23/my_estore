@@ -52,8 +52,6 @@ const SingleGridItem = ({ product: item, gridSize = 3 }: { product: Product; gri
     }
   };
 
-  const isAuthenticated = useAppSelector((state) => state.authReducer.isAuthenticated);
-
   const handleAddToCart = () => {
     if (!isAuthenticated) {
       toast.info("Please login to add items to cart.");
