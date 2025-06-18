@@ -246,8 +246,8 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
                 <h2 className="font-semibold text-xl sm:text-2xl xl:text-custom-3 text-dark dark:text-white">
                   {product.name || "Product Name"}
                 </h2>
-                {product.get_discount_percentage != null && product.get_discount_percentage > 0 && (
-                    <DiscountBadge percentage={product.get_discount_percentage} className="ml-2" />
+                {Number(product.get_discount_percentage) > 0 && (
+                    <DiscountBadge percentage={Number(product.get_discount_percentage)} className="ml-2" />
                 )}
               </div>
 
@@ -285,13 +285,13 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
                         ${Number(product.price).toFixed(2)}
                       </span>
                     )}
-                    {product.get_discount_percentage != null && product.get_discount_percentage > 0 && (
-                      <DiscountBadge percentage={product.get_discount_percentage} className="ml-2" />
+                    {Number(product.get_discount_percentage) > 0 && (
+                      <DiscountBadge percentage={Number(product.get_discount_percentage)} className="ml-2" />
                     )}
                   </>
                 ) : (
                   <span className="inline-block font-semibold text-red-600 bg-red-50 px-2 py-1 rounded">
-                    {product.get_discount_percentage && product.get_discount_percentage > 0
+                    {Number(product.get_discount_percentage) > 0
                       ? `${product.get_discount_percentage}% OFF`
                       : 'Login to see price'}
                   </span>

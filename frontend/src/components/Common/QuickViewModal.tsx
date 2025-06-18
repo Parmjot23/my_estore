@@ -282,13 +282,16 @@ const QuickViewModal = () => {
                       ${currentPrice.toFixed(2)}
                     </span>
                   )}
-                  {product.get_discount_percentage && product.get_discount_percentage > 0 && (
-                    <DiscountBadge percentage={product.get_discount_percentage} className="ml-2" />
+                  {Number(product.get_discount_percentage) > 0 && (
+                    <DiscountBadge
+                      percentage={Number(product.get_discount_percentage)}
+                      className="ml-2"
+                    />
                   )}
                 </>
               ) : (
                 <span className="inline-block font-semibold text-red-600 bg-red-50 px-2 py-1 rounded">
-                  {product.get_discount_percentage && product.get_discount_percentage > 0
+                  {Number(product.get_discount_percentage) > 0
                     ? `${product.get_discount_percentage}% OFF`
                     : 'Login to see price'}
                 </span>

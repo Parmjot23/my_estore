@@ -128,12 +128,12 @@ const SingleItem = ({ item, onRemoveSuccess }: { item: Product; onRemoveSuccess:
         {isAuthenticated ? (
           <p className="text-dark dark:text-white font-medium flex items-center justify-center gap-1">
             ${effectivePrice.toFixed(2)}
-            {item.get_discount_percentage && item.get_discount_percentage > 0 && (
-              <DiscountBadge percentage={item.get_discount_percentage} />
+            {Number(item.get_discount_percentage) > 0 && (
+              <DiscountBadge percentage={Number(item.get_discount_percentage)} />
             )}
           </p>
         ) : (
-          <p className="font-semibold text-red-600">{item.get_discount_percentage && item.get_discount_percentage > 0 ? `${item.get_discount_percentage}% OFF` : 'Login to see price'}</p>
+          <p className="font-semibold text-red-600">{Number(item.get_discount_percentage) > 0 ? `${item.get_discount_percentage}% OFF` : 'Login to see price'}</p>
         )}
       </div>
 
