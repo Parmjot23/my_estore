@@ -29,11 +29,13 @@ const SingleGridItem = ({ product: item, gridSize = 3 }: { product: Product; gri
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isWishlistLoading, setIsWishlistLoading] = useState(false);
 
+  const isAuthenticated = useAppSelector((state) => state.authReducer.isAuthenticated);
+
   useEffect(() => {
     if (item && item.id) {
       setIsWishlisted(wishlistItems.some(wishlistItem => wishlistItem && wishlistItem.id === item.id));
     }
-  }, [wishlistItems, item?.id]);
+  }, [wishlistItems, item]);
 
   if (!item || typeof item.id === 'undefined') {
     console.warn("SingleGridItem rendered with invalid item prop:", item);

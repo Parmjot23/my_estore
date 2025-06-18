@@ -82,7 +82,7 @@ const ShopWithoutSidebarContent: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, gridSize]);
+  }, [currentPage, gridSize, itemsPerPage]);
 
   useEffect(() => {
     if (initialUrlFiltersApplied) {
