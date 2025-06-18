@@ -47,6 +47,7 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
   const [newReviewUserName, setNewReviewUserName] = useState(""); // For guest reviews
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
+  const isAuthenticated = useAppSelector((state) => state.authReducer.isAuthenticated);
 
   // Fetch reviews when the product changes or component mounts
   useEffect(() => {
@@ -117,8 +118,6 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
 
   const reviewCount = product.reviews || 0; // Using 'reviews' as per Product type
   const averageRating = product.average_rating ? Number(product.average_rating) : 0;
-
-  const isAuthenticated = useAppSelector((state) => state.authReducer.isAuthenticated);
 
   const handleAddToCart = () => {
     if (!product) return;

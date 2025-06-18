@@ -44,7 +44,7 @@ const PasswordReset = () => {
               <h2 className="font-semibold text-xl sm:text-2xl xl:text-heading-5 text-dark mb-1.5">
                 Forgot your password?
               </h2>
-              <p>Enter your email below and we\'ll send you a reset link.</p>
+              <p>Enter your email below and we&apos;ll send you a reset link.</p>
             </div>
             {error && <p className="text-red-500 text-center mb-4">{error}</p>}
             <form onSubmit={handleSubmit}>
