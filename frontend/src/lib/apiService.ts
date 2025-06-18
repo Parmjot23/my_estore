@@ -9,7 +9,7 @@ import { PromoBanner } from "@/types/promoBanner";
 
 // Exported so other modules can use the same base URL logic
 export const API_ROOT = process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "http://localhost:8000/api";
+  "https://marked-egret-parmjot23-31f5c39c.koyeb.app/api";
 
 export interface PaginatedResponse<T> {
   count: number;
