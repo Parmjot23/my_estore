@@ -54,6 +54,8 @@ Install Node dependencies and start the Next.js dev server:
 cd frontend
 npm install
 cp .env.local.example .env.local
+# The example points to http://localhost:8000/api. Edit `.env.local` if your
+# backend runs on a different host or port.
 npm run dev
 ```
 This runs `next dev` on port `3000`. The frontend will be reachable at

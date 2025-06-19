@@ -73,12 +73,21 @@ async function fetchWrapper<T>(url: string, options?: RequestInit): Promise<T> {
       let rawErrorBody = '';
       try {
         rawErrorBody = await response.text();
-        // console.log(`[fetchWrapper] Raw Error Response Body (Status ${response.status}):`, rawErrorBody);
-        const jsonError = JSON.parse(rawErrorBody);
-        errorData = { ...errorData, ...jsonError };
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const jsonError = JSON.parse(rawErrorBody);
+          errorData = { ...errorData, ...jsonError };
+        } else {
+          if (response.status === 404) {
+            errorData.message = 'Resource not found (404).';
+          } else if (response.status >= 500) {
+            errorData.message = 'Server error. Please try again later.';
+          } else {
+            errorData.message = `API request failed with status ${response.status}`;
+          }
+        }
       } catch (e) {
-        errorData.message = `API request failed with status ${response.status}. Non-JSON response: ${rawErrorBody.substring(0,100)}...`;
-        // console.warn(`[fetchWrapper] Could not parse error response as JSON. Status: ${response.status}, Body: ${rawErrorBody}`);
+        errorData.message = `API request failed with status ${response.status}.`;
       }
 
       const error: ApiError = new Error(errorData.detail || errorData.message || "Unknown API error") as ApiError;
