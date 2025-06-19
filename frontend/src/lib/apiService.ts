@@ -152,7 +152,8 @@ export const getProducts = (params?: GetProductsParams): Promise<PaginatedProduc
 };
 
 export const getProductBySlug = (slug: string): Promise<Product> => {
-  return fetchWrapper<Product>(`${SHOP_BASE_URL}/products/${slug}/`);
+  const encoded = encodeURIComponent(slug);
+  return fetchWrapper<Product>(`${SHOP_BASE_URL}/products/${encoded}/`);
 };
 
 export interface GetCategoriesParams {

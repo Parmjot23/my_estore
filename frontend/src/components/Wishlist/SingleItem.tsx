@@ -113,7 +113,9 @@ const SingleItem = ({ item, onRemoveSuccess }: { item: Product; onRemoveSuccess:
           </div>
           <div className="min-w-0">
             <h3 className="text-dark dark:text-white ease-out duration-200 hover:text-blue dark:hover:text-blue text-sm sm:text-base font-medium truncate">
-              <Link href={`/shop-details/${item.slug || item.id}`}> {item.name} </Link>
+              <Link
+                href={`/shop-details/${encodeURIComponent(item.slug || String(item.id))}`}
+              > {item.name} </Link>
             </h3>
             {/* Display original price if there's a discount */}
             {isAuthenticated && currentDiscountedPrice !== null && currentDiscountedPrice < currentPrice && (
