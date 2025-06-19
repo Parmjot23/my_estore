@@ -28,7 +28,7 @@ const PromoBanner = () => {
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
         {big && (
           <div className="relative z-1 overflow-hidden rounded-lg bg-[#F5F5F7] py-12.5 lg:py-17.5 xl:py-22.5 px-4 sm:px-7.5 lg:px-14 xl:px-19 mb-7.5">
-            <div className="max-w-[550px] w-full">
+            <div className="max-w-[550px] w-full bg-white/80 p-4 sm:p-0 sm:bg-transparent rounded">
               <span className="block font-medium text-xl text-dark mb-3">
                 {big.product_details?.name}
               </span>
@@ -49,7 +49,7 @@ const PromoBanner = () => {
               <Image
                 src={getImage(big.product_details) as string}
                 alt={big.product_details?.name || "Promo image"}
-                className="absolute bottom-0 right-4 lg:right-26 -z-1"
+                className="absolute bottom-0 right-4 lg:right-26 -z-1 w-40 sm:w-[274px] h-auto"
                 width={274}
                 height={350}
               />
@@ -67,13 +67,13 @@ const PromoBanner = () => {
                 <Image
                   src={getImage(banner.product_details) as string}
                   alt={banner.product_details?.name || "Promo image"}
-                  className={`absolute top-1/2 -translate-y-1/2 ${idx === 0 ? 'left-3 sm:left-10' : 'right-3 sm:right-8.5'} -z-1`}
+                  className={`absolute top-1/2 -translate-y-1/2 ${idx === 0 ? 'left-3 sm:left-10 w-32 sm:w-[241px]' : 'right-3 sm:right-8.5 w-28 sm:w-[200px]'} -z-1 h-auto`}
                   width={idx === 0 ? 241 : 200}
                   height={idx === 0 ? 241 : 200}
                 />
               )}
 
-              <div className={idx === 0 ? 'text-right' : ''}>
+              <div className={`${idx === 0 ? 'text-right' : ''} relative z-10 bg-white/80 p-3 sm:p-0 sm:bg-transparent rounded`}>
                 <span className="block text-lg text-dark mb-1.5">
                   {banner.product_details?.name}
                 </span>
