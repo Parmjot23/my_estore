@@ -98,6 +98,10 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny] # Or IsAdminOrReadOnly for modifications
     lookup_field = 'slug'
+    # Allow characters like dots, underscores, commas, plus signs and
+    # parentheses in product slugs. Using a broad regex helps match the
+    # imported product data which contains a variety of symbols.
+    lookup_value_regex = r'[\w\-\.(),+]+'
 
     # Filtering, Searching, Ordering
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
