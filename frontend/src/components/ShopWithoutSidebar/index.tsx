@@ -118,7 +118,7 @@ const ShopWithoutSidebarContent: React.FC = () => {
     if (endPage < totalPages) { if (endPage < totalPages - 1) pageNumbers.push(-1); pageNumbers.push(totalPages); }
     return (
       <nav aria-label="Page navigation" className="flex justify-center mt-12">
-        <ul className="inline-flex items-center -space-x-px">
+        <ul className="inline-flex items-center space-x-px">
           <li>
             <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">Previous</button>
           </li>

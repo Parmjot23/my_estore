@@ -184,7 +184,7 @@ const ShopWithSidebarContent: React.FC = () => {
     for (let i = startPage; i <= endPage; i++) pageNumbers.push(i);
     if (endPage < totalPages) { if (endPage < totalPages - 1) pageNumbers.push(-1); pageNumbers.push(totalPages); }
     return (
-      <nav aria-label="Page navigation" className="flex justify-center mt-12"><ul className="inline-flex items-center -space-x-px">
+      <nav aria-label="Page navigation" className="flex justify-center mt-12"><ul className="inline-flex items-center space-x-px">
           <li><button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">Previous</button></li>
           {pageNumbers.map((number, index) => number === -1 ? (<li key={`ellipsis-${index}`}><span className="px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300">...</span></li>) : (<li key={number}><button onClick={() => handlePageChange(number)} className={`px-3 h-8 leading-tight border ${currentPage === number ? "text-blue-600 bg-blue-50 border-blue-300 hover:bg-blue-100 hover:text-blue-700 z-10" : "text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700"}`}>{number}</button></li>))}
           <li><button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50">Next</button></li>
