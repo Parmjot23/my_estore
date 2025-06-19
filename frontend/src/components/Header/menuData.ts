@@ -19,5 +19,11 @@ export const menuData: Menu[] = [
     newTab: false,
     path: "/contact",
   },
+  {
+    id: 4,
+    title: "Wishlist",
+    newTab: false,
+    path: "/wishlist",
+  },
   // The "pages" and "blogs" sections have been removed from navigation
 ];
