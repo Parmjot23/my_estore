@@ -371,7 +371,7 @@ const QuickViewModal = () => {
 
             <div className="mt-5">
               <Link
-                href={`/shop-details/${product.slug}`}
+                href={`/shop-details/${encodeURIComponent(product.slug)}`}
                 onClick={handleModalClose}
                 className="text-sm font-medium text-primary hover:underline"
               >

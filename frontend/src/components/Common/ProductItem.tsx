@@ -140,7 +140,10 @@ const ProductItem = ({ item }: { item: Product }) => {
   return (
     <div className="group flex flex-col h-full rounded-lg bg-white shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out overflow-hidden">
       <div className="relative overflow-hidden flex items-center justify-center bg-gray-100 aspect-square w-full">
-        <Link href={`/shop-details/${item.slug}`} className="block w-full h-full">
+        <Link
+          href={`/shop-details/${encodeURIComponent(item.slug)}`}
+          className="block w-full h-full"
+        >
           <Image
             src={imageUrl}
             alt={item.name || "Product image"}
@@ -208,7 +211,10 @@ const ProductItem = ({ item }: { item: Product }) => {
           <p className="text-xs text-gray-600">({reviewCount})</p>
         </div>
         <h3 className="font-semibold text-sm text-dark hover:text-blue transition-colors duration-200 mb-1.5 flex-grow">
-          <Link href={`/shop-details/${item.slug}`} className="line-clamp-2">
+          <Link
+            href={`/shop-details/${encodeURIComponent(item.slug)}`}
+            className="line-clamp-2"
+          >
             {item.name}
           </Link>
         </h3>

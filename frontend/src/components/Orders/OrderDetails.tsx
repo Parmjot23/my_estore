@@ -75,7 +75,10 @@ const OrderDetails = ({ orderItem: order }: OrderDetailsProps) => {
                 />
               </div>
               <div className="flex-grow min-w-0">
-                <Link href={`/shop-details/${item.product_details?.slug || item.product_id}`} className="text-sm font-medium text-dark dark:text-white hover:text-blue dark:hover:text-blue transition-colors truncate block">
+                <Link
+                  href={`/shop-details/${encodeURIComponent(item.product_details?.slug || String(item.product_id))}`}
+                  className="text-sm font-medium text-dark dark:text-white hover:text-blue dark:hover:text-blue transition-colors truncate block"
+                >
                   {item.product_details?.name || `Product ID: ${item.product_id}`}
                 </Link>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Qty: {item.quantity}</p>
