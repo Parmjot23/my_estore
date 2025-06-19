@@ -5,6 +5,8 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
+    // Disable Next.js image optimization so external URLs are served directly
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'http',
