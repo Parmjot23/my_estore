@@ -55,11 +55,11 @@ const HeroCarousal = () => {
     >
       {heroProducts.map((item, idx) => (
         <SwiperSlide key={idx}>
-          <div className="relative h-[70vh] flex items-center justify-center gap-8 sm:gap-12 overflow-hidden px-4 sm:px-8 xl:px-0 max-w-[1170px] mx-auto">
+          <div className="relative h-[70vh] flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 overflow-hidden px-4 sm:px-8 xl:px-0 max-w-[1170px] mx-auto">
             <div className={`absolute inset-0 bg-gradient-to-r ${gradientClasses[idx % gradientClasses.length]}`}></div>
             <div className="absolute inset-0 bg-white/60"></div>
 
-            <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left max-w-md">
+            <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left max-w-md bg-white/80 p-4 sm:p-0 sm:bg-transparent rounded">
               <DiscountBadge percentage={item.discount} className="mb-4" />
               <h2 className="font-bold text-3xl sm:text-4xl md:text-5xl text-dark-base mb-3">
                 {item.title}
@@ -73,8 +73,8 @@ const HeroCarousal = () => {
               </Link>
             </div>
 
-            <div className="relative z-10 hidden sm:block">
-              <Image src={item.image} alt={item.title} width={380} height={380} />
+            <div className="relative z-10">
+              <Image src={item.image} alt={item.title} width={380} height={380} className="w-60 sm:w-auto h-auto" />
             </div>
           </div>
         </SwiperSlide>
