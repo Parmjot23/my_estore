@@ -8,7 +8,7 @@
   }
 
   body {
-    @apply font-sans font-normal text-base text-dark-base relative z-1;
+    @apply font-sans font-normal text-base text-dark-base relative z-1 overflow-x-hidden;
   }
 }
 
