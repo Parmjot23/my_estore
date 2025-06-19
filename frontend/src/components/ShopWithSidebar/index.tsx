@@ -36,10 +36,9 @@ const ShopWithSidebarContent: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalProducts, setTotalProducts] = useState<number>(0);
-  // Number of columns/rows for the grid view. 3 corresponds to the previous 3x3 layout.
-  const [gridSize, setGridSize] = useState<number>(3);
-  // Items per page is derived from the grid size (e.g., 3 => 9 items)
-  const itemsPerPage = gridSize * gridSize;
+  // Responsive grid; items per page tuned for larger screens
+  const gridSize = 3;
+  const itemsPerPage = 12;
 
   const [allCategories, setAllCategories] = useState<CategoryType[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
@@ -97,7 +96,7 @@ const ShopWithSidebarContent: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, gridSize, itemsPerPage]);
+  }, [currentPage, itemsPerPage]);
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -163,10 +162,6 @@ const ShopWithSidebarContent: React.FC = () => {
     setCurrentPage(1);
   };
 
-  const handleGridSizeChange = (size: number) => {
-    setGridSize(size);
-    setCurrentPage(1);
-  };
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages && newPage !== currentPage) {
@@ -176,11 +171,8 @@ const ShopWithSidebarContent: React.FC = () => {
 
   const uniqueBrandNames = Array.from(new Set(products.map(p => p.brand_details?.name).filter(Boolean))) as string[];
 
-  const gridColsClass = gridSize === 2
-    ? "sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2"
-    : gridSize === 4
-    ? "sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4"
-    : "sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3";
+  // Responsive grid: 1 column on extra-small, 2 on small, 3 on medium, 4 on large+
+  const gridColsClass = "sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
 
   const renderPagination = () => { /* ... keep your existing pagination logic ... */
     if (totalPages <= 1) return null;
@@ -241,33 +233,6 @@ const ShopWithSidebarContent: React.FC = () => {
                     <button onClick={() => setViewMode("grid")} className={`p-2 rounded-md ${viewMode === "grid" ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"}`} aria-label="Grid view"><LayoutGrid size={20} /></button>
                     <button onClick={() => setViewMode("list")} className={`p-2 rounded-md ${viewMode === "list" ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"}`} aria-label="List view"><List size={20} /></button>
                     </div>
-                    <div className="flex items-center ml-4 space-x-1">
-                      {[2, 3, 4].map((size) => (
-                        <button
-                          key={size}
-                          onClick={() => handleGridSizeChange(size)}
-                          aria-label={`Grid ${size}x${size}`}
-                          className={`p-1 border rounded-md flex items-center justify-center w-8 h-8 ${
-                            gridSize === size
-                              ? "bg-indigo-600 text-white border-indigo-600"
-                              : "bg-gray-200 text-gray-700 border-gray-300 hover:bg-gray-300"
-                          }`}
-                        >
-                          <span
-                            className="grid gap-[1px]"
-                            style={{
-                              gridTemplateColumns: `repeat(${size}, 1fr)`,
-                              width: "14px",
-                              height: "14px",
-                            }}
-                          >
-                            {Array.from({ length: size * size }).map((_, i) => (
-                              <span key={i} className="block w-full h-full bg-current"></span>
-                            ))}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
                 </div>
               </div>
               {/* Product list rendering logic from previous correct version */}
@@ -282,7 +247,7 @@ const ShopWithSidebarContent: React.FC = () => {
                         !product || typeof product.id === 'undefined' ? (
                           <div key={`invalid-grid-${index}`} className="text-red-500 p-2 border border-red-300">Invalid product data</div>
                         ) : (
-                          <SingleGridItem key={product.id || `grid-fallback-${index}`} product={product} gridSize={gridSize} />
+                          <SingleGridItem key={product.id || `grid-fallback-${index}`} product={product} />
                         )
                       ))}
                     </div>
