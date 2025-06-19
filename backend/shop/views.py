@@ -98,7 +98,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny] # Or IsAdminOrReadOnly for modifications
     lookup_field = 'slug'
-    lookup_value_regex = r'[^/]+'
+    
 
     # Filtering, Searching, Ordering
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
