@@ -94,7 +94,10 @@ class ProductViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = Product.objects.filter(is_available=True).select_related('category')
+    # Base queryset includes all products so detail pages work even for
+    # items that are no longer available. Availability filtering is applied
+    # only when listing products.
+    queryset = Product.objects.select_related("category")
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny] # Or IsAdminOrReadOnly for modifications
     lookup_field = 'slug'
@@ -119,6 +122,13 @@ class ProductViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'description', 'sku', 'category__name', 'brand__name', 'compatible_with__name']
     ordering_fields = ['name', 'price', 'created_at', 'average_rating']
     ordering = ['-created_at'] # Default ordering
+
+    def get_queryset(self):
+        """Apply availability filter only for list action."""
+        qs = super().get_queryset()
+        if self.action == "list":
+            qs = qs.filter(is_available=True)
+        return qs
 
     # To pass request context to serializer (e.g., for building absolute image URLs)
     def get_serializer_context(self):
