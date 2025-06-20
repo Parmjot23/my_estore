@@ -1,13 +1,9 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
 import Image from "next/image";
 
 const SingleItem = ({ item, removeItemFromCart }) => {
-  const dispatch = useDispatch<AppDispatch>();
-
   const handleRemoveFromCart = () => {
-    dispatch(removeItemFromCart(item.id));
+    removeItemFromCart(item.id);
   };
 
   return (

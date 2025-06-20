@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/orders/', include('orders.urls')),
     path('api/wishlists/', include('wishlists.urls')),
     path('api/carts/', include('carts.urls')),
+    path('api/cart/', include('carts.urls')),
     path('api/testimonials/', include('testimonials.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     # You would add other app API urls here, e.g.:

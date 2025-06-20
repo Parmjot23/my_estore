@@ -2,21 +2,14 @@
 import React, { useEffect, useState } from "react";
 
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
-import {
-  removeItemFromCart,
-  selectTotalPrice,
-} from "@/redux/features/cart-slice";
-import { useAppSelector } from "@/redux/store";
-import { useSelector } from "react-redux";
+import { useCart } from "@/app/context/CartContext";
 import SingleItem from "./SingleItem";
 import Link from "next/link";
 import EmptyCart from "./EmptyCart";
 
 const CartSidebarModal = () => {
   const { isCartModalOpen, closeCartModal } = useCartModalContext();
-  const cartItems = useAppSelector((state) => state.cartReducer.items);
-
-  const totalPrice = useSelector(selectTotalPrice);
+  const { items: cartItems, totalPrice, removeItem } = useCart();
 
   useEffect(() => {
     // closing modal while clicking outside
@@ -82,7 +75,7 @@ const CartSidebarModal = () => {
                   <SingleItem
                     key={key}
                     item={item}
-                    removeItemFromCart={removeItemFromCart}
+                    removeItemFromCart={removeItem}
                   />
                 ))
               ) : (
