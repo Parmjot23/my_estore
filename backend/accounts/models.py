@@ -9,6 +9,13 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     gst_hst_number = models.CharField(max_length=50, blank=True, null=True)
     pst_number = models.CharField(max_length=50, blank=True, null=True)
+    is_active = models.BooleanField(
+        _('active'),
+        default=False,
+        help_text=_(
+            'Designates whether this user should be treated as active. Unselect this instead of deleting accounts.'
+        ),
+    )
 
     # Add or change related_name for groups and user_permissions
     # to avoid clashes with the default auth.User model.
