@@ -6,6 +6,10 @@ export interface User {
   email: string;
   first_name?: string;
   last_name?: string;
+  company_name?: string;
+  phone_number?: string;
+  gst_hst_number?: string;
+  pst_number?: string;
   profile_image?: string;
   // Add any other fields your UserSerializer exposes
 }
@@ -31,6 +35,10 @@ export interface RegisterData {
   password2?: string; // Password confirmation
   first_name?: string;
   last_name?: string;
+  company_name?: string;
+  phone_number?: string;
+  gst_hst_number?: string;
+  pst_number?: string;
 }
 
 export interface Address {

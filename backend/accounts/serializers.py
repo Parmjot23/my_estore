@@ -10,7 +10,19 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_staff', 'profile_image')
+        fields = (
+            'id',
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'company_name',
+            'phone_number',
+            'gst_hst_number',
+            'pst_number',
+            'is_staff',
+            'profile_image',
+        )
         read_only_fields = ('is_staff',)
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -19,10 +31,25 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'password2', 'first_name', 'last_name')
+        fields = (
+            'username',
+            'email',
+            'password',
+            'password2',
+            'first_name',
+            'last_name',
+            'company_name',
+            'phone_number',
+            'gst_hst_number',
+            'pst_number',
+        )
         extra_kwargs = {
             'first_name': {'required': False},
             'last_name': {'required': False},
+            'company_name': {'required': False},
+            'phone_number': {'required': False},
+            'gst_hst_number': {'required': False},
+            'pst_number': {'required': False},
         }
 
     def validate(self, attrs):
@@ -36,7 +63,11 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             password=validated_data['password'],
             first_name=validated_data.get('first_name', ''),
-            last_name=validated_data.get('last_name', '')
+            last_name=validated_data.get('last_name', ''),
+            company_name=validated_data.get('company_name', ''),
+            phone_number=validated_data.get('phone_number', ''),
+            gst_hst_number=validated_data.get('gst_hst_number', ''),
+            pst_number=validated_data.get('pst_number', ''),
         )
         return user
 
