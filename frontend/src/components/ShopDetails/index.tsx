@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { addItemToCart } from "@/redux/features/cart-slice";
 import { addItemToWishlist as addItemToWishlistAction } from "@/redux/features/wishlist-slice";
+import { addToCart as apiAddToCart } from "@/lib/apiService";
 import { updateproductDetails } from "@/redux/features/product-details"; // For PreviewSliderModal
 import { toast } from "react-toastify";
 import Link from "next/link"; // Import Link
@@ -119,7 +120,7 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
   const reviewCount = product.reviews || 0; // Using 'reviews' as per Product type
   const averageRating = product.average_rating ? Number(product.average_rating) : 0;
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!product) return;
     if (!isAuthenticated) {
       toast.info("Please login to add items to cart.");
@@ -129,15 +130,20 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
       toast.warn(`${product.name} is out of stock.`);
       return;
     }
-    dispatch(
-      addItemToCart({
-        ...product,
-        quantity,
-        discountedPrice: effectivePrice,
-        price: Number(product.price),
-      })
-    );
-    toast.success(`${product.name} (x${quantity}) added to cart`);
+    try {
+      await apiAddToCart(product.id, quantity);
+      dispatch(
+        addItemToCart({
+          ...product,
+          quantity,
+          discountedPrice: effectivePrice,
+          price: Number(product.price),
+        })
+      );
+      toast.success(`${product.name} (x${quantity}) added to cart`);
+    } catch (err: any) {
+      toast.error(err.data?.detail || err.message || "Failed to add to cart.");
+    }
   };
 
   const handleAddToWishlist = () => {

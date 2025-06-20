@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { addItemToCart } from "@/redux/features/cart-slice";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
+import { addToCart as apiAddToCart } from "@/lib/apiService";
 import { toast } from "react-toastify";
 import PreviewSlider from "./PreviewSlider"; // Assuming this component is correctly implemented
 import { getProductBySlug } from "@/lib/apiService";
@@ -73,7 +74,7 @@ const QuickViewModal = () => {
     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!product) return;
     if (!isAuthenticated) {
       toast.info("Please login to add items to cart.");
@@ -83,15 +84,20 @@ const QuickViewModal = () => {
       toast.warn(`${product.name} is out of stock.`);
       return;
     }
-    dispatch(
-      addItemToCart({
-        ...product,
-        quantity,
-        discountedPrice: effectivePrice,
-        price: Number(product.price),
-      })
-    );
-    toast.success(`${product.name} added to cart`);
+    try {
+      await apiAddToCart(product.id, quantity);
+      dispatch(
+        addItemToCart({
+          ...product,
+          quantity,
+          discountedPrice: effectivePrice,
+          price: Number(product.price),
+        })
+      );
+      toast.success(`${product.name} added to cart`);
+    } catch (err: any) {
+      toast.error(err.data?.detail || err.message || "Failed to add to cart.");
+    }
   };
 
   const handleAddToWishlist = () => {
