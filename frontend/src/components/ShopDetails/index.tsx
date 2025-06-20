@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 import Link from "next/link"; // Import Link
 
 // API service imports for reviews
-import { getProductReviews, createProductReview } from "@/lib/apiService";
+import { getProductReviews, createProductReview, addToCart as apiAddToCart } from "@/lib/apiService";
 import { Review } from "@/types/product";
 
 
@@ -119,7 +119,7 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
   const reviewCount = product.reviews || 0; // Using 'reviews' as per Product type
   const averageRating = product.average_rating ? Number(product.average_rating) : 0;
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!product) return;
     if (!isAuthenticated) {
       toast.info("Please login to add items to cart.");
@@ -129,15 +129,20 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
       toast.warn(`${product.name} is out of stock.`);
       return;
     }
-    dispatch(
-      addItemToCart({
-        ...product,
-        quantity,
-        discountedPrice: effectivePrice,
-        price: Number(product.price),
-      })
-    );
-    toast.success(`${product.name} (x${quantity}) added to cart`);
+    try {
+      await apiAddToCart(product.id, quantity);
+      dispatch(
+        addItemToCart({
+          ...product,
+          quantity,
+          discountedPrice: effectivePrice,
+          price: Number(product.price),
+        })
+      );
+      toast.success(`${product.name} (x${quantity}) added to cart`);
+    } catch (error: any) {
+      toast.error(error.data?.detail || error.message || "Failed to add to cart.");
+    }
   };
 
   const handleAddToWishlist = () => {
@@ -337,13 +342,15 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
                             <svg className="fill-current" width="18" height="18" viewBox="0 0 20 20"><path d="M3.33301 10C3.33301 9.5398 3.7061 9.16671 4.16634 9.16671H15.833C16.2932 9.16671 16.6663 9.5398 16.6663 10C16.6663 10.4603 16.2932 10.8334 15.833 10.8334H4.16634C3.7061 10.8334 3.33301 10.4603 3.33301 10Z" /><path d="M9.99967 16.6667C9.53944 16.6667 9.16634 16.2936 9.16634 15.8334L9.16634 4.16671C9.16634 3.70647 9.53944 3.33337 9.99967 3.33337C10.4599 3.33337 10.833 3.70647 10.833 4.16671L10.833 15.8334C10.833 16.2936 10.4599 16.6667 9.99967 16.6667Z" /></svg>
                         </button>
                     </div>
-                    <button
-                        onClick={handleAddToCart}
-                        className="flex-1 inline-flex items-center justify-center font-medium text-white bg-primary py-3 px-5 sm:px-7 rounded-md ease-out duration-200 hover:bg-primary/90 disabled:bg-gray-400 dark:disabled:bg-dark-4"
-                        disabled={!product.is_available}
-                    >
-                        {product.is_available ? "Add to Cart" : "Out of Stock"}
-                    </button>
+                    {isAuthenticated && (
+                      <button
+                          onClick={handleAddToCart}
+                          className="flex-1 inline-flex items-center justify-center font-medium text-white bg-primary py-3 px-5 sm:px-7 rounded-md ease-out duration-200 hover:bg-primary/90 disabled:bg-gray-400 dark:disabled:bg-dark-4"
+                          disabled={!product.is_available}
+                      >
+                          {product.is_available ? "Add to Cart" : "Out of Stock"}
+                      </button>
+                    )}
                      <button
                         onClick={handleAddToWishlist}
                         aria-label="Add to wishlist"

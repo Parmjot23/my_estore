@@ -11,7 +11,7 @@ import { addItemToCart } from "@/redux/features/cart-slice";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
 import { toast } from "react-toastify";
 import PreviewSlider from "./PreviewSlider"; // Assuming this component is correctly implemented
-import { getProductBySlug } from "@/lib/apiService";
+import { getProductBySlug, addToCart as apiAddToCart } from "@/lib/apiService";
 import { Star, Heart, ShoppingCart, XCircle, RefreshCw } from "lucide-react"; // Lucide icons
 import DiscountBadge from "@/components/Common/DiscountBadge";
 
@@ -73,7 +73,7 @@ const QuickViewModal = () => {
     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!product) return;
     if (!isAuthenticated) {
       toast.info("Please login to add items to cart.");
@@ -83,15 +83,20 @@ const QuickViewModal = () => {
       toast.warn(`${product.name} is out of stock.`);
       return;
     }
-    dispatch(
-      addItemToCart({
-        ...product,
-        quantity,
-        discountedPrice: effectivePrice,
-        price: Number(product.price),
-      })
-    );
-    toast.success(`${product.name} added to cart`);
+    try {
+      await apiAddToCart(product.id, quantity);
+      dispatch(
+        addItemToCart({
+          ...product,
+          quantity,
+          discountedPrice: effectivePrice,
+          price: Number(product.price),
+        })
+      );
+      toast.success(`${product.name} (x${quantity}) added to cart`);
+    } catch (error: any) {
+      toast.error(error.data?.detail || error.message || "Failed to add to cart.");
+    }
   };
 
   const handleAddToWishlist = () => {
@@ -327,14 +332,16 @@ const QuickViewModal = () => {
                   +
                 </button>
               </div>
-              <button
-                onClick={handleAddToCart}
-                disabled={!product.is_available}
-                className={`flex-1 rounded-md px-5 py-2.5 text-sm font-medium text-white transition-colors
-                  ${!product.is_available ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-primary/90'}`}
-              >
-                {product.is_available ? "Add to Cart" : "Out of Stock"}
-              </button>
+              {isAuthenticated && (
+                <button
+                  onClick={handleAddToCart}
+                  disabled={!product.is_available}
+                  className={`flex-1 rounded-md px-5 py-2.5 text-sm font-medium text-white transition-colors
+                    ${!product.is_available ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-primary/90'}`}
+                >
+                  {product.is_available ? "Add to Cart" : "Out of Stock"}
+                </button>
+              )}
               <button
                 onClick={handleAddToWishlist}
                 title="Add to Wishlist"
