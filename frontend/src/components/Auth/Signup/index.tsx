@@ -14,6 +14,10 @@ const Signup = () => {
     password2: "",
     first_name: "",
     last_name: "",
+    company_name: "",
+    phone_number: "",
+    gst_hst_number: "",
+    pst_number: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,6 +48,10 @@ const Signup = () => {
         password2: formData.password2,
         first_name: formData.first_name,
         last_name: formData.last_name,
+        company_name: formData.company_name,
+        phone_number: formData.phone_number,
+        gst_hst_number: formData.gst_hst_number,
+        pst_number: formData.pst_number,
       });
       toast.success("Registration successful! Please sign in.");
       router.push("/signin"); // Redirect to signin page
@@ -129,7 +137,7 @@ const Signup = () => {
                   className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                 />
               </div>
-               <div className="mb-5">
+              <div className="mb-5">
                 <label htmlFor="last_name" className="block mb-2.5">
                   Last Name
                 </label>
@@ -142,6 +150,70 @@ const Signup = () => {
                   onChange={handleChange}
                   className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
                 />
+              </div>
+
+              <div className="mb-5">
+                <label htmlFor="company_name" className="block mb-2.5">
+                  Company Name
+                </label>
+                <input
+                  type="text"
+                  name="company_name"
+                  id="company_name"
+                  placeholder="Enter your company name"
+                  value={formData.company_name}
+                  onChange={handleChange}
+                  className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                />
+                {validationErrors.company_name && <p className="text-red-500 text-xs mt-1">{validationErrors.company_name.join(', ')}</p>}
+              </div>
+
+              <div className="mb-5">
+                <label htmlFor="phone_number" className="block mb-2.5">
+                  Phone Number
+                </label>
+                <input
+                  type="text"
+                  name="phone_number"
+                  id="phone_number"
+                  placeholder="Enter your phone number"
+                  value={formData.phone_number}
+                  onChange={handleChange}
+                  className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                />
+                {validationErrors.phone_number && <p className="text-red-500 text-xs mt-1">{validationErrors.phone_number.join(', ')}</p>}
+              </div>
+
+              <div className="mb-5">
+                <label htmlFor="gst_hst_number" className="block mb-2.5">
+                  GST/HST Number
+                </label>
+                <input
+                  type="text"
+                  name="gst_hst_number"
+                  id="gst_hst_number"
+                  placeholder="Enter your GST/HST number"
+                  value={formData.gst_hst_number}
+                  onChange={handleChange}
+                  className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                />
+                {validationErrors.gst_hst_number && <p className="text-red-500 text-xs mt-1">{validationErrors.gst_hst_number.join(', ')}</p>}
+              </div>
+
+              <div className="mb-5">
+                <label htmlFor="pst_number" className="block mb-2.5">
+                  PST Number
+                </label>
+                <input
+                  type="text"
+                  name="pst_number"
+                  id="pst_number"
+                  placeholder="Enter your PST number"
+                  value={formData.pst_number}
+                  onChange={handleChange}
+                  className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                />
+                {validationErrors.pst_number && <p className="text-red-500 text-xs mt-1">{validationErrors.pst_number.join(', ')}</p>}
               </div>
 
               <div className="mb-5">
