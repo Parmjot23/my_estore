@@ -4,12 +4,11 @@ import Breadcrumb from "../Common/Breadcrumb";
 import Login from "./Login";
 import Shipping from "./Shipping"; // This component is for "ship to different address", data needs to be captured
 import ShippingMethod from "./ShippingMethod";
-import PaymentMethod from "./PaymentMethod";
 import Coupon from "./Coupon";
 import Billing from "./Billing"; // Main billing/shipping details here
 import { useAppSelector } from "@/redux/store"; // To get cart items
 import { selectTotalPrice, CartItem } from "@/redux/features/cart-slice"; // To get cart items and total
-import { createOrder, CreateOrderPayload } from "@/lib/apiService";
+import { createOrderFromCart, CreateOrderFromCartPayload } from "@/lib/apiService";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
@@ -50,13 +49,7 @@ const Checkout = () => {
     }
     setIsLoading(true);
 
-    const orderItemsPayload = cartItems.map(item => ({
-      product_id: item.id, // Ensure your backend OrderItemSerializer expects 'product_id'
-      quantity: item.quantity,
-      price: item.effectivePrice, // Send the price at which it was added to cart (or current effective price)
-    }));
-
-    const orderData: CreateOrderPayload = {
+    const orderData: CreateOrderFromCartPayload = {
       first_name: billingDetails.firstName,
       last_name: billingDetails.lastName,
       email: billingDetails.emailAddress,
@@ -66,8 +59,7 @@ const Checkout = () => {
       postal_code: "12345", // Get from form
       city: billingDetails.townCity,
       country: billingDetails.countryRegion,
-      // Add phone, other fields as per your Order model and CreateOrderPayload
-      items: orderItemsPayload,
+      // Add phone, other fields as per your Order model
       // braintree_nonce: "fake-valid-nonce", // If using payment gateway
     };
 
@@ -75,7 +67,7 @@ const Checkout = () => {
     // if (shipToDifferentAddress) { /* ... update orderData with shippingDetails ... */ }
 
     try {
-      const createdOrder = await createOrder(orderData);
+      const createdOrder = await createOrderFromCart(orderData);
       toast.success(`Order #${createdOrder.id} placed successfully!`);
       dispatch(removeAllItemsFromCart()); // Clear the cart
       // Redirect to an order confirmation page
@@ -164,7 +156,6 @@ const Checkout = () => {
                 </div>
                 <Coupon />
                 <ShippingMethod />
-                <PaymentMethod />
                 <button
                   type="submit"
                   disabled={isLoading || cartItems.length === 0}

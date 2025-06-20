@@ -175,6 +175,8 @@ export type CreateOrderPayload = Omit<Order, 'id' | 'user_id' | 'created_at' | '
   // Add any other payment-related fields if needed, e.g., braintree_nonce
 };
 
+export type CreateOrderFromCartPayload = Omit<CreateOrderPayload, 'items'>;
+
 // This was previously in wishlist-slice.ts, ensure it aligns with Product type
 export type WishlistItem = Product; // Wishlist items in Redux store are Product objects
 

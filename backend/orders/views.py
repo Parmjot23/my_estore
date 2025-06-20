@@ -1,7 +1,9 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from .models import Order
-from .serializers import OrderSerializer
+from rest_framework.decorators import action
+from .models import Order, OrderItem
+from .serializers import OrderSerializer, OrderCreateFromCartSerializer
+from carts.models import Cart
 
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
@@ -19,6 +21,36 @@ class OrderViewSet(viewsets.ModelViewSet):
             serializer.save(user=self.request.user)
         else:
             serializer.save() # For guest checkouts, user will be null
+
+    @action(detail=False, methods=['post'], serializer_class=OrderCreateFromCartSerializer)
+    def from_cart(self, request):
+        """Create an order using the authenticated user's cart items."""
+        user = request.user
+        if not user.is_authenticated:
+            return Response({'detail': 'Authentication required.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        cart = Cart.objects.filter(user=user).prefetch_related('items__product').first()
+        if not cart or not cart.items.exists():
+            return Response({'detail': 'Cart is empty.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        order = Order.objects.create(user=user, **serializer.validated_data)
+        for item in cart.items.all():
+            product = item.product
+            price = product.discounted_price if product.discounted_price else product.price
+            OrderItem.objects.create(
+                order=order,
+                product=product,
+                price=price,
+                quantity=item.quantity,
+            )
+
+        cart.items.all().delete()
+
+        response_serializer = OrderSerializer(order, context={'request': request})
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
     # Potentially add custom actions like 'mark_as_paid', 'cancel_order'
     # @action(detail=True, methods=['post'])

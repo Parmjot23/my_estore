@@ -13,6 +13,15 @@ class OrderItemSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'get_cost', 'product_details']
 
 
+class OrderCreateFromCartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = [
+            'first_name', 'last_name', 'email',
+            'street_address', 'apartment_address', 'postal_code', 'city', 'country'
+        ]
+
+
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True)
     user_id = serializers.IntegerField(source='user.id', read_only=True, allow_null=True)

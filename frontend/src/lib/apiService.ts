@@ -1,5 +1,5 @@
 // src/lib/apiService.ts
-import { Product, PaginatedProducts, Review, Tag, Order, CreateOrderPayload, WishlistItem as ApiWishlistItem, ApiCartItem, Category as ProductCategoryType } from "@/types/product";
+import { Product, PaginatedProducts, Review, Tag, Order, CreateOrderPayload, CreateOrderFromCartPayload, WishlistItem as ApiWishlistItem, ApiCartItem, Category as ProductCategoryType } from "@/types/product";
 import { Testimonial } from "@/types/testimonial";
 import { Category } from "@/types/category"; // Corrected: Removed 's'
 import { Brand, PhoneModel } from "@/types/brand";
@@ -327,6 +327,13 @@ const ORDERS_BASE_URL = `${API_ROOT}/orders`;
 
 export const createOrder = (orderData: CreateOrderPayload): Promise<Order> => {
   return fetchWrapper<Order>(`${ORDERS_BASE_URL}/`, {
+    method: 'POST',
+    body: JSON.stringify(orderData),
+  });
+};
+
+export const createOrderFromCart = (orderData: CreateOrderFromCartPayload): Promise<Order> => {
+  return fetchWrapper<Order>(`${ORDERS_BASE_URL}/from-cart/`, {
     method: 'POST',
     body: JSON.stringify(orderData),
   });
