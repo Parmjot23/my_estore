@@ -6,6 +6,8 @@ import { Brand, PhoneModel } from "@/types/brand";
 import { User, AuthTokens, LoginCredentials, RegisterData, Address, ChangePasswordData } from "@/types/user";
 import { SlideshowItem } from "@/types/slideshow";
 import { PromoBanner } from "@/types/promoBanner";
+import { store } from "@/redux/store";
+import { logout } from "@/redux/features/auth-slice";
 
 // Exported so other modules can use the same base URL logic
 export const API_ROOT = process.env.NEXT_PUBLIC_API_BASE_URL ||
@@ -95,6 +97,15 @@ async function fetchWrapper<T>(url: string, options?: RequestInit): Promise<T> {
       error.data = errorData;
       error.rawErrorBody = rawErrorBody;
       console.error("[fetchWrapper] API Error (HTTP Status):", error, "URL:", url, "Options:", options, "Response Status:", response.status);
+
+      if (typeof window !== 'undefined' && response.status === 401) {
+        try {
+          store.dispatch(logout());
+        } finally {
+          window.location.href = '/signin';
+        }
+      }
+
       throw error;
     }
 
@@ -107,6 +118,14 @@ async function fetchWrapper<T>(url: string, options?: RequestInit): Promise<T> {
     console.error("[fetchWrapper] Caught Error in outer try-catch:", error, "URL:", url, "Options:", options);
     if (error.name === 'AbortError') {
         throw new Error('Request aborted');
+    }
+
+    if (error.status === 401 && typeof window !== 'undefined') {
+        try {
+            store.dispatch(logout());
+        } finally {
+            window.location.href = '/signin';
+        }
     }
     // If it's already our custom ApiError, rethrow it
     if (error.status && error.data) {

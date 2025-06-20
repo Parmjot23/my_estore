@@ -27,6 +27,10 @@ const Categories = () => {
         setCategories(fetchedCategories.filter(cat => cat.image_url) || []);
       } catch (err: any) {
         console.error("Categories Component - Error fetching categories:", err);
+        if (err && err.status === 401) {
+          // logout handled in apiService; avoid showing error message
+          return;
+        }
         setError(err.message || "An unknown error occurred while fetching categories.");
       } finally {
         setIsLoading(false);
