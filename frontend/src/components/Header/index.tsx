@@ -183,7 +183,7 @@ const Header = () => {
     }, 1000 * 60 * 25); // Refresh every 25 minutes, adjust as needed
 
     return () => clearInterval(interval);
-  }, [dispatch, router]);
+  }, [dispatch, router, clear]);
 
 
   if (authIsLoading && typeof window !== "undefined" && localStorage.getItem("access_token")) {
