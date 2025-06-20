@@ -57,3 +57,34 @@ class OrderModelTests(APITestCase):
         self.assertEqual(item.quantity, 3)
         self.assertEqual(item.price, Decimal("20.00"))
 
+    def test_create_order_from_cart(self):
+        self.authenticate()
+
+        add_resp = self.client.post(
+            "/api/carts/add-item/",
+            {"product_id": self.product.id, "quantity": 2},
+            format="json",
+        )
+        self.assertEqual(add_resp.status_code, 201)
+
+        order_data = {
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john@example.com",
+            "street_address": "123 Street",
+            "postal_code": "12345",
+            "city": "Town",
+            "country": "Nowhere",
+        }
+
+        response = self.client.post("/api/orders/from-cart/", order_data, format="json")
+        self.assertEqual(response.status_code, 201)
+
+        order = Order.objects.get(id=response.data["id"])
+        self.assertEqual(order.items.count(), 1)
+        item = order.items.first()
+        self.assertEqual(item.quantity, 2)
+
+        cart_resp = self.client.get("/api/carts/")
+        self.assertEqual(len(cart_resp.data["items"]), 0)
+
