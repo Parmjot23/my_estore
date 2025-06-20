@@ -22,7 +22,8 @@ class OrderViewSet(viewsets.ModelViewSet):
         else:
             serializer.save() # For guest checkouts, user will be null
 
-    @action(detail=False, methods=['post'], serializer_class=OrderCreateFromCartSerializer)
+    # Use a hyphen in the URL to match the frontend expectation
+    @action(detail=False, methods=['post'], serializer_class=OrderCreateFromCartSerializer, url_path='from-cart')
     def from_cart(self, request):
         """Create an order using the authenticated user's cart items."""
         user = request.user
