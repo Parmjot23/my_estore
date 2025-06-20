@@ -5,11 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQuickViewModalContext } from "@/app/context/QuickViewModalContext";
 import { Product } from "@/types/product";
+import { useCart } from "@/app/context/CartContext";
 import { useDispatch } from "react-redux";
 import { AppDispatch, useAppSelector } from "@/redux/store";
-import { addItemToCart } from "@/redux/features/cart-slice";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
-import { addToCart as apiAddToCart } from "@/lib/apiService";
 import { toast } from "react-toastify";
 import PreviewSlider from "./PreviewSlider"; // Assuming this component is correctly implemented
 import { getProductBySlug } from "@/lib/apiService";
@@ -24,6 +23,7 @@ const QuickViewModal = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const isAuthenticated = useAppSelector((state) => state.authReducer.isAuthenticated);
+  const { addItem } = useCart();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
@@ -85,15 +85,7 @@ const QuickViewModal = () => {
       return;
     }
     try {
-      await apiAddToCart(product.id, quantity);
-      dispatch(
-        addItemToCart({
-          ...product,
-          quantity,
-          discountedPrice: effectivePrice,
-          price: Number(product.price),
-        })
-      );
+      await addItem(product.id, quantity);
       toast.success(`${product.name} added to cart`);
     } catch (err: any) {
       toast.error(err.data?.detail || err.message || "Failed to add to cart.");

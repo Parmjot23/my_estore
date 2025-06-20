@@ -5,8 +5,8 @@ import Link from "next/link";
 import CustomSelect from "./CustomSelect";
 import { menuData as headerMenuDataImport } from "./menuData";
 import Dropdown from "./Dropdown";
-import { useAppSelector, useAppDispatch } from "@/redux/store"; // Import useAppDispatch
-import { selectTotalPrice, removeAllItemsFromCart } from "@/redux/features/cart-slice";
+import { useAppDispatch } from "@/redux/store";
+import { useCart } from "@/app/context/CartContext";
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -43,8 +43,7 @@ const Header = () => {
   const [stickyMenu, setStickyMenu] = useState(false);
 
   // Cart state
-  const cartItems = useAppSelector((state) => state.cartReducer.items);
-  const totalPrice = useAppSelector(selectTotalPrice);
+  const { items: cartItems, totalPrice, clear } = useCart();
   const { openCartModal } = useCartModalContext();
 
   const headerMenuData: MenuType[] = Array.isArray(headerMenuDataImport)
@@ -143,7 +142,7 @@ const Header = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    dispatch(removeAllItemsFromCart());
+    clear();
     toast.info("You have been logged out.");
     router.push("/"); // Redirect to home or login page
     if (navigationOpen) setNavigationOpen(false);
@@ -176,7 +175,7 @@ const Header = () => {
             console.error("Failed to refresh token:", error);
             // If refresh fails (e.g., refresh token expired), log out user
             dispatch(logout());
-            dispatch(removeAllItemsFromCart());
+            clear();
             router.push('/signin'); // Redirect to sign-in
           }
         }

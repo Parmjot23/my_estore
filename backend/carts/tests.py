@@ -34,7 +34,7 @@ class CartPersistenceTests(APITestCase):
         self.authenticate()
 
         add_resp = self.client.post(
-            "/api/carts/add-item/",
+            "/api/cart/add/",
             {"product_id": self.product.id, "quantity": 2},
             format="json",
         )

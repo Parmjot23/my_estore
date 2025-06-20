@@ -399,7 +399,7 @@ export const clearWishlist = (): Promise<void> => {
     });
 };
 
-const CART_BASE_URL = `${API_ROOT}/carts`;
+const CART_BASE_URL = `${API_ROOT}/cart`;
 
 export const getCart = (): Promise<ApiCartItem[]> => {
     return fetchWrapper<{id: number; user: number; items: ApiCartItem[]}>(`${CART_BASE_URL}/`)
@@ -407,21 +407,21 @@ export const getCart = (): Promise<ApiCartItem[]> => {
 };
 
 export const addToCart = (productId: number, quantity: number = 1): Promise<ApiCartItem> => {
-    return fetchWrapper<ApiCartItem>(`${CART_BASE_URL}/add-item/`, {
+    return fetchWrapper<ApiCartItem>(`${CART_BASE_URL}/add/`, {
         method: 'POST',
         body: JSON.stringify({ product_id: productId, quantity }),
     });
 };
 
 export const updateCartItem = (productId: number, quantity: number): Promise<ApiCartItem> => {
-    return fetchWrapper<ApiCartItem>(`${CART_BASE_URL}/update-item/${productId}/`, {
+    return fetchWrapper<ApiCartItem>(`${CART_BASE_URL}/update/${productId}/`, {
         method: 'PUT',
         body: JSON.stringify({ quantity }),
     });
 };
 
 export const removeFromCart = (productId: number): Promise<void> => {
-    return fetchWrapper<void>(`${CART_BASE_URL}/remove-item/${productId}/`, {
+    return fetchWrapper<void>(`${CART_BASE_URL}/remove/${productId}/`, {
         method: 'DELETE',
     });
 };

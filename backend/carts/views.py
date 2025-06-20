@@ -18,7 +18,7 @@ class CartViewSet(viewsets.GenericViewSet):
         serializer = self.get_serializer(cart)
         return Response(serializer.data)
 
-    @action(detail=False, methods=['post'], serializer_class=AddToCartSerializer, url_path='add-item')
+    @action(detail=False, methods=['post'], serializer_class=AddToCartSerializer, url_path='add')
     def add_item(self, request):
         cart, _ = Cart.objects.get_or_create(user=request.user)
         serializer = AddToCartSerializer(data=request.data)
@@ -40,7 +40,7 @@ class CartViewSet(viewsets.GenericViewSet):
             return Response(item_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['put'], serializer_class=AddToCartSerializer, url_path='update-item/(?P<product_pk>[^/.]+)')
+    @action(detail=False, methods=['put'], serializer_class=AddToCartSerializer, url_path='update/(?P<product_pk>[^/.]+)')
     def update_item(self, request, product_pk=None):
         cart = Cart.objects.filter(user=request.user).first()
         if not cart:
@@ -57,7 +57,7 @@ class CartViewSet(viewsets.GenericViewSet):
         serializer = CartItemSerializer(item, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, methods=['delete'], url_path='remove-item/(?P<product_pk>[^/.]+)')
+    @action(detail=False, methods=['delete'], url_path='remove/(?P<product_pk>[^/.]+)')
     def remove_item(self, request, product_pk=None):
         cart = Cart.objects.filter(user=request.user).first()
         if not cart:
