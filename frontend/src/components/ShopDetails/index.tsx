@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
 import Image from "next/image";
 import Newsletter from "../Common/Newsletter";
-import RecentlyViewdItems from "./RecentlyViewd";
+import Categories from "@/components/Home/Categories";
 import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { Product, ProductMediaItem } from "@/types/product";
 import { Star, Heart, ShoppingCart } from "lucide-react";
@@ -466,7 +466,7 @@ const ShopDetails = ({ product }: ShopDetailsProps) => {
         </div>
       </section>
 
-      <RecentlyViewdItems />
+      <Categories />
       <Newsletter />
        <style jsx>{`
         .form-input {
