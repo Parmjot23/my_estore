@@ -38,7 +38,7 @@ const PromoBanner = () => {
               </h2>
 
               <Link
-                href={`/product/${big.product_details?.slug}`}
+                href={`/shop-details/${encodeURIComponent(big.product_details?.slug || '')}`}
                 className="inline-flex font-medium text-custom-sm text-white bg-blue py-[11px] px-9.5 rounded-md ease-out duration-200 hover:bg-blue-dark mt-7.5"
               >
                 Buy Now
@@ -83,7 +83,7 @@ const PromoBanner = () => {
                 </h2>
 
                 <Link
-                  href={`/product/${banner.product_details?.slug}`}
+                  href={`/shop-details/${encodeURIComponent(banner.product_details?.slug || '')}`}
                   className={`inline-flex font-medium text-custom-sm text-white ${idx === 0 ? 'bg-teal hover:bg-teal-dark' : 'bg-orange hover:bg-orange-dark'} py-2.5 px-8.5 rounded-md ease-out duration-200 mt-7.5`}
                 >
                   Shop Now
