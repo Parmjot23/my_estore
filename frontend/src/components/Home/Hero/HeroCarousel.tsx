@@ -34,14 +34,20 @@ const HeroCarousal = () => {
     .map((s) => {
       const p = s.product_details;
       const imgSrc = getProductImage(p);
-      if (!imgSrc) return null;
+      if (!imgSrc || !p?.slug) return null;
       return {
-        title: p?.name || "",
+        title: p.name,
         image: imgSrc,
-        discount: p?.get_discount_percentage || 0,
+        discount: p.get_discount_percentage || 0,
+        slug: p.slug,
       };
     })
-    .filter(Boolean) as { title: string; image: string; discount: number }[];
+    .filter(Boolean) as {
+      title: string;
+      image: string;
+      discount: number;
+      slug: string;
+    }[];
 
 
   return (
@@ -66,7 +72,7 @@ const HeroCarousal = () => {
               </h2>
               <p className="text-dark-base mb-6">Limited time deal on our best price.</p>
               <Link
-                href="/shop"
+                href={`/shop-details/${encodeURIComponent(item.slug)}`}
                 className="inline-block bg-accent text-white py-3 px-9 rounded-md hover:bg-[#b88d4f] transition"
               >
                 Shop Now
